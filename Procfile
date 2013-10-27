@@ -1,0 +1,1 @@
+web: gunicorn project_settings.wsgi -w 3 --debug --log-level debug
