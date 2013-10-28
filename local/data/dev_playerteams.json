@@ -1,0 +1,64 @@
+[
+  {
+    "_comment1": "player is specified by the unique identifier of improvteams.com URL",
+    "_comment2": "team is specified by team name. Expecting name will be unique among teams.",
+    "player": "http://newyork.improvteams.com/performers/2872/mikelane",
+    "team": "Orange Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/271/drujohnston",
+    "team": "Orange Team",
+    "active": false
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/1169/megan_maes",
+    "team": "Orange Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/144/oscar_montoya",
+    "team": "Orange Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/1855/rachel_rosenthal",
+    "team": "Orange Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/392/steve_siddell",
+    "team": "Sky Blue Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/367/desiree_nash",
+    "team": "Sky Blue Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/3129/tom_lisi",
+    "team": "Sky Blue Team",
+    "active": false
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/1760/leomendoza",
+    "team": "Purple Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/3918/jofirestone",
+    "team": "Purple Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/919/will_cooper",
+    "team": "Maroon Team",
+    "active": true
+  },
+  {
+    "player": "http://newyork.improvteams.com/performers/5761/tessa_greenberg",
+    "team": "Green Team",
+    "active": true
+  }
+]

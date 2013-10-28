@@ -1,0 +1,21 @@
+[
+  {
+    "_comment": "start_date in this file is necessary to establish uniqueness among showphotos.",
+    "team": "Orange Team",
+    "show": "QSIC House Night",
+    "start_date": "2013-09-06",
+    "photo": ""
+  },
+  {
+    "team": "Sky Blue Team",
+    "show": "QSIC House Night",
+    "start_date": "2013-09-20",
+    "photo": ""
+  },
+  {
+    "team": "Purple Team",
+    "show": "Party Show",
+    "start_date": "2013-09-18",
+    "photo": ""
+  }
+]

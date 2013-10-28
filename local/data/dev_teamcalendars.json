@@ -1,0 +1,72 @@
+[
+  {    
+    "show": "QSIC House Night",
+    "start_date": "2013-09-06",
+    "team": "Orange Team",
+    "start_time": "19:00",
+    "end_time": "19:30"
+  },
+  {    
+    "show": "QSIC House Night",
+    "start_date": "2013-09-06",
+    "team": "Sky Blue Team",
+    "start_time": "19:30",
+    "end_time": "20:00"
+  },
+  {    
+    "show": "QSIC House Night",
+    "start_date": "2013-09-06",
+    "team": "Purple Team",
+    "start_time": "20:00",
+    "end_time": "20:30"
+  },
+  {    
+    "show": "QSIC House Night",
+    "start_date": "2013-09-06",
+    "team": "Maroon Team",
+    "start_time": "20:30",
+    "end_time": "21:00"
+  },
+  {    
+    "show": "QSIC House Night",
+    "start_date": "2013-09-13",
+    "team": "Orange Team",
+    "start_time": "20:00",
+    "end_time": "21:00"
+  },
+  {    
+    "show": "QSIC House Night",
+    "start_date": "2013-09-13",
+    "team": "Sky Blue Team",
+    "start_time": "21:00",
+    "end_time": "22:00"
+  },
+  {    
+    "show": "QSIC House Night",
+    "start_date": "2013-09-20",
+    "team": "Maroon Team",
+    "start_time": "20:00",
+    "end_time": "21:00"
+  },
+  {    
+    "show": "QSIC House Night",
+    "start_date": "2013-09-27",
+    "team": "Orange Team",
+    "start_time": "21:00",
+    "end_time": "21:45"
+  },
+  {    
+    "show": "Party Show",
+    "start_date": "2013-09-18",
+    "team": "Maroon Team",
+    "start_time": "18:00",
+    "end_time": "19:30"
+  },
+  {    
+    "show": "Party Show",
+    "start_date": "2013-09-18",
+    "team": "Sky Blue Team",
+    "start_time": "19:45",
+    "end_time": "20:45"
+  }
+]
