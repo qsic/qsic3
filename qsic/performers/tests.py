@@ -2,7 +2,7 @@ from django.test import TestCase
 from selenium import webdriver
 
 #from local.data.create_dev_db import create_dev_db
-from qsic.players.models import Player
+from qsic.performers.models import Performer
 
 #TODO port to python3
 """
@@ -38,12 +38,12 @@ class PerformerUTs(TestCase):
 
     def test__it_id_parsed_from_it_url(self):
         url='http://newyork.improvteams.com/performers/2849/paullogston'
-        p = Player.objects.create(it_url=url)
+        p = Performer.objects.create(it_url=url)
         p.parse_it_id_from_url()
         self.assertEqual(p.it_id, 2849)
 
     def test__it_id_not_parsed_from_it_incorrect_url(self):
         url='http://newyork.improvteams.com/performers/hihihi/paullogston'
-        p = Player.objects.create(it_url=url)
+        p = Performer.objects.create(it_url=url)
         p.parse_it_id_from_url()
         self.assertNotEqual(p.it_id, 2849)

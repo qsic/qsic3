@@ -1,14 +1,8 @@
-import base64
-import struct
-import os
 import re
-import time
 import urllib.parse
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.template.defaultfilters import slugify
-from django.core.files import File
 
 from qsic.parsers.improvteams.parser import ItPerformerParser
 
@@ -45,27 +39,29 @@ class Performer(models.Model):
             self.it_id = int(match.group(1))
 
     def save_it_content_from_parsed_url(self, url=None):
-        """Save Player info parsed from Improvteams.com
+        """Save Performer info parsed from Improvteams.com
             Return True on successful completion
         """
         if url is not None:
             self.it_url = url
             self.parse_it_id_from_url()
 
-        # Return False if URL passed doesn not save to model
+        # Return False if URL passed does not save to model
         # eg. invalid URL
         if not self.it_url:
             return False
 
-        # Parse player info from URL
-        player_info = ParsePlayerInfo(self.it_url)
+        # Parse performer info from URL
+        performer_info = ItPerformerParser(self.it_url)
 
-        self.first_name = player_info.first_name
-        self.last_name = player_info.last_name
+        self.first_name = performer_info.first_name
+        self.last_name = performer_info.last_name
         self.bio = ('%s'
                     '<br>'
                     'Bio courtesy of <a href="%s">%s</a>' %
-                    (player_info.bio, player_info.url, player_info.url))
-        self.headshot = player_info.headshot
+                    (performer_info.bio,
+                     performer_info.url,
+                     performer_info.url))
+        self.headshot = performer_info.headshot
         self.save()
         return True
