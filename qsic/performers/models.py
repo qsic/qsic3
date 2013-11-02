@@ -28,23 +28,10 @@ class Performer(models.Model):
     def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
 
-    def parse_it_id_from_url(self):
-        """Parse Improvteam ID from performer URL
-        ex. http://newyork.improvteams.com/performers/2849/paullogston
-        ex. sets self.it_id = 2849
-        """
-        path = urllib.parse.urlparse(self.it_url)[2]
-        match = re.match(r""".*/(\d+)/.*""", path)
-        if match:
-            self.it_id = int(match.group(1))
-
-    def save_it_content_from_parsed_url(self, url=None):
+    def save_it_content_from_parsed_it_url(self):
         """Save Performer info parsed from Improvteams.com
             Return True on successful completion
         """
-        if url is not None:
-            self.it_url = url
-            self.parse_it_id_from_url()
 
         # Return False if URL passed does not save to model
         # eg. invalid URL
@@ -56,12 +43,18 @@ class Performer(models.Model):
 
         self.first_name = performer_info.first_name
         self.last_name = performer_info.last_name
+
         self.bio = ('%s'
                     '<br>'
                     'Bio courtesy of <a href="%s">%s</a>' %
                     (performer_info.bio,
                      performer_info.url,
                      performer_info.url))
-        self.headshot = performer_info.headshot
+        if self.it_id:
+            self.retrieve_headshot()
         self.save()
         return True
+
+    def retrieve_headshot(self):
+        """Fetch and save headshot photo from Improvteams.com"""
+        pass
