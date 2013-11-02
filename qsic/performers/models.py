@@ -1,6 +1,3 @@
-import re
-import urllib.parse
-
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -36,24 +33,28 @@ class Performer(models.Model):
         # Return False if URL passed does not save to model
         # eg. invalid URL
         if not self.it_url:
-            return False
+            return {'success': False, 'msg': 'It url is not set.'}
 
         # Parse performer info from URL
-        performer_info = ItPerformerParser(self.it_url)
+        try:
+            performer_info = ItPerformerParser(self.it_url)
+        except:
+            return {'success': False, 'msg': 'Unable to parse performer info.'}
 
+        self.it_id = performer_info.it_id
         self.first_name = performer_info.first_name
         self.last_name = performer_info.last_name
 
         self.bio = ('%s'
                     '<br>'
-                    'Bio courtesy of <a href="%s">%s</a>' %
-                    (performer_info.bio,
-                     performer_info.url,
-                     performer_info.url))
+                    'Bio courtesy of <a href="%s">Improvteams.com</a>' %
+                    (performer_info.bio, performer_info.url))
+
         if self.it_id:
             self.retrieve_headshot()
+
         self.save()
-        return True
+        return {'success': True}
 
     def retrieve_headshot(self):
         """Fetch and save headshot photo from Improvteams.com"""
