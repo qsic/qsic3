@@ -8,6 +8,7 @@ PROJECT_ROOT = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 
 DEBUG = 'true' in str(os.environ.get('DJANGO_DEBUG', False)).lower()
 TEMPLATE_DEBUG = DEBUG
+THUMBNAIL_DEBUG = DEBUG
 
 ADMINS = (
     ('Leo Mendoza', 'leomendoza@gmail.com'),
@@ -48,7 +49,9 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-if DEBUG:
+
+SERVE_STATIC = 'true' in str(os.environ.get('SERVE_STATIC', False)).lower()
+if SERVE_STATIC:
     # Absolute path to the directory static files should be collected to.
     # Don't put anything in this directory yourself; store your static files
     # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -87,13 +90,13 @@ else:
     DEFAULT_S3_PATH = 'media'
     MEDIA_ROOT = '/%s/' % DEFAULT_S3_PATH
     MEDIA_URL = '//s3.amazonaws.com/%s/media/' % AWS_STORAGE_BUCKET_NAME
-    DEFAULT_FILE_STORAGE = 'qsic_www.s3utils.DefaultStorage'
+    #DEFAULT_FILE_STORAGE = 'qsic_www.s3utils.DefaultStorage'
 
     # STATIC
     STATIC_S3_PATH = 'static'
     STATIC_ROOT = '/%s/' % STATIC_S3_PATH
     STATIC_URL = '//s3.amazonaws.com/%s/static/' % AWS_STORAGE_BUCKET_NAME
-    STATICFILES_STORAGE = 'qsic_www.s3utils.StaticStorage'
+    #STATICFILES_STORAGE = 'qsic_www.s3utils.StaticStorage'
 
     # ADMIN STATIC
     ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'

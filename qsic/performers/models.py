@@ -1,4 +1,7 @@
+import urllib.request
+
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.db import models
 
 from qsic.parsers.improvteams.parser import ItPerformerParser
@@ -51,11 +54,18 @@ class Performer(models.Model):
                     (performer_info.bio, performer_info.url))
 
         if self.it_id:
-            self.retrieve_headshot()
+            self.fetch_headshot()
 
         self.save()
         return {'success': True}
 
-    def retrieve_headshot(self):
+    def fetch_headshot(self):
         """Fetch and save headshot photo from Improvteams.com"""
-        pass
+        uri = ''.join(['http://newyork.improvteams.com/',
+                       'uploads/performer_images/performer_',
+                       str(self.it_id),
+                       '.jpg'])
+        with urllib.request.urlopen(uri) as imgp:
+            # make sure imgp is a jpeg
+            if imgp.info().get_content_type() == 'image/jpeg':
+                self.headshot = File(imgp)

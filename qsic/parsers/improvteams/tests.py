@@ -3,6 +3,8 @@ import sys
 import unittest
 import urllib
 
+from django.core.files import File
+
 from project_settings.settings import PROJECT_ROOT
 from qsic.parsers.improvteams.parser import BaseItParser
 from qsic.parsers.improvteams.parser import ItPerformerParser
@@ -89,6 +91,7 @@ class ItPerformerParserUTs(unittest.TestCase, ParserUTsMixin):
         self.assertEqual(self.__class__.test_parser.last_name,
                          'Logston')
 
+    @unittest.skip('Method being tested is being depreciated.')
     def test__headshot_uri_parsed_as_expected(self):
         """Check for changes in structure of headshot uri"""
         self.assertEqual(self.__class__.test_parser.headshot_uri,
@@ -98,9 +101,9 @@ class ItPerformerParserUTs(unittest.TestCase, ParserUTsMixin):
                          'http://newyork.improvteams.com'
                          '/uploads/performer_images/performer_2849.jpg')
 
-
+    @unittest.skip('Test and method not complete')
     def test__fetch_headshot(self):
-        pass
+        uri = urllib.parse.urljoin(CONTROL_PERFORMER_URI, 'performer_2849.jpg')
 
 class ItTeamParserUTs(unittest.TestCase, ParserUTsMixin):
     """Team Parser Unit Tests"""

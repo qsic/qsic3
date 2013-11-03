@@ -5,6 +5,7 @@ import urllib
 from bs4 import BeautifulSoup
 from bs4 import SoupStrainer
 
+
 class BaseItParser(object):
     """Base Improvteams Parser"""
     def __init__(self, url=None, *args, **kwargs):
@@ -76,7 +77,22 @@ class ItPerformerParser(BaseItParser):
         self.first_name = name_list[0]
         self.last_name = " ".join(name_list[1:])
 
+    def set_headshot_uri(self):
+        """Set self.headshot_uri to full url based on it_id"""
+        return # shut down maethod
+
+        if self.it_id:
+            self.headshot_uri = ''.join(['http://newyork.improvteams.com/',
+                                         'uploads/performer_images/performer_',
+                                         str(self.it_id),
+                                         '.jpg'])
+
+
+
+    # not sure if I want to keep this function given that we can
+    # generate headshot uri from it_id
     def parse_soup_for_headshot_uri(self):
+        return # shuting down this method fo the time being
         """Return self with headshot_uri populated"""
         selector = '#main .profile .photo_and_links .photo img'
         raw_photo_img = self.soup.select(selector)
@@ -90,9 +106,6 @@ class ItPerformerParser(BaseItParser):
         if self.bio:
             self.bio = bio.strip()
 
-    def fetch_headshot(self):
-        """Fetch bytes of headshot"""
-        pass
 
 class ItTeamParser(BaseItParser):
     """Parse team information from Improvteams"""
