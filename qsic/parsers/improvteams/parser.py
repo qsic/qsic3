@@ -56,7 +56,6 @@ class ItPerformerParser(BaseItParser):
         super().load_soup()
         self.parse_it_id_from_url()
         self.parse_soup_for_bio()
-        self.parse_soup_for_headshot_uri()
         self.parse_soup_for_name()
 
     def parse_it_id_from_url(self):
@@ -76,29 +75,6 @@ class ItPerformerParser(BaseItParser):
         name_list = raw_name.split(' ')
         self.first_name = name_list[0]
         self.last_name = " ".join(name_list[1:])
-
-    def set_headshot_uri(self):
-        """Set self.headshot_uri to full url based on it_id"""
-        return # shut down maethod
-
-        if self.it_id:
-            self.headshot_uri = ''.join(['http://newyork.improvteams.com/',
-                                         'uploads/performer_images/performer_',
-                                         str(self.it_id),
-                                         '.jpg'])
-
-
-
-    # not sure if I want to keep this function given that we can
-    # generate headshot uri from it_id
-    def parse_soup_for_headshot_uri(self):
-        return # shuting down this method fo the time being
-        """Return self with headshot_uri populated"""
-        selector = '#main .profile .photo_and_links .photo img'
-        raw_photo_img = self.soup.select(selector)
-        if raw_photo_img:
-            img_uri = raw_photo_img[0]['src']
-            self.headshot_uri = uri = urllib.parse.urljoin(self.url, img_uri)
 
     def parse_soup_for_bio(self):
         """Return self with bio populated"""
