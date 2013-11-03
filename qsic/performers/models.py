@@ -53,14 +53,13 @@ class Performer(models.Model):
                     'Bio courtesy of <a href="%s">Improvteams.com</a>' %
                     (performer_info.bio, performer_info.url))
 
-        if self.it_id:
-            self.fetch_headshot()
-
         self.save()
         return {'success': True}
 
     def fetch_headshot(self):
         """Fetch and save headshot photo from Improvteams.com"""
+        if not self.it_id:
+            return False
         uri = ''.join(['http://newyork.improvteams.com/',
                        'uploads/performer_images/performer_',
                        str(self.it_id),
@@ -68,4 +67,7 @@ class Performer(models.Model):
         with urllib.request.urlopen(uri) as imgp:
             # make sure imgp is a jpeg
             if imgp.info().get_content_type() == 'image/jpeg':
-                self.headshot = File(imgp)
+                self.headshot.save(str(self.it_id), File(imgp))
+                return True
+            else:
+                return False    # maybe leave this out so we return none

@@ -3,12 +3,14 @@ import os
 
 import dj_database_url
 
-# should point to qsic3 directory
-PROJECT_ROOT = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
-
 DEBUG = 'true' in str(os.environ.get('DJANGO_DEBUG', False)).lower()
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
+
+# should point to qsic3 directory
+PROJECT_ROOT = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
+if DEBUG:
+    print('Project Root set to:', PROJECT_ROOT)
 
 ADMINS = (
     ('Leo Mendoza', 'leomendoza@gmail.com'),
@@ -50,8 +52,18 @@ USE_L10N = True
 USE_TZ = True
 
 
-SERVE_STATIC = 'true' in str(os.environ.get('SERVE_STATIC', False)).lower()
+
+
+# AWS file access info
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
+
+
+env_var_static = os.environ.get('DJANGO_SERVE_STATIC', False)
+SERVE_STATIC = 'true' in str(env_var_static).lower()
 if SERVE_STATIC:
+    # Serve static locally
     # Absolute path to the directory static files should be collected to.
     # Don't put anything in this directory yourself; store your static files
     # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -62,6 +74,19 @@ if SERVE_STATIC:
     # Example: "http://media.lawrence.com/static/"
     STATIC_URL = '/static/'
 
+else:
+    # Serve static from AWS
+    STATIC_ROOT = '//s3.amazonaws.com/%s/static/' % AWS_STORAGE_BUCKET_NAME
+    STATIC_URL = STATIC_ROOT
+
+# ADMIN STATIC
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+
+
+env_var_media = os.environ.get('DJANGO_SERVE_MEDIA', False)
+SERVE_MEDIA= 'true' in str(env_var_media).lower()
+if SERVE_MEDIA:
+    # Serve media locally
     # Absolute filesystem path to the directory that
     # will hold user-uploaded files.
     # Example: "/home/media/media.lawrence.com/media/"
@@ -73,34 +98,19 @@ if SERVE_STATIC:
     MEDIA_URL = '/media/'
 
 else:
-    # AWS file access info
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
+    # Serve media from AWS
+    MEDIA_ROOT = '//s3.amazonaws.com/%s/media/' % AWS_STORAGE_BUCKET_NAME
+    MEDIA_URL = MEDIA_ROOT
 
-    # Insure these variables are set before moving on
-    assert AWS_ACCESS_KEY_ID
-    assert AWS_SECRET_ACCESS_KEY
-    assert AWS_STORAGE_BUCKET_NAME
-
+if SERVE_STATIC or SERVE_MEDIA:
     # Only upload new or changed files to AWS
     AWS_PRELOAD_METADATA = True
 
-    # MEDIA
-    DEFAULT_S3_PATH = 'media'
-    MEDIA_ROOT = '/%s/' % DEFAULT_S3_PATH
-    MEDIA_URL = '//s3.amazonaws.com/%s/media/' % AWS_STORAGE_BUCKET_NAME
-    #DEFAULT_FILE_STORAGE = 'qsic_www.s3utils.DefaultStorage'
-
-    # STATIC
-    STATIC_S3_PATH = 'static'
-    STATIC_ROOT = '/%s/' % STATIC_S3_PATH
-    STATIC_URL = '//s3.amazonaws.com/%s/static/' % AWS_STORAGE_BUCKET_NAME
-    #STATICFILES_STORAGE = 'qsic_www.s3utils.StaticStorage'
-
-    # ADMIN STATIC
-    ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-
+if DEBUG:
+    print('Static Root set to:', STATIC_ROOT)
+    print('Static URL set to:', STATIC_URL)
+    print('Media Root set to:', MEDIA_ROOT)
+    print('Media URL set to:', MEDIA_URL)
 
 # Additional locations of static files
 STATICFILES_DIRS = (

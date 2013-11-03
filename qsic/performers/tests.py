@@ -1,38 +1,32 @@
-from django.test import TestCase
-from selenium import webdriver
+from unittest import TestCase
 
 #from local.data.create_dev_db import create_dev_db
 from qsic.performers.models import Performer
 
-#TODO port to python3
-"""
-class PlayerFTs(TestCase):
+TEST_PERFORMER_URI = ('http://newyork.improvteams.com/'
+                      'performers/2849/paullogston')
 
-	@classmethod
-	def setUpClass(cls):
-		create_dev_db(log=False)
+class PerformerModelIntegrationTests(TestCase):
 
-	def setUp(self):
-		self.browser = webdriver.Chrome()
-		self.browser.implicitly_wait(3)
+    def test__save_it_content_populates_object_as_expected(self):
+        p = Performer.objects.create(it_url=TEST_PERFORMER_URI)
+        p.save_it_content_from_parsed_it_url()
+        self.assertEqual(p.first_name, 'Paul')
+        self.assertEqual(p.last_name, 'Logston')
+        self.assertEqual(p.it_id, 2849)
+        self.assertIsNotNone(p.bio)
 
-	def tearDown(self):
-		self.browser.quit()
+    def test__save_it_content_returns_false_with_no_it_url_set(self):
+        p = Performer.objects.create()
+        r = p.save_it_content_from_parsed_it_url()
+        self.assertFalse(r['success'])
 
-	def test_player_appears_in_current_players(self):
-		self.browser.get('http://queens-secret.dev/players/')
-		players = self.browser.find_elements_by_class_name('player-list')
-		player_list = [player.text for player in players]
-		self.assertIn(u'Mike Lane', player_list)
-		self.assertNotIn(u'Tessa Greenberg', player_list)
+    def test__fetch_headshot_retrieves_and_stores_file(self):
+        p = Performer.objects.create(it_url=TEST_PERFORMER_URI)
+        p.save_it_content_from_parsed_it_url()
+        self.assertTrue(p.fetch_headshot())
+        # test for file on disk
 
-	def test_player_appears_in_past_players(self):
-		self.browser.get('http://queens-secret.dev/players/past/')
-		players = self.browser.find_elements_by_class_name('player-list')
-		player_list = [player.text for player in players]
-		self.assertIn(u'Tessa Greenberg', player_list)
-		#self.assertNotIn(u'Megan Maes', player_list)
-"""
-
-class PerformerUTs(TestCase):
-    pass
+    def test__fetch_headshot_returns_false_on_no_it_id(self):
+        p = Performer.objects.create()
+        self.assertFalse(p.fetch_headshot())
