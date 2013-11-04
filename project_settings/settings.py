@@ -3,6 +3,8 @@ import os
 
 import dj_database_url
 
+from project_settings.s3utils import S3BotoStorage
+
 DEBUG = 'true' in str(os.environ.get('DJANGO_DEBUG', False)).lower()
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
@@ -51,14 +53,17 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-
-
+# Filesystem directory names for static and media files
+STATIC_DIR = 'static'
+MEDIA_DIR = 'media'
 
 # AWS file access info
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
 
+# Of the format: '//s3.amazonaws.com/bucket_name/[media|static]/'
+AWS_S3_URL_TEMPLATE = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
 
 env_var_static = os.environ.get('DJANGO_SERVE_STATIC', False)
 SERVE_STATIC = 'true' in str(env_var_static).lower()
@@ -72,11 +77,13 @@ if SERVE_STATIC:
 
     # URL prefix for static files.
     # Example: "http://media.lawrence.com/static/"
-    STATIC_URL = '/static/'
+    STATIC_URL = '/%s/' % STATIC_DIR
 
 else:
     # Serve static from AWS
-    STATIC_ROOT = '//s3.amazonaws.com/%s/static/' % AWS_STORAGE_BUCKET_NAME
+    # tell django to use django-storages
+    STATICFILES_STORAGE = lambda: S3BotoStorage(location=STATIC_DIR)
+    STATIC_ROOT = AWS_S3_URL_TEMPLATE + STATIC_DIR + '/'
     STATIC_URL = STATIC_ROOT
 
 # ADMIN STATIC
@@ -90,16 +97,18 @@ if SERVE_MEDIA:
     # Absolute filesystem path to the directory that
     # will hold user-uploaded files.
     # Example: "/home/media/media.lawrence.com/media/"
-    MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+    MEDIA_ROOT = os.path.join(PROJECT_ROOT, '%s' % MEDIA_DIR)
 
     # URL that handles the media served from MEDIA_ROOT. Make sure to use a
     # trailing slash.
     # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-    MEDIA_URL = '/media/'
+    MEDIA_URL = '/%s/' % MEDIA_DIR
 
 else:
     # Serve media from AWS
-    MEDIA_ROOT = '//s3.amazonaws.com/%s/media/' % AWS_STORAGE_BUCKET_NAME
+    # tell django to use django-storages
+    DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
+    MEDIA_ROOT = AWS_S3_URL_TEMPLATE + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
 
 if SERVE_STATIC or SERVE_MEDIA:
@@ -172,6 +181,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'south',
+    # 'storages', no longer using storages 2013.11.03
     'easy_thumbnails',
     'qsic',
 )

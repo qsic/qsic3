@@ -67,7 +67,7 @@ class Performer(models.Model):
         with urllib.request.urlopen(uri) as imgp:
             # make sure imgp is a jpeg
             if imgp.info().get_content_type() == 'image/jpeg':
-                self.headshot.save(str(self.it_id), File(imgp))
+                self.headshot.save(str(self.it_id), File(imgp), save=True)
                 return True
             else:
                 return False    # maybe leave this out so we return none
