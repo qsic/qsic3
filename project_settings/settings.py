@@ -3,7 +3,7 @@ import os
 
 import dj_database_url
 
-from project_settings.s3utils import S3BotoStorage
+#from project_settings.s3utils import S3BotoStorage
 
 DEBUG = 'true' in str(os.environ.get('DJANGO_DEBUG', False)).lower()
 TEMPLATE_DEBUG = DEBUG
@@ -82,7 +82,7 @@ if SERVE_STATIC:
 else:
     # Serve static from AWS
     # tell django to use django-storages
-    STATICFILES_STORAGE = lambda: S3BotoStorage(location=STATIC_DIR)
+    #STATICFILES_STORAGE = lambda: S3BotoStorage(location=STATIC_DIR)
     STATIC_ROOT = AWS_S3_URL_TEMPLATE + STATIC_DIR + '/'
     STATIC_URL = STATIC_ROOT
 
@@ -107,7 +107,7 @@ if SERVE_MEDIA:
 else:
     # Serve media from AWS
     # tell django to use django-storages
-    DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
+    # DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
     MEDIA_ROOT = AWS_S3_URL_TEMPLATE + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
 

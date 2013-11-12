@@ -1,3 +1,0 @@
-[submodule "boto_orig"]
-	path = boto_orig
-	url = https://github.com/boto/boto.git
