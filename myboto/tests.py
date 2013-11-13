@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-from project_settings import settings
+from django.conf import settings
 
 from myboto import S3File
 
