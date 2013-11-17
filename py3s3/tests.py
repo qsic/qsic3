@@ -3,7 +3,7 @@ import unittest
 
 from django.conf import settings
 
-from myboto import S3File
+from py3s3 import S3File
 
 
 class MyBotoTests(unittest.TestCase):
