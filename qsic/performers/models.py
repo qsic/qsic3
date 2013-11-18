@@ -33,6 +33,7 @@ class Performer(models.Model):
             Return True on successful completion
         """
 
+
         # Return False if URL passed does not save to model
         # eg. invalid URL
         if not self.it_url:

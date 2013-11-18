@@ -6,7 +6,7 @@ from django.conf import settings
 from py3s3 import S3File
 
 
-class MyBotoTests(unittest.TestCase):
+class Py3s3Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.datetime = datetime.datetime.now()
