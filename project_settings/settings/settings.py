@@ -1,13 +1,28 @@
 # Django settings for qsic3 project.
 import os
 
+from django.core.exceptions import ImproperlyConfigured
+
 import dj_database_url
 
-from py3s3.storage import S3Storage
+from py3s3.storage import MediaS3Storage
+from py3s3.storage import StaticS3Storage
 
-#from project_settings.s3utils import S3BotoStorage
 
-DEBUG = 'true' in str(os.environ.get('DJANGO_DEBUG', False)).lower()
+def get_env_var(env_var, default=None, isbool=False):
+    """
+    Return value of envirnoment variable or throw exception
+    """
+    try:
+        env_value = os.environ.get(env_var, default)
+        if isbool:
+            env_value = 'true' in str(env_value).lower()
+        return env_value
+    except KeyError:
+        error_msg = "%s environment variable not set" % env_var
+        raise ImproperlyConfigured(error_msg)
+
+DEBUG = get_env_var('DJANGO_DEBUG', default=False, isbool=True)
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
 
@@ -23,7 +38,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = get_env_var('DATABASE_URL')
 DATABASES = {
     'default': dj_database_url.config()
 }
@@ -60,9 +75,9 @@ STATIC_DIR = 'static'
 MEDIA_DIR = 'media'
 
 # AWS file access info
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
+AWS_ACCESS_KEY_ID = get_env_var('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get_env_var('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = get_env_var('AWS_STORAGE_BUCKET_NAME')
 
 # Of the format: '//bucket_name.s3.amazonaws.com/[media|static]/'
 AWS_S3_BUCKET_URL = '//%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
@@ -70,8 +85,7 @@ AWS_S3_BUCKET_URL = '//%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # Encoding for AWS transactions
 ENCODING = 'utf-8'
 
-env_var_static = os.environ.get('DJANGO_SERVE_STATIC', False)
-SERVE_STATIC = 'true' in str(env_var_static).lower()
+SERVE_STATIC = get_env_var('DJANGO_SERVE_STATIC', default=False, isbool=True)
 if SERVE_STATIC:
     # Serve static locally
     # Absolute path to the directory static files should be collected to.
@@ -95,8 +109,7 @@ else:
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 
-env_var_media = os.environ.get('DJANGO_SERVE_MEDIA', False)
-SERVE_MEDIA = 'true' in str(env_var_media).lower()
+SERVE_MEDIA = get_env_var('DJANGO_SERVE_MEDIA', default=False, isbool=True)
 if SERVE_MEDIA:
     # Serve media locally
     # Absolute filesystem path to the directory that
@@ -144,9 +157,6 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '*6l!9=9)6w(3fbzf2r0%d7%q&d1c3vp@y%r@z7pcz6@_f)kd$@'
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -193,6 +203,9 @@ INSTALLED_APPS = (
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = get_env_var('DJANGO_SECRET_KEY')
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

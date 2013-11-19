@@ -162,3 +162,11 @@ class S3Storage(Storage):
 
     def modified_time(self, name):
         pass
+
+
+class StaticS3Storage(S3Storage):
+    pass
+
+
+class MediaS3Storage(S3Storage):
+    pass
