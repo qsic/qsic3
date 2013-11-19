@@ -3,10 +3,12 @@ import unittest
 
 from django.conf import settings
 
-from py3s3 import S3File
+from py3s3.files import S3File
+from py3s3.storage import S3Storage
+from qsic.performers.models import Performer
 
 
-class Py3s3Tests(unittest.TestCase):
+class S3FileTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.datetime = datetime.datetime.now()
@@ -32,7 +34,23 @@ class Py3s3Tests(unittest.TestCase):
         fget = S3File(self.bucket, self.test_file_name)
         get_status_code, get_contents = fget.get()
         self.assertEqual(get_status_code, 200)
-        self.assertEqual(get_contents, self.test_contents.encode('utf-8'))
+        self.assertEqual(get_contents,
+                         self.test_contents.encode(settings.ENCODING))
+
+
+class S3StorageTests(unittest.TestCase):
+
+    def test__000_save_model_with_image(self):
+        p = Performer.objects.create(
+            first_name='Paul',
+            last_name='Logston',
+            it_url='http://newyork.improvteams.com/performers/2849/paullogston'
+        )
+        p.save()
+        result = p.save_it_content_from_parsed_it_url()
+        self.assertEqual(result['success'], True, 'IT info save failed.')
+        result = p.fetch_headshot()
+        self.assertEqual(result, True)
 
 if __name__ == '__main__':
     unittest.main()

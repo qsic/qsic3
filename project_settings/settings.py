@@ -3,7 +3,7 @@ import os
 
 import dj_database_url
 
-from py3s3.py3s3customstorage import Py3s3CustomStorage
+from py3s3.storage import S3Storage
 
 #from project_settings.s3utils import S3BotoStorage
 
@@ -64,8 +64,11 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
 
-# Of the format: '//s3.amazonaws.com/bucket_name/[media|static]/'
-AWS_S3_URL_TEMPLATE = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
+# Of the format: '//bucket_name.s3.amazonaws.com/[media|static]/'
+AWS_S3_BUCKET_URL = '//%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+# Encoding for AWS transactions
+ENCODING = 'utf-8'
 
 env_var_static = os.environ.get('DJANGO_SERVE_STATIC', False)
 SERVE_STATIC = 'true' in str(env_var_static).lower()
@@ -85,7 +88,7 @@ else:
     # Serve static from AWS
     # tell django to use django-storages
     #STATICFILES_STORAGE = lambda: S3BotoStorage(location=STATIC_DIR)
-    STATIC_ROOT = AWS_S3_URL_TEMPLATE + STATIC_DIR + '/'
+    STATIC_ROOT = AWS_S3_BUCKET_URL + '/' + STATIC_DIR + '/'
     STATIC_URL = STATIC_ROOT
 
 # ADMIN STATIC
@@ -93,7 +96,7 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 
 env_var_media = os.environ.get('DJANGO_SERVE_MEDIA', False)
-SERVE_MEDIA= 'true' in str(env_var_media).lower()
+SERVE_MEDIA = 'true' in str(env_var_media).lower()
 if SERVE_MEDIA:
     # Serve media locally
     # Absolute filesystem path to the directory that
@@ -110,9 +113,9 @@ else:
     # Serve media from AWS
     # tell django to use django-storages
     # DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
-    MEDIA_ROOT = AWS_S3_URL_TEMPLATE + MEDIA_DIR + '/'
+    MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
-    DEFAULT_FILE_STORAGE = Py3s3CustomStorage
+    DEFAULT_FILE_STORAGE = 'py3s3.storage.S3Storage'
 
 if SERVE_STATIC or SERVE_MEDIA:
     # Only upload new or changed files to AWS
