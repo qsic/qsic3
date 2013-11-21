@@ -110,7 +110,7 @@ class S3Storage(Storage):
             '',
             '',
             timestamp,
-            '/' + self.bucket + self.name
+            '/' + self.bucket + name
         ])
         signature = self.request_signature(stringtosign)
 
@@ -121,16 +121,19 @@ class S3Storage(Storage):
                                                 self.access_key,
                                                 ':',
                                                 signature])
+        file = S3ContentFile('')
         with closing(HTTPConnection(NETLOC)) as conn:
             conn.request('GET',
                          name,
                          headers=headers)
-            r = conn.getresponse()
+            response = conn.getresponse()
+            if not response.status in (200,):
+                raise IOError('py3s3 GET error. Response status: %s' %
+                              response.status)
 
-        if not r.status in (200,):
-            raise IOError('py3s3 GET error. Response status: %s' % r.status)
+            file = S3ContentFile(response.read())
 
-        return S3ContentFile(r.read())
+        return file
 
     def _open(self, name, mode='rb'):
         prefixed_name = self._prepend_name_prefix(name)
