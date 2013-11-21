@@ -3,12 +3,12 @@
 """
 from contextlib import closing
 from datetime import datetime
+import hashlib
 import hmac
 from http.client import HTTPConnection
 import urllib.parse
 from wsgiref.handlers import format_date_time
 
-from django.conf import settings
 from django.core.files.storage import Storage
 
 from .config import BUCKET
@@ -31,7 +31,7 @@ class S3Storage(Storage):
         self.secret_key = secret_key
 
     @staticmethod
-    def request_timestamp(self):
+    def request_timestamp():
         return format_date_time(datetime.now().timestamp())
 
     def _prepend_name_prefix(self, name):
@@ -88,17 +88,19 @@ class S3Storage(Storage):
                          file_object.name,
                          file_object.read(),
                          headers=headers)
-            return conn.getresponse().status
+            response = conn.getresponse()
+
+        if response.status not in (200,):
+            raise IOError('py3s3 PUT error. Response status: %s' %
+                          response.status)
 
     def _save(self, name, file_object):
         prefixed_name = self._prepend_name_prefix(name)
         file_object.name = prefixed_name
-
-        if status not in (200,):
-            raise IOError('py3s3 PUT error. Response status: %s' % status)
+        self._put_file(file_object)
         return name
 
-    def get_file(self, name):
+    def _get_file(self, name):
         """
         Return a signature for use in GET requests
         """
@@ -124,18 +126,17 @@ class S3Storage(Storage):
                          name,
                          headers=headers)
             r = conn.getresponse()
-            return r.status, r.read()
+
+        if not r.status in (200,):
+            raise IOError('py3s3 GET error. Response status: %s' % r.status)
+
+        return S3ContentFile(r.read())
 
     def _open(self, name, mode='rb'):
-        name = self._prepend_name_prefix(name)
-        file = self.get_file(name)
-        status, data = file
-        if status in (200,):
-            f = File(data)
-            f.close()
-            return f
-        else:
-            raise IOError('py3s3 GET error. Response status: %s' % status)
+        prefixed_name = self._prepend_name_prefix(name)
+        file = self._get_file(prefixed_name)
+        file.name = name
+        return file
 
     def delete(self, name):
         pass
@@ -165,8 +166,12 @@ class S3Storage(Storage):
 
 
 class StaticS3Storage(S3Storage):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.name_prefix = 'static/'
 
 
 class MediaS3Storage(S3Storage):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.name_prefix = 'media/'

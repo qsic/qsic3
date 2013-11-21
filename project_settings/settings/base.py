@@ -5,9 +5,6 @@ from django.core.exceptions import ImproperlyConfigured
 
 import dj_database_url
 
-from py3s3.storage import MediaS3Storage
-from py3s3.storage import StaticS3Storage
-
 
 def get_env_var(env_var, default=None, isbool=False):
     """
@@ -101,7 +98,7 @@ if SERVE_STATIC:
 else:
     # Serve static from AWS
     # tell django to use django-storages
-    #STATICFILES_STORAGE = lambda: S3BotoStorage(location=STATIC_DIR)
+    STATICFILES_STORAGE = 'py3s3.storage.StaticS3Storage'
     STATIC_ROOT = AWS_S3_BUCKET_URL + '/' + STATIC_DIR + '/'
     STATIC_URL = STATIC_ROOT
 
@@ -128,7 +125,7 @@ else:
     # DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
     MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
-    DEFAULT_FILE_STORAGE = 'py3s3.storage.S3Storage'
+    DEFAULT_FILE_STORAGE = 'py3s3.storage.MediaS3Storage'
 
 if SERVE_STATIC or SERVE_MEDIA:
     # Only upload new or changed files to AWS
@@ -198,14 +195,16 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'south',
     # 'storages', no longer using storages 2013.11.03
-    'easy_thumbnails',
+    #'easy_thumbnails',
     'qsic',
+    'py3s3',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = get_env_var('DJANGO_SECRET_KEY')
+#SECRET_KEY = get_env_var('DJANGO_SECRET_KEY')
+SECRET_KEY = 'I803C28lV0FEYOYPoufwCJKe56ENvXkUvuwDyJgDb936M_NyOE'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
