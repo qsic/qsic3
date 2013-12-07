@@ -21,6 +21,18 @@ from .utils import b64_string
 NETLOC = '%s.s3.amazonaws.com' % BUCKET
 
 
+class S3IOError(IOError):
+    pass
+
+
+class S3FileDoesNotExistError(S3IOError):
+    def __init__(self, name=None, msg=None):
+        total_msg = 'File does not exist: {}'.format(name)
+        if msg:
+            total_msg += ' {}'.format(msg)
+        super().__init__(total_msg)
+
+
 class S3Storage(Storage):
     """A custom storage implimentation for use with py3s3"""
     def __init__(self, name_prefix='', bucket=BUCKET,
@@ -31,8 +43,19 @@ class S3Storage(Storage):
         self.secret_key = secret_key
 
     @staticmethod
-    def request_timestamp():
-        return format_date_time(datetime.now().timestamp())
+    def request_timestamp(timestamp=None):
+        if timestamp is None:
+            timestamp = datetime.now().timestamp()
+        return format_date_time(timestamp)
+
+    @staticmethod
+    def datetime_from_aws_timestamp(timestamp):
+        """
+        Return datetime from parsed AWS header timestamp string.
+        AWS Format:  Wed, 28 Oct 2009 22:32:00 GMT
+        """
+        fmt = '%a, %d %b %Y %X %Z'
+        return datetime.strptime(timestamp, fmt)
 
     def _prepend_name_prefix(self, name):
         """Return file name (ie. path) with the prefix directory prepended"""
@@ -58,6 +81,7 @@ class S3Storage(Storage):
         return b64_string(digest)
 
     def _put_file(self, file_object):
+        """Send PUT request to S3 with file_object contents"""
         timestamp = self.request_timestamp()
 
         mimetype = file_object.mimetype if file_object.mimetype else ''
@@ -113,7 +137,6 @@ class S3Storage(Storage):
             '/' + self.bucket + name
         ])
         signature = self.request_signature(stringtosign)
-
         headers = dict()
         headers['Date'] = timestamp
         if self.access_key and self.secret_key:
@@ -128,11 +151,15 @@ class S3Storage(Storage):
                          headers=headers)
             response = conn.getresponse()
             if not response.status in (200,):
-                raise IOError('py3s3 GET error. Response status: %s' %
-                              response.status)
+                if response.length is None:
+                    # length == None seems to be returned from GET requests
+                    # to non-existing files
+                    raise S3FileDoesNotExistError(name, 'Fun in the sun.')
+                # catch all other cases
+                raise S3IOError('py3s3 GET error. Response status: %s' %
+                                response.status)
 
             file = S3ContentFile(response.read())
-
         return file
 
     def _open(self, name, mode='rb'):
@@ -142,20 +169,46 @@ class S3Storage(Storage):
         return file
 
     def delete(self, name):
-        pass
+        timestamp = self.request_timestamp()
+        stringtosign = '\n'.join([
+            'DELETE',
+            '',
+            '',
+            timestamp,
+            '/' + self.bucket + name
+        ])
+        signature = self.request_signature(stringtosign)
+        headers = dict()
+        headers['Date'] = timestamp
+        if self.access_key and self.secret_key:
+            headers['Authorization'] = ''.join(['AWS' + ' ',
+                                                self.access_key,
+                                                ':',
+                                                signature])
+        with closing(HTTPConnection(NETLOC)) as conn:
+            conn.request('DELETE',
+                         name,
+                         headers=headers)
+            response = conn.getresponse()
+            if not response.status in (204,):
+                raise S3IOError('py3s3 DELETE error. Response status: %s' %
+                                response.status)
 
     def exists(self, name):
         with closing(HTTPConnection(NETLOC)) as conn:
             conn.request('HEAD', self.url(name))
-            return conn.getresponse().status == 200
+            return conn.getresponse().status in (200,)
 
     def listdir(self, path):
-        pass
+        raise NotImplementedError()
 
     def size(self, name):
-        pass
+        with closing(HTTPConnection(NETLOC)) as conn:
+            conn.request('GET', self.url(name))
+            return conn.getresponse().length
 
     def url(self, name):
+        """Return URL of resource"""
         scheme = 'http'
         netloc = NETLOC
         path = self._prepend_name_prefix(name)
@@ -165,7 +218,13 @@ class S3Storage(Storage):
         return urllib.parse.urlunsplit(url_tuple)
 
     def modified_time(self, name):
-        pass
+        with closing(HTTPConnection(NETLOC)) as conn:
+            conn.request('HEAD', self.url(name))
+            dt_header = conn.getresponse().getheader('Last-Modified', None)
+        if dt_header is None:
+            raise S3IOError('No modified time available for file: %s' %
+                            name)
+        return self.datetime_from_aws_timestamp(dt_header)
 
 
 class StaticS3Storage(S3Storage):
