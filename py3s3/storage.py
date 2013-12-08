@@ -154,7 +154,7 @@ class S3Storage(Storage):
                 if response.length is None:
                     # length == None seems to be returned from GET requests
                     # to non-existing files
-                    raise S3FileDoesNotExistError(name, 'Fun in the sun.')
+                    raise S3FileDoesNotExistError(name)
                 # catch all other cases
                 raise S3IOError('py3s3 GET error. Response status: %s' %
                                 response.status)
@@ -169,13 +169,14 @@ class S3Storage(Storage):
         return file
 
     def delete(self, name):
+        prefixed_name = self._prepend_name_prefix(name)
         timestamp = self.request_timestamp()
         stringtosign = '\n'.join([
             'DELETE',
             '',
             '',
             timestamp,
-            '/' + self.bucket + name
+            '/' + self.bucket + prefixed_name
         ])
         signature = self.request_signature(stringtosign)
         headers = dict()
@@ -187,7 +188,7 @@ class S3Storage(Storage):
                                                 signature])
         with closing(HTTPConnection(NETLOC)) as conn:
             conn.request('DELETE',
-                         name,
+                         prefixed_name,
                          headers=headers)
             response = conn.getresponse()
             if not response.status in (204,):
@@ -197,7 +198,8 @@ class S3Storage(Storage):
     def exists(self, name):
         with closing(HTTPConnection(NETLOC)) as conn:
             conn.request('HEAD', self.url(name))
-            return conn.getresponse().status in (200,)
+            response = conn.getresponse()
+            return response.status in (200,)
 
     def listdir(self, path):
         raise NotImplementedError()
@@ -227,13 +229,13 @@ class S3Storage(Storage):
         return self.datetime_from_aws_timestamp(dt_header)
 
 
-class StaticS3Storage(S3Storage):
+class S3MediaStorage(S3Storage):
     def __init__(self):
         super().__init__()
-        self.name_prefix = 'static/'
+        self.name_prefix = '/media'
 
 
-class MediaS3Storage(S3Storage):
+class S3StaticStorage(S3Storage):
     def __init__(self):
         super().__init__()
-        self.name_prefix = 'media/'
+        self.name_prefix = '/static'

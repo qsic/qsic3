@@ -1,4 +1,5 @@
 import datetime
+import time
 import unittest
 
 from django.conf import settings
@@ -6,9 +7,11 @@ from django.conf import settings
 from .files import S3ContentFile
 from .storage import S3IOError
 from .storage import S3Storage
+from .storage import S3MediaStorage
+from .storage import S3StaticStorage
 
 
-class Py3s3StorageTests(unittest.TestCase):
+class Py3s3S3StorageTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.datetime = datetime.datetime.now()
@@ -46,9 +49,21 @@ class Py3s3StorageTests(unittest.TestCase):
         file = self.storage._open(self.test_file_name)
         self.assertEqual(self.file.content, file.content)
 
-    def test__005_DELETE_delets_test_file_from_s3(self):
+    def test__005_DELETE_deletes_test_file_from_s3(self):
         self.storage.delete(self.test_file_name)
         self.assertFalse(self.storage.exists(self.test_file_name))
+
+
+class Py3s3S3StaticStorageTests(Py3s3S3StorageTests):
+    def setUp(self):
+        super().setUp()
+        self.storage = S3StaticStorage()
+
+
+class Py3s3S3MediaStorageTests(Py3s3S3StorageTests):
+    def setUp(self):
+        super().setUp()
+        self.storage = S3MediaStorage()
 
 if __name__ == '__main__':
     unittest.main()
