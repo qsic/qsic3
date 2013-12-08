@@ -104,7 +104,7 @@ class S3Storage(Storage):
         headers['Content-Length'] = file_object.size
         headers['Content-MD5'] = file_object.md5hash()
         if mimetype:
-            headers['Content-Type'] = self.mimetype
+            headers['Content-Type'] = file_object.mimetype
         headers['x-amz-acl'] = 'public-read'
 
         with closing(HTTPConnection(NETLOC)) as conn:

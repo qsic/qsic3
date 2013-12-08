@@ -23,8 +23,13 @@ DEBUG = get_env_var('DJANGO_DEBUG', default=False, isbool=True)
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
 
+
 # should point to qsic3 directory
-PROJECT_ROOT = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
+def dirname(file, depth):
+    """Return directory name containing file depth levels deep"""
+    return os.path.dirname(dirname(file, depth-1)) if depth else file
+
+PROJECT_ROOT = os.path.realpath(dirname(__file__, 3))
 if DEBUG:
     print('Project Root set to:', PROJECT_ROOT)
 
@@ -98,7 +103,7 @@ if SERVE_STATIC:
 else:
     # Serve static from AWS
     # tell django to use django-storages
-    STATICFILES_STORAGE = 'py3s3.storage.StaticS3Storage'
+    STATICFILES_STORAGE = 'py3s3.storage.S3StaticStorage'
     STATIC_ROOT = AWS_S3_BUCKET_URL + '/' + STATIC_DIR + '/'
     STATIC_URL = STATIC_ROOT
 
@@ -125,7 +130,7 @@ else:
     # DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
     MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
-    DEFAULT_FILE_STORAGE = 'py3s3.storage.MediaS3Storage'
+    DEFAULT_FILE_STORAGE = 'py3s3.storage.S3MediaStorage'
 
 if SERVE_STATIC or SERVE_MEDIA:
     # Only upload new or changed files to AWS

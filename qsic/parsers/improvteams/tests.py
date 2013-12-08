@@ -5,7 +5,7 @@ import urllib
 
 from django.core.files import File
 
-from project_settings.settings import PROJECT_ROOT
+from project_settings.settings.base import PROJECT_ROOT
 from qsic.parsers.improvteams.parser import BaseItParser
 from qsic.parsers.improvteams.parser import ItPerformerParser
 from qsic.parsers.improvteams.parser import ItTeamParser

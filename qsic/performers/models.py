@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from django.db import models
 
+from py3s3.files import S3ContentFile
 from qsic.parsers.improvteams.parser import ItPerformerParser
 
 
@@ -68,9 +69,14 @@ class Performer(models.Model):
                        '.jpg'])
         with urllib.request.urlopen(uri) as imgp:
             # make sure imgp is a jpeg
-            if imgp.info().get_content_type() == 'image/jpeg':
+            mimetype = 'image/jpeg'
+            if imgp.info().get_content_type() == mimetype:
                 name = str(self.it_id) + '.jpg'
-                self.headshot.save(name, ContentFile(imgp.read()), save=True)
+                self.headshot.save(
+                    name,
+                    S3ContentFile(imgp.read(), mimetype=mimetype),
+                    save=True
+                )
                 return True
             else:
                 return False    # maybe leave this out so we return none
