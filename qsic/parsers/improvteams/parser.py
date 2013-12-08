@@ -40,6 +40,9 @@ class BaseItParser(object):
         strainer = SoupStrainer(id='main')
         self.soup = BeautifulSoup(self.html, parse_only=strainer)
 
+    def __str__(self):
+        return self.url
+
 
 class ItPerformerParser(BaseItParser):
     """Parser for performer information from Improvteams"""
@@ -78,7 +81,7 @@ class ItPerformerParser(BaseItParser):
 
     def parse_soup_for_bio(self):
         """Return self with bio populated"""
-        bio = self.soup.select('#main .profile .profile_right .bio')[0].string
+        bio = self.soup.select('#main .profile .profile_right .bio')[0].text
         if self.bio:
             self.bio = bio.strip()
 
