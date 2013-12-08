@@ -35,7 +35,6 @@ class Performer(models.Model):
             Return True on successful completion
         """
 
-
         # Return False if URL passed does not save to model
         # eg. invalid URL
         if not self.it_url:
@@ -62,7 +61,7 @@ class Performer(models.Model):
     def fetch_headshot(self):
         """Fetch and save headshot photo from Improvteams.com"""
         if not self.it_id:
-            return False
+            return {'success': False, 'msg': 'Improvteams id is not set.'}
         uri = ''.join(['http://newyork.improvteams.com/',
                        'uploads/performer_images/performer_',
                        str(self.it_id),
@@ -77,6 +76,5 @@ class Performer(models.Model):
                     S3ContentFile(imgp.read(), mimetype=mimetype),
                     save=True
                 )
-                return True
-            else:
-                return False    # maybe leave this out so we return none
+                return {'success': True}
+        return {'success': False, 'msg': 'Unable to save headshot.'}
