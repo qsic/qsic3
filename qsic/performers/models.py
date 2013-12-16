@@ -30,7 +30,7 @@ class Performer(models.Model):
 
     @property
     def full_name(self):
-        return '%s %s' % (self.first_name, self.last_name)
+        return '{} {}'.format(self.first_name, self.last_name)
 
     def save_it_content_from_parsed_it_url(self):
         """Save Performer info parsed from Improvteams.com
@@ -52,10 +52,12 @@ class Performer(models.Model):
         self.first_name = performer_info.first_name
         self.last_name = performer_info.last_name
 
-        self.bio = ('%s'
-                    '<br>'
-                    'Bio courtesy of <a href="%s">Improvteams.com</a>' %
-                    (performer_info.bio, performer_info.url))
+        self.bio = ''.join([
+            '{}'.format(performer_info.bio),
+            '<br>'
+            'Bio courtesy of '
+            '<a href="{}">Improvteams.com</a>'.format(performer_info.url)
+        ])
 
         self.save()
         return {'success': True}

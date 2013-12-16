@@ -1,3 +1,4 @@
+import logging
 import os.path
 import sys
 import unittest
@@ -10,13 +11,21 @@ from qsic.parsers.improvteams.parser import BaseItParser
 from qsic.parsers.improvteams.parser import ItPerformerParser
 from qsic.parsers.improvteams.parser import ItTeamParser
 
+logger = logging.getLogger(__name__)
+
+
+def local_data_path(file_name):
+    """
+    Return absolute path of file file_name
+    located in local/test_data
+    """
+    return os.path.join(PROJECT_ROOT, 'local', 'test_data', file_name)
+
+
 """The file at this location holds the HTML that will be tested
 against to see if the format of performer pages has changed.
 """
-CONTROL_PERFORMER_URI = os.path.join(PROJECT_ROOT,
-                                      'local',
-                                      'test_data',
-                                      'it_performer_page_paullogston.html')
+CONTROL_PERFORMER_URI = local_data_path('it_performer_page_paullogston.html')
 
 """The file at this URI will be tested against the control perfomer page to
 see if any changes in the format of the HTML.
@@ -27,15 +36,22 @@ TEST_PERFORMER_URI = ('http://newyork.improvteams.com/'
 """The file at this location holds the HTML that will be tested
 against to see if the format of teams pages has changed.
 """
-CONTROL_TEAM_URI = os.path.join(PROJECT_ROOT,
-                                'local',
-                                'test_data',
-                                'it_team_page_bearcountry.html')
+CONTROL_TEAM_URI_PLAIN = local_data_path('it_team_page_amanda_and_jenice.html')
 
 """The file at this URI will be tested against the control team page to
 see if any changes in the format of the HTML.
 """
-TEST_TEAM_URI = 'http://bearcountry.improvteams.com/'
+#TEST_TEAM_URI_PLAIN = 'http://bearcountry.improvteams.com/'
+TEST_TEAM_URI_PLAIN = 'http://amandajenice.improvteams.com/'
+
+"""Similar to above however this will be tested against a different
+Improvteams.com Team page format. The format here has a main photo
+that consumes most of the page.
+"""
+CONTROL_TEAM_URI_PLUS = local_data_path('it_team_page_boat.html')
+
+TEST_TEAM_URI_PLUS = 'http://boat.improvteams.com/'
+
 
 def get_control_html_from_lfs(path):
     with open(path) as fp:
@@ -46,9 +62,10 @@ class BaseItParserUTs(unittest.TestCase):
     """Common Unit Tests to all Parser test objects"""
     pass
 
+
 class ParserUTsMixin(object):
     """Unit tests common to all parser objects"""
-    def test__fetch_html_returns_200(self):
+    def test__000_fetch_html_returns_200(self):
         """Fetch returns status code of 200"""
         parser = BaseItParser(self.__class__.test_uri)
         self.assertEqual(parser.response_status, 200)
@@ -56,73 +73,74 @@ class ParserUTsMixin(object):
 
 class ItPerformerParserUTs(unittest.TestCase, ParserUTsMixin):
     """Performer Parser Unit Tests"""
+    test_uri = TEST_PERFORMER_URI
+    control_uri = CONTROL_PERFORMER_URI
+
     @classmethod
     def setUpClass(cls):
-        cls.test_uri = TEST_PERFORMER_URI
-        cls.control_uri = CONTROL_PERFORMER_URI
-
         cls.test_parser = ItPerformerParser(cls.test_uri)
         cls.control_parser = ItPerformerParser(None)
         cls.control_parser.html = get_control_html_from_lfs(cls.control_uri)
+        cls.control_parser.parse_soup()
 
-    def test__it_id_parsed_from_it_url(self):
-        self.assertEqual(self.__class__.test_parser.it_id, 2849)
+    def test__000_it_id_parsed_from_it_url(self):
+        self.assertEqual(self.test_parser.it_id, 2849)
 
-    def test__bio_parsed_as_expected(self):
+    def test__001_bio_parsed_as_expected(self):
         """Checks for changes in the structure of bio at Improvteams.com"""
-        control_bio = self.__class__.control_parser.soup.select('#main '
-                                                     '.profile '
-                                                     '.profile_right '
-                                                     '.bio')[0].string
-        test_bio = self.__class__.test_parser.soup.select('#main '
-                                               '.profile '
-                                               '.profile_right '
-                                               '.bio')[0].string
+        selector = '#main .profile .profile_right .bio'
+        control_bio = self.control_parser.soup.select(selector)[0].string
+        test_bio = self.test_parser.soup.select(selector)[0].string
         self.assertEqual(test_bio, control_bio)
 
-    def test__name_parsed_as_expected(self):
+    def test__002_name_parsed_as_expected(self):
         """Check for changes in structure of name"""
-        self.assertEqual(self.__class__.test_parser.first_name,
-                         self.__class__.control_parser.first_name)
-        self.assertEqual(self.__class__.test_parser.last_name,
-                         self.__class__.control_parser.last_name)
-        self.assertEqual(self.__class__.test_parser.first_name,
-                         'Paul')
-        self.assertEqual(self.__class__.test_parser.last_name,
-                         'Logston')
+        self.assertEqual(self.test_parser.first_name,
+                         self.control_parser.first_name)
+        self.assertEqual(self.test_parser.last_name,
+                         self.control_parser.last_name)
+        self.assertEqual(self.test_parser.first_name, 'Paul')
+        self.assertEqual(self.test_parser.last_name, 'Logston')
 
 
-class ItTeamParserUTs(unittest.TestCase, ParserUTsMixin):
-    """Team Parser Unit Tests"""
+class ItTeamPlainParserUTs(unittest.TestCase, ParserUTsMixin):
+    """Team Plain Parser Unit Tests"""
+    control_uri = CONTROL_TEAM_URI_PLAIN
+    test_uri = TEST_TEAM_URI_PLAIN
+    team_name = 'Amanda & Jenic'
+
     @classmethod
     def setUpClass(cls):
-        cls.control_uri = CONTROL_TEAM_URI
-        cls.test_uri = TEST_TEAM_URI
-
         cls.test_parser = ItTeamParser(cls.test_uri)
         cls.control_parser = ItTeamParser(None)
         cls.control_parser.html = get_control_html_from_lfs(cls.control_uri)
+        cls.control_parser.parse_soup()
 
-    def test__team_name_parsed_as_expected(self):
+    def test__000_team_name_parsed_as_expected(self):
         """Check for changes in structure of HTML effecting team name"""
-        self.assertEqual(self.__class__.test_parser.team_name,
-                         self.__class__.control_parser.team_name)
-        self.assertEqual(self.__class__.test_parser.team_name, 'Bear Country')
+        self.assertEqual(self.test_parser.team_name,
+                         self.control_parser.team_name)
+        self.assertEqual(self.test_parser.team_name,
+                         self.team_name)
 
-    def test__team_photo_uri_parsed_as_expected(self):
+    def test__001_team_photo_uri_parsed_as_expected(self):
         """Check for changes in structure of HTML effecting team photo uri"""
-        self.assertEqual(self.__class__.test_parser.team_photo_uri,
-                         self.__class__.control_parser.team_photo_uri)
+        self.assertEqual(self.test_parser.team_photo_uri,
+                         self.control_parser.team_photo_uri)
 
-    def test__team_bio_parsed_as_expected(self):
+    def test__002_team_bio_parsed_as_expected(self):
         """Check for changes in structure of HTML effecting team bio"""
-        self.assertEqual(self.__class__.test_parser.team_bio,
-                         self.__class__.control_parser.team_bio)
+        self.assertEqual(self.test_parser.team_bio,
+                         self.control_parser.team_bio)
 
-    def test__performer_uri_list_parsed_as_expected(self):
+    def test__003_performer_uri_list_parsed_as_expected(self):
         """Check for changes in structure of HTML effecting performer list"""
-        self.assertEqual(self.__class__.test_parser.performer_uri_list,
-                         self.__class__.control_parser.performer_uri_list)
-        self.assertEqual(self.__class__.test_parser.performer_uri_list,
-            ['http://newyork.improvteams.com/performers/2872/mike_lane',
-             'http://newyork.improvteams.com/performers/2849/paul_logston'])
+        self.assertEqual(self.test_parser.performer_uri_list,
+                         self.control_parser.performer_uri_list)
+
+
+class ItTeamPlusParserUTs(ItTeamPlainParserUTs):
+    """Team Plus Parser Unit Tests"""
+    control_uri = CONTROL_TEAM_URI_PLUS
+    test_uri = TEST_TEAM_URI_PLUS
+    team_name = 'Boat'
