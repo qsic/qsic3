@@ -2,11 +2,14 @@
     A custom ContentFile for S3 uploads/downloads.
 """
 import hashlib
+import logging
 
 from django.core.files.base import ContentFile
 
 from .config import ENCODING
 from .utils import b64_string
+
+logger = logging.getLogger(__name__)
 
 
 class S3ContentFile(ContentFile):
@@ -41,9 +44,6 @@ class S3ContentFile(ContentFile):
         """Return the MD5 hash string of the file content"""
         digest = hashlib.md5(self.content).digest()
         return b64_string(digest)
-
-    def read(self, num_of_bytes=None):
-        return self.content
 
     def write(self, content):
         raise NotImplementedError

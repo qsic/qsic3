@@ -1,11 +1,13 @@
+import logging
 import urllib.request
 
 from django.contrib.auth.models import User
-from django.core.files.base import ContentFile
 from django.db import models
 
 from py3s3.files import S3ContentFile
 from qsic.parsers.improvteams.parser import ItPerformerParser
+
+logger = logging.getLogger(__name__)
 
 
 class Performer(models.Model):
@@ -70,11 +72,8 @@ class Performer(models.Model):
             # make sure imgp is a jpeg
             mimetype = 'image/jpeg'
             if imgp.info().get_content_type() == mimetype:
-                name = str(self.it_id) + '.jpg'
-                self.headshot.save(
-                    name,
-                    S3ContentFile(imgp.read(), mimetype=mimetype),
-                    save=True
-                )
+                file_name = str(self.it_id) + '.jpg'
+                s3file = S3ContentFile(imgp.read(), mimetype=mimetype)
+                self.headshot.save(file_name, s3file, save=False)
                 return {'success': True}
         return {'success': False, 'msg': 'Unable to save headshot.'}
