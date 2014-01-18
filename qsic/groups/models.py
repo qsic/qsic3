@@ -20,3 +20,19 @@ class Group(models.Model):
 
     class Meta:
         app_label = 'qsic'
+
+
+class GroupPerformerRelation(models.Model):
+    """
+    This model represents the relationship between a play and a
+    performance group. A performer can be on a team from
+    start dt to end dt.
+    """
+    group = ForeignKey('qsic.Group')
+    performer = models.ForeignKey('qsic.Performer')
+
+    start_dt = models.DateTimeField()
+    end_dt = models.DateTimeField()
+
+    class Meta:
+        app_label = 'qsic'

@@ -13,26 +13,6 @@ from qsic.parsers.improvteams.parser import ItTeamParser
 
 logger = logging.getLogger(__name__)
 
-
-def local_data_path(file_name):
-    """
-    Return absolute path of file file_name
-    located in local/test_data
-    """
-    return os.path.join(PROJECT_ROOT, 'local', 'test_data', file_name)
-
-
-"""The file at this location holds the HTML that will be tested
-against to see if the format of performer pages has changed.
-"""
-CONTROL_PERFORMER_URI = local_data_path('it_performer_page_paullogston.html')
-
-"""The file at this URI will be tested against the control perfomer page to
-see if any changes in the format of the HTML.
-"""
-TEST_PERFORMER_URI = ('http://newyork.improvteams.com/'
-                       'performers/2849/paullogston')
-
 """The file at this location holds the HTML that will be tested
 against to see if the format of teams pages has changed.
 """
@@ -51,6 +31,22 @@ that consumes most of the page.
 CONTROL_TEAM_URI_PLUS = local_data_path('it_team_page_boat.html')
 
 TEST_TEAM_URI_PLUS = 'http://boat.improvteams.com/'
+
+
+test_relations = {
+    'Paul': {
+        'control': 'it_performer_page_paullogston.html',
+        'test': 'http://newyork.improvteams.com/performers/2849/paullogston'
+    },
+}
+
+
+def local_data_path(file_name):
+    """
+    Return absolute path of file file_name
+    located in local/test_data
+    """
+    return os.path.join(PROJECT_ROOT, 'local', 'test_data', file_name)
 
 
 def get_control_html_from_lfs(path):
@@ -73,8 +69,9 @@ class ParserUTsMixin(object):
 
 class ItPerformerParserUTs(unittest.TestCase, ParserUTsMixin):
     """Performer Parser Unit Tests"""
-    test_uri = TEST_PERFORMER_URI
-    control_uri = CONTROL_PERFORMER_URI
+    test_relation = test_relations['Paul']
+    test_uri = test_relation['test']
+    control_uri = test_relation['control']
 
     @classmethod
     def setUpClass(cls):
