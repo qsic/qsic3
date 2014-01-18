@@ -28,7 +28,7 @@ class GroupPerformerRelation(models.Model):
     performance group. A performer can be on a team from
     start dt to end dt.
     """
-    group = ForeignKey('qsic.Group')
+    group = models.ForeignKey('qsic.Group')
     performer = models.ForeignKey('qsic.Performer')
 
     start_dt = models.DateTimeField()

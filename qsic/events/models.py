@@ -8,14 +8,15 @@ class EventSeries(models.Model):
     """
     Exmaple: QSIC House Nights as a whole, QSIC Saturday Musical Nights
     """
-    name = models.CharField()
+    name = models.CharField(max_length=1024, blank=True, default='')
     start_dt = models.DateTimeField(blank=True)
     end_dt = models.DateTimeField(blank=True)
-    price = models.PositiveFloatField(blank=True)
+    price = models.DecimalField(blank=True, max_digits=6, decimal_places=2)
     description = models.TextField(blank=True)
 
     class Meta:
         app_label = 'qsic'
+        ordering = ['-end_dt']
 
     def __str__(self):
         return 'EventSeries {} {} - {}'.format(self.name, self.start_dt, self.end_dt)
@@ -26,10 +27,10 @@ class Event(models.Model):
     Example. QSIC House Night, QSIC Winter Ball
     """
     event_series = models.ForeignKey('qsic.EventSeries', blank=True, null=True)
-    name = models.CharField()
+    name = models.CharField(max_length=1024, blank=True, default='')
     start_dt = models.DateTimeField(blank=True)
     end_dt = models.DateTimeField(blank=True)
-    price = models.PositiveFloatField(blank=True)
+    price = models.DecimalField(blank=True, max_digits=6, decimal_places=2)
     description = models.TextField(blank=True)
 
     class Meta:
@@ -44,14 +45,14 @@ class Performance(models.Model):
     Represents a single performance. For example,
     a 20 minute set by a house night team. It could also
     be a 45 minute variety show or a two hour play.
-    As long as it cant be divided into independently coherent
+    As long as it can not be divided into independently coherent
     pieces it can be considered a performance.
     """
     event = models.ForeignKey('qsic.Event', blank=True, null=True)
-    name = models.CharField(blank=True, default='')
+    name = models.CharField(max_length=1024, blank=True, default='')
     start_dt = models.DateTimeField()
     end_dt = models.DateTimeField()
-    price = models.PositiveFloatField()
+    price = models.DecimalField(blank=True, max_digits=6, decimal_places=2)
 
     class Meta:
         app_label = 'qsic'
