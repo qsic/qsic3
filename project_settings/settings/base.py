@@ -208,8 +208,7 @@ INSTALLED_APPS = (
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 # Make this unique, and don't share it with anybody.
-#SECRET_KEY = get_env_var('DJANGO_SECRET_KEY')
-SECRET_KEY = 'I803C28lV0FEYOYPoufwCJKe56ENvXkUvuwDyJgDb936M_NyOE'
+SECRET_KEY = get_env_var('DJANGO_SECRET_KEY')
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
