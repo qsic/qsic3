@@ -16,7 +16,7 @@ def get_env_var(env_var, default=None, isbool=False):
             env_value = 'true' in str(env_value).lower()
         return env_value
     except KeyError:
-        error_msg = "%s environment variable not set" % env_var
+        error_msg = '{} environment variable not set'.format(env_var)
         raise ImproperlyConfigured(error_msg)
 
 DEBUG = get_env_var('DJANGO_DEBUG', default=False, isbool=True)
@@ -59,7 +59,7 @@ TIME_ZONE = 'America/New_York'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-SITE_ID = 1
+SITE_ID = 2
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

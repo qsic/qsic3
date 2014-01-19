@@ -5,4 +5,4 @@ from subprocess import call
 try:
     call(["foreman", "start"])
 except KeyboardInterrupt:
-    print('foreman stopped.')
+    print('\nforeman stopped.')
