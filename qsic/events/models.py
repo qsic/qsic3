@@ -35,6 +35,7 @@ class Event(models.Model):
 
     class Meta:
         app_label = 'qsic'
+        ordering = ['-end_dt']
 
     def __str__(self):
         return 'Event {} {} - {}'.format(self.name, self.start_dt, self.end_dt)
@@ -56,6 +57,7 @@ class Performance(models.Model):
 
     class Meta:
         app_label = 'qsic'
+        ordering = ['-end_dt']
 
     def __str__(self):
         return 'Performance {} {} - {}'.format(self.name, self.start_dt, self.end_dt)
