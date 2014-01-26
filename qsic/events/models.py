@@ -9,17 +9,14 @@ class EventSeries(models.Model):
     Exmaple: QSIC House Nights as a whole, QSIC Saturday Musical Nights
     """
     name = models.CharField(max_length=1024, blank=True, default='')
-    start_dt = models.DateTimeField(blank=True)
-    end_dt = models.DateTimeField(blank=True)
-    price = models.DecimalField(blank=True, max_digits=6, decimal_places=2)
     description = models.TextField(blank=True)
 
     class Meta:
         app_label = 'qsic'
-        ordering = ['-end_dt']
+        ordering = ['-id']
 
     def __str__(self):
-        return 'EventSeries {} {} - {}'.format(self.name, self.start_dt, self.end_dt)
+        return 'EventSeries {}'.format(self.name)
 
 
 class Event(models.Model):
@@ -28,17 +25,30 @@ class Event(models.Model):
     """
     event_series = models.ForeignKey('qsic.EventSeries', blank=True, null=True)
     name = models.CharField(max_length=1024, blank=True, default='')
-    start_dt = models.DateTimeField(blank=True)
-    end_dt = models.DateTimeField(blank=True)
-    price = models.DecimalField(blank=True, max_digits=6, decimal_places=2)
+    # Making times and price private so that a performance(s) can
+    # override them.
+    _start_dt = models.DateTimeField(blank=True, null=True)
+    _end_dt = models.DateTimeField(blank=True, null=True)
+    _price = models.DecimalField(blank=True,
+                                 null=True,
+                                 max_digits=6,
+                                 decimal_places=2,
+                                 default=None)
     description = models.TextField(blank=True)
 
     class Meta:
         app_label = 'qsic'
-        ordering = ['-end_dt']
+        ordering = ['-id']
 
     def __str__(self):
-        return 'Event {} {} - {}'.format(self.name, self.start_dt, self.end_dt)
+        return 'Event {}'.format(self.name)
+
+    @property
+    def start_dt(self):
+        if self._start_dt:
+            return _start_dt
+        elif self.performance_set:
+            return self.performance_set.order_by('start_dt')[0]
 
 
 class Performance(models.Model):
@@ -53,7 +63,11 @@ class Performance(models.Model):
     name = models.CharField(max_length=1024, blank=True, default='')
     start_dt = models.DateTimeField()
     end_dt = models.DateTimeField()
-    price = models.DecimalField(blank=True, max_digits=6, decimal_places=2)
+    price = models.DecimalField(blank=True,
+                                null=True,
+                                max_digits=6,
+                                decimal_places=2,
+                                default=None)
 
     class Meta:
         app_label = 'qsic'

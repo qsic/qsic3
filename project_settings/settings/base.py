@@ -13,7 +13,7 @@ def get_env_var(env_var, default=None, isbool=False):
     try:
         env_value = os.environ.get(env_var, default)
         if isbool:
-            env_value = 'true' in str(env_value).lower()
+            env_value = 'true' in str(env_value).lower().strip()
         return env_value
     except KeyError:
         error_msg = '{} environment variable not set'.format(env_var)
@@ -59,7 +59,7 @@ TIME_ZONE = 'America/New_York'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-SITE_ID = 2
+SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
