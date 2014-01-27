@@ -4,26 +4,10 @@ from qsic.performers.models import Performer
 from qsic.groups.models import Group
 
 
-class EventSeries(models.Model):
-    """
-    Exmaple: QSIC House Nights as a whole, QSIC Saturday Musical Nights
-    """
-    name = models.CharField(max_length=1024, blank=True, default='')
-    description = models.TextField(blank=True)
-
-    class Meta:
-        app_label = 'qsic'
-        ordering = ['-id']
-
-    def __str__(self):
-        return '{}'.format(self.name)
-
-
 class Event(models.Model):
     """
     Example. QSIC House Night, QSIC Winter Ball
     """
-    event_series = models.ForeignKey('qsic.EventSeries', blank=True, null=True)
     name = models.CharField(max_length=1024, blank=True, default='')
     # Making times and price private so that a performance(s) can
     # override them.

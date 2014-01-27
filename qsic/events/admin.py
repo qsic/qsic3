@@ -1,15 +1,8 @@
 from django.contrib import admin
 
-from .models import EventSeries
 from .models import Event
 from .models import Performance
 from .models import PerformanceGroupPerformerRelation
-
-
-class EventSeriesAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
-admin.site.register(EventSeries, EventSeriesAdmin)
 
 
 class EventAdmin(admin.ModelAdmin):
