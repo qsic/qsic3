@@ -17,6 +17,7 @@ class Group(models.Model):
                               null=True,
                               blank=True)
     bio = models.TextField(null=True, blank=True)
+    create_dt = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         app_label = 'qsic'

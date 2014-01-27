@@ -16,7 +16,7 @@ class EventSeries(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return 'EventSeries {}'.format(self.name)
+        return '{}'.format(self.name)
 
 
 class Event(models.Model):
@@ -47,7 +47,7 @@ class Event(models.Model):
     def start_dt(self):
         if self._start_dt:
             return _start_dt
-        elif self.performance_set:
+        elif self.performance_set.count():
             return self.performance_set.order_by('start_dt')[0]
 
 

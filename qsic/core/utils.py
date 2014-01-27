@@ -65,3 +65,13 @@ class CalendarWeek(object):
         Return string which can be used in urls identifying week by YYYYMMDD.
         """
         return self.start_dt.strftime(self.slug_pattern)
+
+    def __str__(self):
+        return self.start_dt.strftime('%Y-%m-%d')
+
+    def __contains__(self, item):
+        if isinstance(item, str) and len(item) == 8:
+            return self.start_dt == self._monday_dt_for_week_slug(item)
+        elif isinstance(item, datetime):
+            return self.start_dt <= item < self.end_dt
+        return False

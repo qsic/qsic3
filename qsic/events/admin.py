@@ -13,7 +13,7 @@ admin.site.register(EventSeries, EventSeriesAdmin)
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'event_series', 'start_dt', 'end_dt',)
+    list_display = ('name', 'event_series', 'start_dt',)
     search_fields = ('name', 'event_series',)
 admin.site.register(Event, EventAdmin)
 
@@ -25,6 +25,6 @@ admin.site.register(Performance, PerformanceAdmin)
 
 
 class PerformanceGroupPerformerRelationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'event', 'start_dt', 'end_dt', 'price',)
-    search_fields = ('name', 'event',)
+    list_display = ('performance', 'performer', 'group',)
+    search_fields = ('performance', 'performer', 'group',)
 admin.site.register(PerformanceGroupPerformerRelation, PerformanceGroupPerformerRelationAdmin)
