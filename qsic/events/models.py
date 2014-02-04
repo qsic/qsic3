@@ -24,15 +24,38 @@ class Event(models.Model):
         app_label = 'qsic'
         ordering = ['-id']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.performance_offset = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        qs = self.performance_set.order_by('start_dt')
+        if self.performance_offset < qs.count():
+            performance = qs[self.performance_offset]
+            self.performance_offset += 1
+            return performance
+        else:
+            raise StopIteration
+
     def __str__(self):
         return 'Event {}'.format(self.name)
 
     @property
     def start_dt(self):
         if self._start_dt:
-            return _start_dt
+            return self._start_dt
         elif self.performance_set.count():
-            return self.performance_set.order_by('start_dt')[0]
+            return self.performance_set.order_by('start_dt')[0].start_dt
+
+    @property
+    def end_dt(self):
+        if self._end_dt:
+            return self._end_dt
+        elif self.performance_set.count():
+            return self.performance_set.order_by('-end_dt')[0].end_dt
 
 
 class Performance(models.Model):
@@ -58,7 +81,7 @@ class Performance(models.Model):
         ordering = ['-end_dt']
 
     def __str__(self):
-        return 'Performance {} {} - {}'.format(self.name, self.start_dt, self.end_dt)
+        return '{} {} - {}'.format(self.name, self.start_dt, self.end_dt)
 
     @property
     def performers(self):

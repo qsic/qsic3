@@ -16,21 +16,28 @@ def current_week(request):
     return HttpResponseRedirect(reverse('qsic_week', args=(curr_week.slug,)))
 
 
-# show calendar for week (Events & Performacnes without events)
+#
 def week(request, week_slug):
+    """
+    Show calendar for week. Events along with their corresponding
+    performances and performacnes without events.
+    """
     cal_week = CalendarWeek(week_slug)
 
-    # get all events starting this week
-    events = [event for event in Event.objects.all() if event.start_dt in cal_week]
-    # get all performances bound to an event
-    event_performances = [p for p in event.performance_set.all() for event in events]
+    # get all events for cal_week
+    events = (e for e in Event.objects.all() if e.start_dt in cal_week)
 
     # get all performances not in events
     performances = Performance.objects.filter(
         start_dt__gte=cal_week.start_dt,
         end_dt__lt=cal_week.end_dt,
-        #not in=event_performances
+    ).exclude(
+        event__in=events
     )
+
+    party_var = 'WOOOO!!!'
+    party_dict = {'first': 'FIEIFEIFJEI'}
+    party_list = ['maybe']
 
     return render_to_response(
         'events/week.html',

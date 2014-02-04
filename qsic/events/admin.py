@@ -6,8 +6,8 @@ from .models import PerformanceGroupPerformerRelation
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'event_series', 'start_dt',)
-    search_fields = ('name', 'event_series',)
+    list_display = ('name', 'start_dt',)
+    search_fields = ('name',)
 admin.site.register(Event, EventAdmin)
 
 

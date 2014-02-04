@@ -4,7 +4,7 @@ from django.conf.urls import url
 urlpatterns = patterns(
     'qsic.events.views',
 
-    url(r'^current_week/?$',
+    url(r'^week/current/?$',
         'current_week',
         name='qsic_current_week'),
 
