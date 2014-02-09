@@ -4,6 +4,7 @@ from django.http.response import HttpResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+from django.views.generic import DetailView
 
 from qsic.core.utils import CalendarWeek
 from qsic.events.models import Event
@@ -25,19 +26,15 @@ def week(request, week_slug):
     cal_week = CalendarWeek(week_slug)
 
     # get all events for cal_week
-    events = (e for e in Event.objects.all() if e.start_dt in cal_week)
+    events = [e for e in Event.objects.all() if e.start_dt in cal_week]
 
     # get all performances not in events
     performances = Performance.objects.filter(
         start_dt__gte=cal_week.start_dt,
-        end_dt__lt=cal_week.end_dt,
+        start_dt__lt=cal_week.end_dt,
     ).exclude(
         event__in=events
     )
-
-    party_var = 'WOOOO!!!'
-    party_dict = {'first': 'FIEIFEIFJEI'}
-    party_list = ['maybe']
 
     return render_to_response(
         'events/week.html',
@@ -46,23 +43,11 @@ def week(request, week_slug):
     )
 
 
-# show event (Particular Event with Performaces)
-def event(request, event_id):
-    # cheange to modelview
-    event = Event.objects.get(event_id)
-
-    return render_to_response(
-        'events/event.html',
-        locals(),
-        context_instance=RequestContext(request)
-    )
+class EventDetailView(DetailView):
+    template_name = 'events/event_detail.html'
+    model = Event
 
 
-# show performance (Performance details)
-def performance(request, performance_id):
-    # change to modelveiw
-    return render_to_response(
-        'events/event.html',
-        locals(),
-        context_instance=RequestContext(request)
-    )
+class PerformanceDetailView(DetailView):
+    template_name = 'events/performance_detail.html'
+    model = Performance

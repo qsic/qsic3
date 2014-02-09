@@ -3,8 +3,12 @@ from datetime import datetime
 from django.test import TestCase
 from django.utils.timezone import utc
 
+from freezegun import freeze_time
+
 from .models import Event
 from .models import Performance
+
+from qsic.core.utils import CalendarWeek
 
 
 class EventDateTimeMethodsTC(TestCase):
@@ -86,25 +90,179 @@ class EventPerformanceRelationTC(TestCase):
         self.assertEqual(expected, result)
 
 
+# "2012-12-12 00:00:00" is a Wednesday
+# 15th is a Saturday
+@freeze_time("2012-12-12 00:00:00", tz_offset=0)
 class EventsPerformacesWeekPassedToTemplateTC(TestCase):
     """
-    Assert that correct event and week objects are handed to
+    Assert that correct event and performances objects are handed to
     template for rendering.
     """
+    def setUp(self):
+        """
+        Set up events and performances for next several weeks
+        """
+        self.cal_week = CalendarWeek()
+
+        # Week of Monday, 2012-12-10 - One Event, Winter Ball
+        self.e1 = Event.objects.create(
+            name='QSIC Winter Ball',
+            description='A night of fun!',
+            _start_dt=datetime(2012, 12, 15, 21, 0, 0, tzinfo=utc),
+            _end_dt=datetime(2012, 12, 16, 2, 0, 0, tzinfo=utc),
+            _price=15.00
+        )
+
+        # Week of Monday, 2012-12-17 - One event with two performances
+        self.e2 = Event.objects.create(name='QSIC House Night', description='A night of fun!')
+        self.p1 = Performance.objects.create(
+            event=self.e2,
+            name='Peace Love and Joy',
+            start_dt=datetime(2012, 12, 21, 19, 30, 0, tzinfo=utc),
+            end_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=utc),
+            price=5.00
+        )
+        self.p2 = Performance.objects.create(
+            event=self.e2,
+            name="Rockin' Rolla Music",
+            start_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=utc),
+            end_dt=datetime(2012, 12, 21, 20, 30, 0, tzinfo=utc),
+            price=5.00
+        )
+
+        # Week of Monday, 2012-12-24 - Dark
+
+        # Week of Monday, 2012-12-31 - No events, 3 performances
+        self.p3 = Performance.objects.create(
+            event=self.e2,
+            name='Suzie Q & The Team',
+            start_dt=datetime(2013, 1, 2, 20, 15, 0, tzinfo=utc),
+            end_dt=datetime(2013, 1, 2, 23, 0, 0, tzinfo=utc),
+            price=5.00
+        )
+        self.p4 = Performance.objects.create(
+            event=self.e2,
+            name='Magic Man, The',
+            start_dt=datetime(2013, 1, 4, 19, 0, 0, tzinfo=utc),
+            end_dt=datetime(2012, 1, 4, 21, 15, 0, tzinfo=utc),
+            price=5.00
+        )
+        self.p5 = Performance.objects.create(
+            event=self.e2,
+            name='Marty Loves Pizza',
+            start_dt=datetime(2013, 1, 5, 12, 30, 0, tzinfo=utc),
+            end_dt=datetime(2012, 1, 5, 16, 0, 0, tzinfo=utc),
+            price=5.00
+        )
+
+        # Week of Monday, 2013-01-07 - 1 events, 2 performances in event, 1 not in event
+        self.e3 = Event.objects.create(name='Happy Fun Time', description='Lalalalalal')
+        self.p6 = Performance.objects.create(
+            event=self.e3,
+            name='Skiddss',
+            start_dt=datetime(2013, 1, 11, 15, 0, 0, tzinfo=utc),
+            end_dt=datetime(2012, 1, 11, 17, 0, 0, tzinfo=utc),
+            price=23.00
+        )
+        self.p7 = Performance.objects.create(
+            event=self.e3,
+            name='Lolipops',
+            start_dt=datetime(2013, 1, 11, 17, 30, 0, tzinfo=utc),
+            end_dt=datetime(2012, 1, 11, 19, 0, 0, tzinfo=utc),
+            price=34.00
+        )
+        self.p8 = Performance.objects.create(
+            name='Madness!',
+            start_dt=datetime(2013, 1, 11, 20, 30, 0, tzinfo=utc),
+            end_dt=datetime(2012, 1, 11, 22, 0, 0, tzinfo=utc),
+            price=15.00
+        )
+
+    def get_local_context(self, response):
+        self.assertTrue(hasattr(response, 'context'))
+        self.assertTrue(hasattr(response.context, 'dicts'))
+        local_context = response.context.dicts
+        dict_list = [d for d in local_context if 'events' in d or 'performances' in d]
+        self.assertTrue(len(dict_list), 1)
+        return dict_list[0]
 
     def test_no_performaces_or_events_for_dark_week(self):
-        response = self.client.get('/events/week/current', follow=True)
-        local_context = [d for d in response.context if 'events' in d]
-        self.assertIsNot(local_context, [])
-        local_context = local_context[0]
-
-        # make sure expect values are in local context
+        response = self.client.get('/events/week/20121224', follow=True)
+        local_context = self.get_local_context(response)
+        # Assert no events
+        self.assertEqual(local_context['events'], [])
+        # Assert no Performances
+        self.assertEqual([p for p in local_context['performances']], [])
 
     def test_performances_no_events(self):
-        pass
+        response = self.client.get('/events/week/20121231', follow=True)
+        local_context = self.get_local_context(response)
+        # Assert no events
+        self.assertEqual(local_context['events'], [])
+        # 3 Performances
+        self.assertEqual(local_context['performances'].count(), 3)
 
-    def test_no_non_event_performances_several_events(self):
-        pass
+    def test_no_non_event_performances_one_event(self):
+        response = self.client.get('/events/week/20121217', follow=True)
+        local_context = self.get_local_context(response)
+        # Assert 1 event
+        self.assertEqual(len([e for e in local_context['events']]), 1)
+        # No Performances
+        self.assertEqual(local_context['performances'].count(), 0)
 
     def test_events_and_non_event_performances(self):
-        pass
+        response = self.client.get('/events/week/20130107', follow=True)
+        local_context = self.get_local_context(response)
+        # Assert 1 event
+        events = [e for e in local_context['events']]
+        self.assertEqual(len(events), 1)
+        event_performances = [p for p in events[0]]
+        # 2 Event Performances
+        self.assertEqual(len(event_performances), 2)
+        # 1 Non Event Performance
+        self.assertEqual(local_context['performances'].count(), 1)
+
+
+# "2012-12-12 00:00:00" is a Wednesday
+# 15th is a Saturday
+@freeze_time("2012-12-12 00:00:00", tz_offset=0)
+class EventsPerformacesDetailViewContextPassedToTemplateTC(TestCase):
+    """
+    Assert that correct event and performance objects are handed to
+    template for rendering.
+    """
+    def setUp(self):
+        """
+        Set up an event and some performances.
+        """
+        self.cal_week = CalendarWeek()
+
+        # Week of Monday, 2012-12-17 - One event with two performances
+        self.e1 = Event.objects.create(name='QSIC House Night', description='A night of fun!')
+        self.p1 = Performance.objects.create(
+            event=self.e1,
+            name='Peace Love and Joy',
+            start_dt=datetime(2012, 12, 21, 19, 30, 0, tzinfo=utc),
+            end_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=utc),
+            price=5.00
+        )
+        self.p2 = Performance.objects.create(
+            event=self.e1,
+            name="Rockin' Rolla Music",
+            start_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=utc),
+            end_dt=datetime(2012, 12, 21, 20, 30, 0, tzinfo=utc),
+            price=5.00
+        )
+
+    def test_event_in_context(self):
+        response = self.client.get('/events/event/' + str(self.e1.id), follow=True)
+        self.assertTrue(hasattr(response, 'context_data'))
+        local_context = response.context_data
+        self.assertEqual(local_context['event'], self.e1)
+
+    def test_performance_in_context_no_event(self):
+        response = self.client.get('/events/performance/' + str(self.p1.id), follow=True)
+        self.assertTrue(hasattr(response, 'context_data'))
+        local_context = response.context_data
+        self.assertEqual(local_context['performance'], self.p1)
+        self.assertFalse(hasattr(local_context, 'event'))
