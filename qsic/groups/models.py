@@ -1,6 +1,7 @@
 import urllib.request
 
 from django.db import models
+from django.utils import timezone
 
 from py3s3.files import S3ContentFile
 from qsic.parsers.improvteams.parser import ItTeamParser
@@ -18,22 +19,42 @@ class Group(models.Model):
                               blank=True)
     bio = models.TextField(null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True, null=True)
+    is_house_team = models.BooleanField(default=True)
 
     class Meta:
         app_label = 'qsic'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.performer_offset = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        qs = self.groupperformerrelation_set.all()
+        qs = qs.filter(start_dt__lte=timezone.now(), end_dt__gte=timezone.now())
+
+        if self.performer_offset < qs.count():
+            performer = qs[self.performer_offset]
+            self.performer_offset += 1
+            return performer
+        else:
+            raise StopIteration
+
 
 class GroupPerformerRelation(models.Model):
     """
-    This model represents the relationship between a play and a
-    performance group. A performer can be on a team from
-    start dt to end dt.
+    This model represents the relationship between a performer and a
+    performance group. A performer is always part of a group. Whether the
+    performer appears on a team's current roster depends on if the peroformer
+    has a ``GroupPerfromerRelation`` for the group.
     """
     group = models.ForeignKey('qsic.Group')
     performer = models.ForeignKey('qsic.Performer')
 
     start_dt = models.DateTimeField()
-    end_dt = models.DateTimeField()
+    end_dt = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         app_label = 'qsic'

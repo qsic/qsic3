@@ -28,6 +28,8 @@ class Migration(SchemaMigration):
             ('it_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('photo', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
             ('bio', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('create_dt', self.gf('django.db.models.fields.DateTimeField')(null=True, auto_now_add=True, blank=True)),
+            ('is_house_team', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
         db.send_create_signal('qsic', ['Group'])
 
@@ -37,26 +39,17 @@ class Migration(SchemaMigration):
             ('group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['qsic.Group'])),
             ('performer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['qsic.Performer'])),
             ('start_dt', self.gf('django.db.models.fields.DateTimeField')()),
-            ('end_dt', self.gf('django.db.models.fields.DateTimeField')()),
+            ('end_dt', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
         ))
         db.send_create_signal('qsic', ['GroupPerformerRelation'])
-
-        # Adding model 'EventSeries'
-        db.create_table('qsic_eventseries', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=1024, default='', blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-        ))
-        db.send_create_signal('qsic', ['EventSeries'])
 
         # Adding model 'Event'
         db.create_table('qsic_event', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('event_series', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['qsic.EventSeries'], blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=1024, default='', blank=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(default='', max_length=1024, blank=True)),
             ('_start_dt', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('_end_dt', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('_price', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=6, default=None, blank=True, decimal_places=2)),
+            ('_price', self.gf('django.db.models.fields.DecimalField')(default=None, max_digits=6, decimal_places=2, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
         db.send_create_signal('qsic', ['Event'])
@@ -65,10 +58,10 @@ class Migration(SchemaMigration):
         db.create_table('qsic_performance', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('event', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['qsic.Event'], blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=1024, default='', blank=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(default='', max_length=1024, blank=True)),
             ('start_dt', self.gf('django.db.models.fields.DateTimeField')()),
             ('end_dt', self.gf('django.db.models.fields.DateTimeField')()),
-            ('price', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=6, default=None, blank=True, decimal_places=2)),
+            ('price', self.gf('django.db.models.fields.DecimalField')(default=None, max_digits=6, decimal_places=2, null=True, blank=True)),
         ))
         db.send_create_signal('qsic', ['Performance'])
 
@@ -91,9 +84,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'GroupPerformerRelation'
         db.delete_table('qsic_groupperformerrelation')
-
-        # Deleting model 'EventSeries'
-        db.delete_table('qsic_eventseries')
 
         # Deleting model 'Event'
         db.delete_table('qsic_event')
@@ -124,7 +114,7 @@ class Migration(SchemaMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'related_name': "'user_set'", 'blank': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'user_set'", 'symmetrical': 'False', 'to': "orm['auth.Group']", 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -132,11 +122,11 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'related_name': "'user_set'", 'blank': 'True'}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'user_set'", 'symmetrical': 'False', 'to': "orm['auth.Permission']", 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '30', 'unique': 'True'})
         },
         'contenttypes.contenttype': {
-            'Meta': {'db_table': "'django_content_type'", 'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType'},
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -145,30 +135,25 @@ class Migration(SchemaMigration):
         'qsic.event': {
             'Meta': {'ordering': "['-id']", 'object_name': 'Event'},
             '_end_dt': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            '_price': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '6', 'default': 'None', 'blank': 'True', 'decimal_places': '2'}),
+            '_price': ('django.db.models.fields.DecimalField', [], {'default': 'None', 'max_digits': '6', 'decimal_places': '2', 'null': 'True', 'blank': 'True'}),
             '_start_dt': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'event_series': ('django.db.models.fields.related.ForeignKey', [], {'null': 'True', 'to': "orm['qsic.EventSeries']", 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'default': "''", 'blank': 'True'})
-        },
-        'qsic.eventseries': {
-            'Meta': {'ordering': "['-id']", 'object_name': 'EventSeries'},
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'default': "''", 'blank': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1024', 'blank': 'True'})
         },
         'qsic.group': {
             'Meta': {'object_name': 'Group'},
             'bio': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'create_dt': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_house_team': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'it_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'photo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
         },
         'qsic.groupperformerrelation': {
             'Meta': {'object_name': 'GroupPerformerRelation'},
-            'end_dt': ('django.db.models.fields.DateTimeField', [], {}),
+            'end_dt': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['qsic.Group']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'performer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['qsic.Performer']"}),
@@ -179,8 +164,8 @@ class Migration(SchemaMigration):
             'end_dt': ('django.db.models.fields.DateTimeField', [], {}),
             'event': ('django.db.models.fields.related.ForeignKey', [], {'null': 'True', 'to': "orm['qsic.Event']", 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'default': "''", 'blank': 'True'}),
-            'price': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '6', 'default': 'None', 'blank': 'True', 'decimal_places': '2'}),
+            'name': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1024', 'blank': 'True'}),
+            'price': ('django.db.models.fields.DecimalField', [], {'default': 'None', 'max_digits': '6', 'decimal_places': '2', 'null': 'True', 'blank': 'True'}),
             'start_dt': ('django.db.models.fields.DateTimeField', [], {})
         },
         'qsic.performancegroupperformerrelation': {
