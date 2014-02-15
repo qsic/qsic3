@@ -22,4 +22,13 @@ urlpatterns = patterns(
     url(r'^performance/(?P<pk>\d+)/?$',
         PerformanceDetailView.as_view(),
         name='peroformance_detail_view'),
+
+    # TODO add reroutes to slugged urls
+    url(r'^event/(?P<slug>)/?$',
+        EventDetailView.as_view(),
+        name='event_detail_view'),
+
+    url(r'^performance/(?P<slug>)/?$',
+        PerformanceDetailView.as_view(),
+        name='peroformance_detail_view'),
 )
