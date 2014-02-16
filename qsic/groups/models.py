@@ -14,7 +14,7 @@ class Group(models.Model):
     Represents a Team or other Performance Group.
     """
     name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64, unique=True)
+    slug = models.SlugField(blank=True, default='')
     # 'it' is short for Imrpovteams / Improvteams.com
     it_url = models.URLField(null=True, blank=True)
     photo = models.ImageField(upload_to='performers/headshots',

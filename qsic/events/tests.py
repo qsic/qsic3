@@ -1,5 +1,7 @@
+import unittest
 from datetime import datetime
 
+from django.template.defaultfilters import slugify
 from django.test import TestCase
 from django.utils.timezone import utc
 
@@ -266,3 +268,37 @@ class EventsPerformacesDetailViewContextPassedToTemplateTC(TestCase):
         local_context = response.context_data
         self.assertEqual(local_context['performance'], self.p1)
         self.assertFalse(hasattr(local_context, 'event'))
+
+
+class SlugTC(TestCase):
+    """
+    A test case for all slug related tests.
+    """
+    @classmethod
+    def setUpClass(cls):
+        cls.start_dt = datetime.utcnow().replace(tzinfo=utc)
+        cls.end_dt = datetime.utcnow().replace(tzinfo=utc)
+
+    def test_save_event_generates_correct_slug(self):
+        e = Event.objects.create(name='QSIC House Night')
+        self.assertEqual(e.slug, 'qsic-house-night')
+
+    def test_save_performance_generates_correct_slug(self):
+        p = Performance.objects.create(name='Butter High!',
+                                       start_dt=self.start_dt,
+                                       end_dt=self.end_dt)
+        self.assertEqual(p.slug, 'butter-high')
+
+    def test_get_event_detail_view_redirects_to_view_with_slug(self):
+        e = Event.objects.create(name='QSIC House Night')
+        response = self.client.get('/events/event/' + str(e.id), follow=True)
+        self.assertTrue(hasattr(response, 'request'))
+        self.assertEqual(response.request['PATH_INFO'], e.url)
+
+    def test_get_performance_detail_view_redirects_to_view_with_slug(self):
+        p = Performance.objects.create(name='Butter High!',
+                                       start_dt=self.start_dt,
+                                       end_dt=self.end_dt)
+        response = self.client.get('/events/performance/' + str(p.id), follow=True)
+        self.assertTrue(hasattr(response, 'request'))
+        self.assertEqual(response.request['PATH_INFO'], p.url)

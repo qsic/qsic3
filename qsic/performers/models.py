@@ -14,6 +14,7 @@ class Performer(models.Model):
     user = models.OneToOneField(User, null=True, blank=True)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
+    slug = models.SlugField(blank=True, default='')
     # 'it' is short for Imrpovteams / Improvteams.com
     it_url = models.URLField(null=True, blank=True)
     it_id = models.PositiveIntegerField(null=True, blank=True)

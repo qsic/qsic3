@@ -1,7 +1,6 @@
-from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.http.response import HttpResponse
 from django.http.response import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.generic import DetailView
@@ -10,6 +9,8 @@ from qsic.core.utils import CalendarWeek
 from qsic.events.models import Event
 from qsic.events.models import Performance
 
+
+from django.template.defaultfilters import slugify
 
 def current_week(request):
     # get current week and forward to that week
@@ -41,6 +42,16 @@ def week(request, week_slug):
         locals(),
         context_instance=RequestContext(request)
     )
+
+
+def event_detial_view_add_slug(request, pk=None):
+    e = get_object_or_404(Event, id=pk)
+    return HttpResponseRedirect(e.url)
+
+
+def performance_detail_view_add_slug(request, pk=None):
+    p = get_object_or_404(Performance, id=pk)
+    return HttpResponseRedirect(p.url)
 
 
 class EventDetailView(DetailView):

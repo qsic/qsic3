@@ -1,5 +1,6 @@
-from django.template.defaultfilters import slugify
+from django.core.urlresolvers import reverse
 from django.db import models
+from django.template.defaultfilters import slugify
 
 from qsic.performers.models import Performer
 from qsic.groups.models import Group
@@ -10,7 +11,7 @@ class Event(models.Model):
     Example. QSIC House Night, QSIC Winter Ball
     """
     name = models.CharField(max_length=1024, blank=True, default='')
-    slug = models.SlugField(_('slug'), max_length=60, blank=True)
+    slug = models.SlugField(blank=True, default='')
     # Making times and price private so that a performance(s) can
     # override them.
     _start_dt = models.DateTimeField(blank=True, null=True)
@@ -42,6 +43,10 @@ class Event(models.Model):
         else:
             raise StopIteration
 
+    def save(self, **kwargs):
+        self.slug = slugify(self.name)
+        super(Event, self).save()
+
     def __str__(self):
         return 'Event {}'.format(self.name)
 
@@ -59,6 +64,12 @@ class Event(models.Model):
         elif self.performance_set.count():
             return self.performance_set.order_by('-end_dt')[0].end_dt
 
+    @property
+    def url(self):
+        url = reverse('event_detial_view_add_slug', kwargs={'pk': self.id})
+        url = ''.join((url, '/', self.slug))
+        return url
+
 
 class Performance(models.Model):
     """
@@ -70,7 +81,7 @@ class Performance(models.Model):
     """
     event = models.ForeignKey('qsic.Event', blank=True, null=True)
     name = models.CharField(max_length=1024, blank=True, default='')
-    slug = models.SlugField(_('slug'), max_length=60, blank=True)
+    slug = models.SlugField(blank=True, default='')
     start_dt = models.DateTimeField()
     end_dt = models.DateTimeField()
     price = models.DecimalField(blank=True,
@@ -85,6 +96,16 @@ class Performance(models.Model):
 
     def __str__(self):
         return '{} {} - {}'.format(self.name, self.start_dt, self.end_dt)
+
+    def save(self, **kwargs):
+        self.slug = slugify(self.name)
+        super(Performance, self).save()
+
+    @property
+    def url(self):
+        url = reverse('performance_detail_view_add_slug', kwargs={'pk': self.id})
+        url = ''.join((url, '/', self.slug))
+        return url
 
     @property
     def performers(self):
