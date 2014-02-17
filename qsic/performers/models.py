@@ -2,7 +2,9 @@ import logging
 import urllib.request
 
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
+from django.template.defaultfilters import slugify
 
 from py3s3.files import S3ContentFile
 from qsic.parsers.improvteams.parser import ItPerformerParser
@@ -28,6 +30,16 @@ class Performer(models.Model):
 
     def __str__(self):
         return self.full_name
+
+    def save(self, **kwargs):
+        self.slug = slugify(' '.join((self.first_name, self.last_name)))
+        super().save()
+
+    @property
+    def url(self):
+        url = reverse('performer_detail_view_add_slug', kwargs={'pk': self.id})
+        url = ''.join((url, '/', self.slug))
+        return url
 
     @property
     def full_name(self):

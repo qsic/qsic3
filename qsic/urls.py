@@ -13,7 +13,7 @@ urlpatterns = patterns(
     # sub apps
     url(r'^events/', include('qsic.events.urls')),
     url(r'^groups/', include('qsic.groups.urls')),
-    #url(r'^performers/', include('qsic.performers.urls')),
+    url(r'^performers/', include('qsic.performers.urls')),
 
 
 )
