@@ -1,8 +1,10 @@
 import string
 import urllib.request
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
+from django.template.defaultfilters import slugify
 from django.utils import timezone
 
 from py3s3.files import S3ContentFile
@@ -51,13 +53,21 @@ class Group(models.Model):
         else:
             raise StopIteration
 
-    # TODO test this method
     @property
     def is_current(self):
-        return GroupPerformerRelation.objects.filter(group=self).filter(
-            Q(start_dt__lte=timezone.now()),
-            (Q(end_dt__gte=timezone.now() | Q(end_dt=None)))
-        ).exists()
+        gpr = GroupPerformerRelation.objects.filter(group=self)
+        gpr = gpr.filter(Q(end_dt__gte=timezone.now()) | Q(end_dt=None))
+        return gpr.filter(Q(start_dt__lte=timezone.now())).exists()
+
+    def save(self, **kwargs):
+        self.slug = slugify(self.name)
+        super().save()
+
+    @property
+    def url(self):
+        url = reverse('group_detail_view_add_slug', kwargs={'pk': self.id})
+        url = ''.join((url, '/', self.slug))
+        return url
 
 
 class GroupPerformerRelation(models.Model):

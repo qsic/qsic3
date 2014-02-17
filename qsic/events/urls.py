@@ -23,11 +23,11 @@ urlpatterns = patterns(
         'performance_detail_view_add_slug',
         name='performance_detail_view_add_slug'),
 
-    url(r'^event/(?P<pk>\d+)/[A-Za-z0-9_\-]+?$',
+    url(r'^event/(?P<pk>\d+)/[A-Za-z0-9_\-]+$',
         EventDetailView.as_view(),
         name='event_detail_view'),
 
-    url(r'^performance/(?P<pk>\d+)/[A-Za-z0-9_\-]+?$',
+    url(r'^performance/(?P<pk>\d+)/[A-Za-z0-9_\-]+$',
         PerformanceDetailView.as_view(),
         name='peroformance_detail_view'),
 )
