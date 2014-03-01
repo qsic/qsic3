@@ -9,8 +9,8 @@ from qsic.core.utils import CalendarWeek
 from qsic.events.models import Event
 from qsic.events.models import Performance
 
-
 from django.template.defaultfilters import slugify
+
 
 def current_week(request):
     # get current week and forward to that week

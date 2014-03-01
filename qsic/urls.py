@@ -5,7 +5,7 @@ urlpatterns = patterns(
     '',
 
     # to index page of QSIC
-    #url(r'^$', 'qsic.views.index', name='qsic_index'),
+    url(r'^$', 'qsic.views.index_redirect', name='qsic_index'),
 
     # About Page
     url(r'^about/?$', TemplateView.as_view(template_name='about.html')),
