@@ -142,6 +142,13 @@ if DEBUG:
     print('Media Root set to:', MEDIA_ROOT)
     print('Media URL set to:', MEDIA_URL)
 
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'static', 'components')
+
+BOWER_INSTALLED_APPS = (
+    'jquery#1.9',
+    'underscore',
+)
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -156,6 +163,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'djangobower.finders.BowerFinder',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -202,6 +210,7 @@ INSTALLED_APPS = (
     #'easy_thumbnails',
     'qsic',
     'py3s3',
+    'djangobower',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
