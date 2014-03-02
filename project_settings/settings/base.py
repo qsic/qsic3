@@ -23,13 +23,13 @@ DEBUG = get_env_var('DJANGO_DEBUG', default=False, isbool=True)
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
 
+# Return directory name containing file depth levels deep
+dirname = lambda file, depth: os.path.dirname(dirname(file, depth-1)) if depth else file
 
-# should point to qsic3 directory
-def dirname(file, depth):
-    """Return directory name containing file depth levels deep"""
-    return os.path.dirname(dirname(file, depth-1)) if depth else file
+PROJECT_ROOT = os.path.abspath(dirname(__file__, 3))
 
-PROJECT_ROOT = os.path.realpath(dirname(__file__, 3))
+rootjoin = lambda *args: os.path.join(PROJECT_ROOT, *args)
+
 if DEBUG:
     print('Project Root set to:', PROJECT_ROOT)
 
@@ -94,7 +94,7 @@ if SERVE_STATIC:
     # Don't put anything in this directory yourself; store your static files
     # in apps' "static/" subdirectories and in STATICFILES_DIRS.
     # Example: "/home/media/media.lawrence.com/static/"
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'collected_static')
+    STATIC_ROOT = rootjoin(PROJECT_ROOT, 'collected_static')
 
     # URL prefix for static files.
     # Example: "http://media.lawrence.com/static/"
@@ -110,14 +110,13 @@ else:
 # ADMIN STATIC
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
-
 SERVE_MEDIA = get_env_var('DJANGO_SERVE_MEDIA', default=False, isbool=True)
 if SERVE_MEDIA:
     # Serve media locally
     # Absolute filesystem path to the directory that
     # will hold user-uploaded files.
     # Example: "/home/media/media.lawrence.com/media/"
-    MEDIA_ROOT = os.path.join(PROJECT_ROOT, '%s' % MEDIA_DIR)
+    MEDIA_ROOT = rootjoin(PROJECT_ROOT, '%s' % MEDIA_DIR)
 
     # URL that handles the media served from MEDIA_ROOT. Make sure to use a
     # trailing slash.
@@ -136,25 +135,20 @@ if SERVE_STATIC or SERVE_MEDIA:
     # Only upload new or changed files to AWS
     AWS_PRELOAD_METADATA = True
 
+
 if DEBUG:
     print('Static Root set to:', STATIC_ROOT)
     print('Static URL set to:', STATIC_URL)
     print('Media Root set to:', MEDIA_ROOT)
     print('Media URL set to:', MEDIA_URL)
 
-BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'static', 'components')
-
-BOWER_INSTALLED_APPS = (
-    'jquery#1.9',
-    'underscore',
-)
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'static'),
+    rootjoin('foundation'),
 )
 
 # List of finder classes that know how to find static files in
@@ -163,7 +157,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    'djangobower.finders.BowerFinder',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -210,7 +203,6 @@ INSTALLED_APPS = (
     #'easy_thumbnails',
     'qsic',
     'py3s3',
-    'djangobower',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -269,12 +261,6 @@ LOGGING = {
         },
 
         'qsic': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-
-        'py3s3': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,

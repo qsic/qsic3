@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
 urlpatterns = patterns(
@@ -15,5 +17,6 @@ urlpatterns = patterns(
     url(r'^groups/', include('qsic.groups.urls')),
     url(r'^performers/', include('qsic.performers.urls')),
 
-
 )
+
+urlpatterns += staticfiles_urlpatterns()
