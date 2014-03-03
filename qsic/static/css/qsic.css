@@ -1,0 +1,9 @@
+.top-bar .name h1 a {
+    padding: 0;
+}
+
+.top-bar .name a img {
+    height: 45px;
+    margin: 0 auto;
+    vertical-align: bottom;
+}

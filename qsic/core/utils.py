@@ -75,3 +75,14 @@ class CalendarWeek(object):
         elif isinstance(item, datetime):
             return self.start_dt <= item < self.end_dt
         return False
+
+    def days(self):
+        days = []
+        for i in range(7):
+            date = self.start_dt + timedelta(days=i)
+            days.append({
+                'date': date,
+                'name': date.strftime('%A'),
+                'offset': i
+            })
+        return days

@@ -70,6 +70,10 @@ class Event(models.Model):
         url = ''.join((url, '/', self.slug))
         return url
 
+    @property
+    def type(self):
+        return self.__class__.name
+
 
 class Performance(models.Model):
     """
@@ -124,6 +128,10 @@ class Performance(models.Model):
                 ).select_values('performer')
                 performers.extend(results)
         return performers
+
+    @property
+    def type(self):
+        return self.__class__.name
 
 
 class PerformanceGroupPerformerRelation(models.Model):

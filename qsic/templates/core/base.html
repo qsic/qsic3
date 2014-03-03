@@ -1,0 +1,95 @@
+{% load staticfiles %}
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QSIC | {% block title %}{% endblock title %}</title>
+  <link rel="stylesheet" href="{% static 'css/foundation.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/qsic.css' %}"
+  <script src="{% static 'js/vendor/modernizr.js' %}"></script>
+  {% block extra_head %}{% endblock extra_head %}
+</head>
+<body>
+{% block body_content %}
+  {% block header %}
+    <!-- Navigation -->
+    <nav class="top-bar" data-topbar>
+      <ul class="title-area">
+        <!-- Title Area -->
+        <li class="name">
+          <h1>
+            <a class="show-for-medium-up" href="#">
+              <img src="{% static 'images/qsic-logo-queen.png' %}">
+                  <span>
+                    The Queen's Secret Improv Club
+                  </span>
+            </a>
+            <a class="show-for-small" href="#">
+              <img src="{% static 'images/qsic-logo-queen.png' %}">
+                  <span>
+                    QSIC
+                  </span>
+            </a>
+          </h1>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <li class="divider"></li>
+          <li>
+            <a href="#">Shows</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="#">Performers</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="#">Teams</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="#">About QSIC</a>
+          </li>
+        </ul>
+      </section>
+    </nav>
+
+    <!-- End Top Bar -->
+  {% endblock header %}
+
+  <div class="row">
+    <div class="small-12 columns">
+      {% block main_content %}{% endblock main_content %}
+    </div>
+  </div>
+
+  {% block footer %}
+    <footer class="row">
+      <div class="small-12 columns">
+        <hr>
+        <div class="row">
+          <div class="small-12 columns">
+            <ul class="inline-list right">
+              <li>© Copyright 2014 QSIC</li>
+              <li><a href="#">Directions</a></li>
+              <li><a href="#">Donate</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  {% endblock footer %}
+{% endblock body_content %}
+<script src="{% static 'js/vendor/jquery.js' %}"></script>
+<script src="{% static 'js/foundation.min.js' %}"></script>
+<script>
+  $(document).foundation();
+</script>
+{% block extra_foot %}{% endblock extra_foot %}
+</body>
+</html>

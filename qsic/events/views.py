@@ -1,3 +1,6 @@
+import itertools
+from datetime import timedelta
+
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -18,7 +21,6 @@ def current_week(request):
     return HttpResponseRedirect(reverse('qsic_week', args=(curr_week.slug,)))
 
 
-#
 def week(request, week_slug):
     """
     Show calendar for week. Events along with their corresponding
@@ -27,7 +29,7 @@ def week(request, week_slug):
     cal_week = CalendarWeek(week_slug)
 
     # get all events for cal_week
-    events = [e for e in Event.objects.all() if e.start_dt in cal_week]
+    events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt in cal_week]
 
     # get all performances not in events
     performances = Performance.objects.filter(
@@ -35,7 +37,25 @@ def week(request, week_slug):
         start_dt__lt=cal_week.end_dt,
     ).exclude(
         event__in=events
+    ).order_by(
+        'start_dt'
     )
+
+    events_and_perofrmances = list(itertools.chain(events, performances))
+
+    events_and_perofrmances.sort(key=lambda i: i.start_dt)
+
+    # for each day in ``cal_week``, add events and performances for that day
+    # in the order they take place.
+    days = []
+    for day in cal_week.days():
+        day_start = day['date']
+        day_end = day['date'] + timedelta(days=1)
+        day_events = []
+        while (events_and_perofrmances and
+                day_start <= events_and_perofrmances[0].start_dt < day_end):
+            day_events.append(events_and_perofrmances.pop(0))
+        days.append(day_events)
 
     return render_to_response(
         'events/week.html',

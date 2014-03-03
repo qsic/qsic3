@@ -35,3 +35,9 @@ class CalendarWeekTC(unittest.TestCase):
         expected = datetime(2013, 12, 16, 0, 0, 0, tzinfo=utc)
         result = CalendarWeek('20131211').end_dt
         self.assertEqual(expected, result)
+
+    def test_days(self):
+        expected = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+        cal_week = CalendarWeek('20131211')
+        result = tuple(d['name'] for d in cal_week.days())
+        self.assertEqual(expected, result)
