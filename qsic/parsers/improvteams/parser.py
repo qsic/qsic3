@@ -68,7 +68,7 @@ class ItPerformerParser(BaseItParser):
         ex. http://newyork.improvteams.com/performers/2849/paullogston
         ex. sets self.it_id = 2849
         """
-        path = urllib.parse.urlparse(self.url)[2]
+        path = self.url
         match = re.match(""".*/(\d+)/.*""", str(path))
         if match:
             self.it_id = int(match.group(1))

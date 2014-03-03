@@ -15,26 +15,28 @@
   {% block header %}
     <!-- Navigation -->
     <nav class="top-bar" data-topbar>
-      <ul class="title-area">
-        <!-- Title Area -->
-        <li class="name">
-          <h1>
-            <a class="show-for-medium-up" href="#">
-              <img src="{% static 'images/qsic-logo-queen.png' %}">
-                  <span>
-                    The Queen's Secret Improv Club
-                  </span>
-            </a>
-            <a class="show-for-small" href="#">
-              <img src="{% static 'images/qsic-logo-queen.png' %}">
-                  <span>
-                    QSIC
-                  </span>
-            </a>
-          </h1>
-        </li>
-        <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
-      </ul>
+      <section class="top-bar-section">
+        <ul class="title-area">
+          <!-- Title Area -->
+          <li class="name">
+            <h1>
+              <a class="show-for-medium-up" href="#">
+                <img src="{% static 'images/qsic-logo-queen.png' %}">
+                    <span>
+                      The Queen's Secret Improv Club
+                    </span>
+              </a>
+              <a class="show-for-small" href="#">
+                <img src="{% static 'images/qsic-logo-queen.png' %}">
+                    <span>
+                      QSIC
+                    </span>
+              </a>
+            </h1>
+          </li>
+          <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+        </ul>
+      </section>
 
       <section class="top-bar-section">
         <!-- Right Nav Section -->
@@ -64,6 +66,7 @@
 
   <div class="row">
     <div class="small-12 columns">
+      <br>
       {% block main_content %}{% endblock main_content %}
     </div>
   </div>

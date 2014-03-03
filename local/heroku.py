@@ -1,5 +1,9 @@
 import psycopg2
 
+from django.template.defaultfilters import slugify
+
+from qsic.parsers.improvteams.parser import ItPerformerParser
+
 
 def update_local_db_with_qsic27_production():
     performers = []
@@ -25,8 +29,9 @@ def update_local_db_with_qsic27_production():
         # add players
         pass
         # add groups
-
+        pass
         # add performances
+        pass
 
 
 def convert_performer_row(row):
@@ -35,10 +40,21 @@ def convert_performer_row(row):
     """
     keys = ('id', 'first_name', 'last_name', 'improvteams_url', 'bio', 'h', 'u', 't')
     d = dict(zip(keys, row))
-    print(d)
+    parser = ItPerformerParser()
+    parser.url = d.pop('improvteams_url', '')
+    parser.parse_it_id_from_url()
+    slug = slugify(' '.join((d['first_name'], d['last_name'])))
+    d.update({
+        'it_id': parser.it_id,
+        'it_url': parser.url,
+        'slug': slug
+    })
+    return d
 
 
 def convert_group_row(row):
+    'http://alabasterd.improvteams.com/'
+    print(row)
     pass
 
 

@@ -72,7 +72,7 @@ class Event(models.Model):
 
     @property
     def type(self):
-        return self.__class__.name
+        return self.__class__.__name__
 
 
 class Performance(models.Model):
@@ -131,7 +131,7 @@ class Performance(models.Model):
 
     @property
     def type(self):
-        return self.__class__.name
+        return self.__class__.__name__
 
 
 class PerformanceGroupPerformerRelation(models.Model):

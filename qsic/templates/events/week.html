@@ -3,6 +3,7 @@
 {% block title %}A Week!{% endblock title %}
 
 {% block main_content %}
+
   <div class="row">
     <div class="small-12 columns">
       <h3>This week at QSIC..</h3>
@@ -29,15 +30,20 @@
             <td>
               {% for item in day %}
                 {% if item.type == 'Event' %}
-                  <ul>
-                    {% for performace in item %}
-                      <li>performance.start_dt: performance.name</li>
-                    {% endfor %}
-                  </ul>
+                  <div>
+                    <span class="clearfix">
+                      {{ item.name  }}
+                    </span>
+                    <ul class="event_performance_list">
+                      {% for p in item %}
+                        <li>{{ p.start_dt|time:"h:i a" }} {{ p.name }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
                 {% elif item.type == 'Performance' %}
-                  <ul>
-                    <li>item.start_dt: item.name</li>
-                  </ul>
+                  <span class="">
+                    {{ item.start_dt|time:"h:i a" }} {{ item.name }}
+                  </span>
                 {% endif %}
               {% endfor %}
             </td>

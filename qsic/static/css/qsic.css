@@ -1,8 +1,9 @@
-.top-bar .name h1 a {
+.top-bar-section .title-area .name h1 a {
     padding: 0;
+    padding-right: 15px;
 }
 
-.top-bar .name a img {
+.top-bar-section .title-area .name a img {
     height: 45px;
     margin: 0 auto;
     vertical-align: bottom;
