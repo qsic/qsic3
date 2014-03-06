@@ -107,9 +107,6 @@ else:
     STATIC_ROOT = AWS_S3_BUCKET_URL + '/' + STATIC_DIR + '/'
     STATIC_URL = STATIC_ROOT
 
-# ADMIN STATIC
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-
 SERVE_MEDIA = get_env_var('DJANGO_SERVE_MEDIA', default=False, isbool=True)
 if SERVE_MEDIA:
     # Serve media locally
