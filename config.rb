@@ -1,7 +1,7 @@
 # Require any additional compass plugins here.
 
 # Set this to the root of your project when deployed:
-css_dir = "static/css"
+css_dir = "stylesheets/css"
 sass_dir = "scss"
 images_dir = "images"
 javascripts_dir = "js"
