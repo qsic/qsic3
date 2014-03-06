@@ -6,6 +6,9 @@
 ### PyCharm
 .idea/
 
+### SASS/SCSS
+.sass-cache
+
 ### Private
 local/enter_env.sh
 

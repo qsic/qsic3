@@ -7,7 +7,7 @@
   <title>QSIC | {% block title %}{% endblock title %}</title>
   <link rel="stylesheet" href="{% static 'css/foundation.css' %}" />
   <link rel="stylesheet" href="{% static 'css/qsic.css' %}"
-  <script src="{% static 'js/vendor/modernizr.js' %}"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.1.1/js/vendor/modernizr.min.js"></script>
   {% block extra_head %}{% endblock extra_head %}
 </head>
 <body>
@@ -88,8 +88,8 @@
     </footer>
   {% endblock footer %}
 {% endblock body_content %}
-<script src="{% static 'js/vendor/jquery.js' %}"></script>
-<script src="{% static 'js/foundation.min.js' %}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.1.1/js/vendor/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.1.1/js/foundation.min.js"></script>
 <script>
   $(document).foundation();
 </script>

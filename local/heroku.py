@@ -1,8 +1,10 @@
 import psycopg2
+import sys
 
 from django.template.defaultfilters import slugify
 
 from qsic.parsers.improvteams.parser import ItPerformerParser
+from qsic.parsers.improvteams.parser import ItTeamParser
 
 
 def update_local_db_with_qsic27_production():
@@ -15,15 +17,21 @@ def update_local_db_with_qsic27_production():
         for row in cur.fetchall():
             performers.append(convert_performer_row(row))
 
-        # get teams
-        cur.execute("SELECT * FROM teams_team;")
-        for row in cur.fetchall():
-            groups.append(convert_group_row(row))
+        # get shows
+        cur.execute("SELECT * FROM shows_show;")
+
+        # get shows_teamcalendar
+        cur.execute("SELECT * FROM shows_teamcalendar;")
 
         # get team_player relationships
         cur.execute("SELECT * FROM teams_playerteam;")
         for row in cur.fetchall():
             group_performer_relationships.append(convert_group_performer_relationship(row))
+
+        # get teams_team
+        cur.execute("SELECT * FROM teams_team;")
+        for row in cur.fetchall():
+            groups.append(convert_group_row(row))
 
     with psycopg2.connect("dbname=qsic") as conn, conn.cursor() as cur:
         # add players
@@ -53,20 +61,40 @@ def convert_performer_row(row):
 
 
 def convert_group_row(row):
-    'http://alabasterd.improvteams.com/'
-    print(row)
-    pass
+    """
+    Convert group data to new db format
+    """
+    keys = ('id', 'name', 'created', 'retired', 'team_logo', 'team_photo', 'website',
+            'logo_slice', 'improvteams_url', 'profile', 'name_color', 'name_shadow_color',
+            'is_house_team', 'background_color')
+    d = dict(zip(keys, row))
+    slug = slugify(d['name'])
+    url = d['improvteams_url'] if 'improvteams.com' in d['improvteams_url'] else ''
+    d.update({
+        'it_url': url,
+        'slug': slug
+    })
+    return d
 
 
 def convert_group_performer_relationship(row):
+    """
+    Convert performer
+    """
+    keys = ('id', 'player_id', 'team_id', 'active')
+    d = dict(zip(keys, row))
     pass
 
 
 def convert_performance_row(row):
+    k = ('id', 'blurb', 'start_date', 'active', 'title')
+    d = dict(zip(keys, row))
     pass
 
 
 def convert_team_performance_row(row):
+    k = ('id', 'show_id', 'team_id', 'start_time', 'end_time')
+    d = dict(zip(keys, row))
     pass
 
 
