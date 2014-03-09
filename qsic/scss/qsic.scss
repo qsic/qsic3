@@ -1,20 +1,4 @@
-.top-bar-section {
-  .title-area {
-    .name {
-      h1 a {
-        padding: 0;
-        padding-right: 15px;
-      }
 
-      a img {
-        height: 45px;
-        margin: 0 auto;
-        vertical-align: bottom;
-      }
-    }
-  }
-}
-
-.week {
-  
-}
+@import "nav";
+@import "week";
+@import "footer";

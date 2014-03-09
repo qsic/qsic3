@@ -1,20 +1,4 @@
-/* line 4, _nav.scss */
-.top-bar-section .title-area .name h1 a {
-  padding: 0;
-  padding-right: 15px;
-}
-/* line 9, _nav.scss */
-.top-bar-section .title-area .name a img {
-  height: 45px;
-  margin: 0 auto;
-  vertical-align: bottom;
-}
-
-/* line 2, _week.scss */
-.week .day {
-  border-left: 1px solid #dddddd;
-}
-/* line 4, _week.scss */
+/* line 3, _week.scss */
 .week .day .event {
   border-bottom-color: #aaaaff;
   border-bottom-style: solid;
@@ -22,36 +6,31 @@
   background-color: #eeeeee;
   text-align: center;
 }
-/* line 13, _week.scss */
+/* line 12, _week.scss */
 .week .day .event .title {
   font-size: 14px;
   font-weight: bold;
   background-color: #aaaaff;
   padding: 5px;
 }
-/* line 20, _week.scss */
+/* line 19, _week.scss */
 .week .day .event ul {
   list-style: none;
   margin: 0px 0px 0px 10px;
   display: table;
 }
-/* line 24, _week.scss */
+/* line 23, _week.scss */
 .week .day .event ul li {
   display: table;
   padding: auto 10px;
 }
-/* line 29, _week.scss */
+/* line 32, _week.scss */
 .week .day .event .performance {
   font-size: 12px;
 }
-/* line 36, _week.scss */
+/* line 39, _week.scss */
 .week .day .dark {
   color: #777777;
   font-weight: bold;
   font-size: 10px;
-}
-
-/* line 2, _footer.scss */
-footer ul {
-  font-size: 12px;
 }

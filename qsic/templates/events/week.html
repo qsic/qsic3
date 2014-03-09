@@ -27,25 +27,30 @@
         <tbody>
         <tr>
           {% for day in days %}
-            <td>
-              {% for item in day %}
-                {% if item.type == 'Event' %}
-                  <div>
-                    <span class="clearfix">
-                      {{ item.name  }}
+            <td class="day">
+              {% if day %}
+                {% for item in day %}
+                  {% if item.type == 'Event' %}
+                    <div class="event">
+                      <h1 class="title">{{ item.name }}</h1>
+                      <ul class="performance_list">
+                        {% for p in item %}
+                          <li class="performance">
+                            {{ p.start_dt|time:"g:i a" }}
+                            <a href="{{ p.url }}">{{ p.name }}</a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% elif item.type == 'Performance' %}
+                    <span class="performance">
+                      {{ item.start_dt|time:"g:i a" }} {{ item.name }}
                     </span>
-                    <ul class="event_performance_list">
-                      {% for p in item %}
-                        <li>{{ p.start_dt|time:"h:i a" }} {{ p.name }}</li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                {% elif item.type == 'Performance' %}
-                  <span class="">
-                    {{ item.start_dt|time:"h:i a" }} {{ item.name }}
-                  </span>
-                {% endif %}
-              {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <span class="dark"></span>
+              {% endif %}
             </td>
           {% endfor %}
         </tr>

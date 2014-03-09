@@ -1,0 +1,42 @@
+.week {
+    .day {
+        border-left: 1px solid #dddddd;
+        .event {
+            border-bottom-color: #aaaaff;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            background-color: #eeeeee;
+
+//            display: table;
+            text-align: center;
+
+            .title {
+                font-size: 14px;
+                font-weight: bold;
+                background-color: #aaaaff;
+                padding: 5px;
+            }
+
+            ul {
+                list-style: none;
+                margin: 0px 0px 0px 10px;
+                display: table;
+                li {
+                    display: table;
+                    padding: auto 10px;
+                }
+            }
+            .performance {
+                font-size: 12px;
+            }
+        }
+        .performance {
+
+        }
+        .dark {
+            color: #777777;
+            font-weight: bold;
+            font-size: 10px;
+        }
+    }
+}

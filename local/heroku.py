@@ -67,6 +67,8 @@ def update_local_db_with_qsic27_production():
                          p['it_url'],
                          p['it_id'],
                          p['bio']))
+        next_id = max([o['id'] for o in data['performers'].values()]) + 1
+        cur.execute("ALTER SEQUENCE qsic_performer_id_seq RESTART WITH %s;", (next_id,))
 
         # add groups
         for g in data['groups'].values():
@@ -81,6 +83,8 @@ def update_local_db_with_qsic27_production():
                          g['profile'],
                          g['created'],
                          g['is_house_team']))
+        next_id = max([o['id'] for o in data['groups'].values()]) + 1
+        cur.execute("ALTER SEQUENCE qsic_group_id_seq RESTART WITH %s;", (next_id,))
 
         # add group perofrmer relations
         for gpr in data['group_performer_relationships'].values():
@@ -95,6 +99,9 @@ def update_local_db_with_qsic27_production():
                          d['performer_id'],
                          d['start_dt'],
                          d['end_dt']))
+        next_id = max([o['id'] for o in data['group_performer_relationships'].values()]) + 1
+        cur.execute("ALTER SEQUENCE qsic_groupperformerrelation_id_seq RESTART WITH %s;",
+                    (next_id,))
 
         # add events
         for e in data['events'].values():
@@ -111,6 +118,8 @@ def update_local_db_with_qsic27_production():
                          e['slug'],
                          start_dt,
                          end_dt))
+        next_id = max([o['id'] for o in data['events'].values()]) + 1
+        cur.execute("ALTER SEQUENCE qsic_event_id_seq RESTART WITH %s;", (next_id,))
 
         # add performaces
         for p in data['group_performances'].values():
@@ -130,6 +139,8 @@ def update_local_db_with_qsic27_production():
                          start_dt,
                          end_dt,
                          slug))
+        next_id = max([o['id'] for o in data['group_performances'].values()]) + 1
+        cur.execute("ALTER SEQUENCE qsic_performance_id_seq RESTART WITH %s;", (next_id,))
 
         # add group performance relations
         for p in data['group_performances'].values():

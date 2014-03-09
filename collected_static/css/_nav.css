@@ -1,0 +1,11 @@
+/* line 4, _nav.scss */
+.top-bar-section .title-area .name h1 a {
+  padding: 0;
+  padding-right: 15px;
+}
+/* line 9, _nav.scss */
+.top-bar-section .title-area .name a img {
+  height: 45px;
+  margin: 0 auto;
+  vertical-align: bottom;
+}
