@@ -10,45 +10,104 @@
   vertical-align: bottom;
 }
 
-/* line 2, _week.scss */
-.week .day {
-  border-left: 1px solid #dddddd;
+/* line 22, _week.scss */
+.week {
+  font-size: 0;
 }
-/* line 4, _week.scss */
-.week .day .event {
+/* line 25, _week.scss */
+.week .day {
+  margin: 0;
+  padding: 1px;
+  width: 138px;
+  min-height: 300px;
+  display: inline-block;
+}
+/* line 32, _week.scss */
+.week .day .header {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px;
   border-bottom-color: #aaaaff;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  background-color: #eeeeee;
-  text-align: center;
+  border-bottom-width: 2px;
+  margin-bottom: 5px;
 }
-/* line 13, _week.scss */
-.week .day .event .title {
-  font-size: 14px;
-  font-weight: bold;
-  background-color: #aaaaff;
-  padding: 5px;
+/* line 42, _week.scss */
+.week .day .content {
+  display: table;
+  width: 100%;
 }
-/* line 20, _week.scss */
-.week .day .event ul {
+/* line 46, _week.scss */
+.week .day .content ul {
   list-style: none;
-  margin: 0px 0px 0px 10px;
-  display: table;
-}
-/* line 24, _week.scss */
-.week .day .event ul li {
-  display: table;
-  padding: auto 10px;
-}
-/* line 29, _week.scss */
-.week .day .event .performance {
+  margin: 0;
   font-size: 12px;
 }
-/* line 36, _week.scss */
-.week .day .dark {
-  color: #777777;
+/* line 51, _week.scss */
+.week .day .content ul .event {
+  border-left-color: #aaaaff;
+  border-left-style: solid;
+  border-left-width: 4px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+/* line 58, _week.scss */
+.week .day .content ul .event .title {
+  font-size: 14px;
   font-weight: bold;
-  font-size: 10px;
+}
+/* line 63, _week.scss */
+.week .day .content ul .event .performance {
+  text-align: left;
+  padding-left: 5px;
+  line-height: 16px;
+}
+/* line 6, _week.scss */
+.week .day .content ul .event .performance .time {
+  display: block;
+}
+/* line 10, _week.scss */
+.week .day .content ul .event .performance a {
+  padding-left: 10px;
+}
+/* line 70, _week.scss */
+.week .day .content ul .performance {
+  text-align: left;
+  padding-left: 5px;
+  line-height: 16px;
+  margin-bottom: 5px;
+}
+/* line 6, _week.scss */
+.week .day .content ul .performance .time {
+  display: block;
+}
+/* line 10, _week.scss */
+.week .day .content ul .performance a {
+  padding-left: 10px;
+}
+/* line 76, _week.scss */
+.week .day .content .dark {
+  text-align: center;
+  font-size: 12px;
+  height: 50px;
+  display: table-cell;
+  vertical-align: middle;
+}
+/* line 83, _week.scss */
+.week .day .content .dark img {
+  height: 10px;
+}
+
+/* line 93, _week.scss */
+.week-nav .nav img, .week-nav .previous img, .week-nav .following img {
+  height: 10px;
+  width: 10px;
+}
+/* line 103, _week.scss */
+.week-nav .following {
+  float: right;
 }
 
 /* line 2, _footer.scss */

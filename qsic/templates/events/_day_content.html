@@ -1,0 +1,40 @@
+{% load static %}
+
+{% if not day.events %}
+  <div class="dark">
+    <img title="No Shows Today" src="{% static 'images/icon-clubs.png' %}">
+  </div>
+{% else %}
+  <ul>
+    {% for item in day.events %}
+      <li>
+        {% if item.type == 'Event' %}
+          <div class="event">
+            <span class="title">
+              <a href="{{ item.url }}">
+                {{ item.name }}
+              </a>
+            </span>
+            <ul>
+              {% for p in item %}
+                <li class="performance">
+                  <span class="time">
+                    {{ p.start_dt|time:"g:i a" }}
+                  </span>
+                  <a href="{{ p.url }}">{{ p.name }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% elif item.type == 'Performance' %}
+          <div class="performance">
+            <span class="time">
+             {{ item.start_dt|time:"g:i a" }}
+            </span>
+            <a href="{{ item.url }}">{{ item.name }}</a>
+          </div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

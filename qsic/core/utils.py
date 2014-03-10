@@ -6,6 +6,9 @@ from datetime import datetime
 from datetime import timedelta
 
 from django.utils.timezone import utc
+import pytz
+
+EST = pytz.timezone('US/Eastern')
 
 
 def validate_slug(slug, digits=8):
@@ -18,8 +21,8 @@ def validate_slug(slug, digits=8):
 class CalendarWeek(object):
     """
     This class represents a Sun - Sat week.
-    Weeks start on Monday at 00:00:00 UTC and ends instantaniously before
-    00:00:00 UTC on the following Monday.
+    Weeks start on Monday at 00:00:00 EST and ends instantaniously before
+    00:00:00 EST on the following Monday.
     """
     slug_pattern = '%Y%m%d'
 
@@ -29,8 +32,7 @@ class CalendarWeek(object):
         If a naive datetime or no datetimme is given, create one based on
         current date.
         """
-
-        # referecnes Sunday, 00:00:00 UTC of the given week
+        # referecnes Monday, 00:00:00 EST of the given week
         self._start_dt = self._monday_dt_for_week_slug(slug)
 
     def _monday_dt_for_week_slug(self, slug=None):
@@ -40,15 +42,13 @@ class CalendarWeek(object):
         # get datetime based on slug
         if slug and validate_slug(slug):
             dt = datetime.strptime(slug, self.slug_pattern)
-            dt = dt.replace(tzinfo=utc)
         else:
-            dt = datetime.utcnow().replace(tzinfo=utc)
-            dt = dt.replace(hour=0, minute=0, second=0)
-            # set slug
+            dt = datetime.now().replace(hour=0, minute=0, second=0)
+        dt = dt.replace(tzinfo=EST)
 
         # calculate offset from today to most recent past Monday
         # Monday (0), Sunday (7)
-        dt = dt - timedelta(dt.weekday())
+        dt = dt - timedelta(days=dt.weekday())
         return dt
 
     @property
@@ -57,7 +57,17 @@ class CalendarWeek(object):
 
     @property
     def end_dt(self):
-        return self.start_dt + timedelta(days=7)
+        return self.start_dt + timedelta(weeks=1)
+
+    def __add__(self, other):
+        if not isinstance(other, int):
+            raise ValueError('Expected integer value. Got {}'.format(type(other)))
+        return self.start_dt + timedelta(weeks=other)
+
+    def __sub__(self, other):
+        if not isinstance(other, int):
+            raise ValueError('Expected integer value. Got {}'.format(type(other)))
+        return self.start_dt - timedelta(weeks=other)
 
     @property
     def slug(self):
@@ -86,3 +96,6 @@ class CalendarWeek(object):
                 'offset': i
             })
         return days
+
+    def is_current_week(self):
+        return self.start_dt == CalendarWeek().start_dt

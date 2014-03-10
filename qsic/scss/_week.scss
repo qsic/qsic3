@@ -1,42 +1,107 @@
+@mixin performance {
+    text-align: left;
+    padding-left: 5px;
+    line-height: 16px;
+
+    .time {
+        display: block;
+    }
+
+    a {
+        padding-left: 10px;
+    }
+}
+
+@mixin border-bottom-purple {
+    border-bottom-color: #aaaaff;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+
 .week {
+    font-size: 0;
+
     .day {
-        border-left: 1px solid #dddddd;
-        .event {
-            border-bottom-color: #aaaaff;
-            border-bottom-style: solid;
-            border-bottom-width: 1px;
-            background-color: #eeeeee;
+        margin: 0;
+        padding: 1px;
+        width: 138px;
+        min-height: 300px;
+        display: inline-block;
 
-//            display: table;
+        .header {
             text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px;
+            @include border-bottom-purple;
+            border-bottom-width: 2px;
+            margin-bottom: 5px;
+        }
 
-            .title {
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #aaaaff;
-                padding: 5px;
-            }
+        .content {
+            display: table;
+            width: 100%;
 
             ul {
                 list-style: none;
-                margin: 0px 0px 0px 10px;
-                display: table;
-                li {
-                    display: table;
-                    padding: auto 10px;
+                margin: 0;
+                font-size: 12px;
+
+                .event {
+                    border-left-color: #aaaaff;
+                    border-left-style: solid;
+                    border-left-width: 4px;
+                    text-align: center;
+                    margin-bottom: 5px;
+
+                    .title {
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+
+                    .performance {
+                        @include performance;
+                    }
+
+                }
+
+
+                .performance {
+                    @include performance;
+                    margin-bottom: 5px;
                 }
             }
-            .performance {
+
+            .dark {
+                text-align: center;
                 font-size: 12px;
+                height: 50px;
+                display: table-cell;
+                vertical-align: middle;
+
+                img {
+                    height: 10px;
+                }
             }
         }
-        .performance {
+    }
+}
 
+.week-nav {
+    .nav {
+        img{
+            height: 10px;
+            width: 10px;
         }
-        .dark {
-            color: #777777;
-            font-weight: bold;
-            font-size: 10px;
-        }
+    }
+
+    .previous {
+        @extend .nav;
+    }
+
+    .following {
+        @extend .nav;
+        float: right;
     }
 }

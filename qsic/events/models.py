@@ -41,6 +41,7 @@ class Event(models.Model):
             self.performance_offset += 1
             return performance
         else:
+            self.performance_offset = 0
             raise StopIteration
 
     def save(self, **kwargs):
@@ -48,7 +49,7 @@ class Event(models.Model):
         super(Event, self).save()
 
     def __str__(self):
-        return 'Event {}'.format(self.name)
+        return '{} {}'.format(self.start_dt, self.name)
 
     @property
     def start_dt(self):

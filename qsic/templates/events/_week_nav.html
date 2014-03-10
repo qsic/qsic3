@@ -1,0 +1,14 @@
+{% load static %}
+<div class="row week-nav">
+  <div class="small-1 columns nav">
+    <a href="{% url 'qsic_week' previous_week.slug %}">
+      <img class="previous" src="{% static 'images/icon-spades-left.png' %}" title="Previous Week">
+    </a>
+  </div>
+
+  <div class="small-1 columns nav">
+    <a href="{% url 'qsic_week' following_week.slug %}">
+      <img class="following" src="{% static 'images/icon-spades-right.png' %}" title="Following Week">
+    </a>
+  </div>
+</div>

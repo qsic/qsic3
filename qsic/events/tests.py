@@ -3,9 +3,10 @@ from datetime import datetime
 
 from django.template.defaultfilters import slugify
 from django.test import TestCase
-from django.utils.timezone import utc
 
 from freezegun import freeze_time
+
+from qsic.core.utils import EST
 
 from .models import Event
 from .models import Performance
@@ -20,22 +21,22 @@ class EventDateTimeMethodsTC(TestCase):
         self.p1 = Performance.objects.create(
             event=self.e,
             name='First Performace in Event',
-            start_dt=datetime(2013, 1, 17, 19, 30, 0, tzinfo=utc),
-            end_dt=datetime(2013, 1, 17, 20, 0, 0, tzinfo=utc)
+            start_dt=datetime(2013, 1, 17, 19, 30, 0, tzinfo=EST),
+            end_dt=datetime(2013, 1, 17, 20, 0, 0, tzinfo=EST)
         )
 
         self.p2 = Performance.objects.create(
             event=self.e,
             name='Second Performace in Event',
-            start_dt=datetime(2013, 1, 17, 19, 45, 0, tzinfo=utc),
-            end_dt=datetime(2013, 1, 17, 20, 15, 0, tzinfo=utc)
+            start_dt=datetime(2013, 1, 17, 19, 45, 0, tzinfo=EST),
+            end_dt=datetime(2013, 1, 17, 20, 15, 0, tzinfo=EST)
         )
 
         self.p3 = Performance.objects.create(
             event=None,
             name='Performace not in Event',
-            start_dt=datetime(2013, 1, 17, 19, 30, 0, tzinfo=utc),
-            end_dt=datetime(2013, 1, 17, 20, 0, 0, tzinfo=utc)
+            start_dt=datetime(2013, 1, 17, 19, 30, 0, tzinfo=EST),
+            end_dt=datetime(2013, 1, 17, 20, 0, 0, tzinfo=EST)
         )
 
     def test_event_start_dt_is_first_peformance_start_dt(self):
@@ -46,12 +47,12 @@ class EventDateTimeMethodsTC(TestCase):
         self.assertEqual(self.e.end_dt, self.p2.end_dt)
 
     def test_event_start_dt_overrides_performance_dt(self):
-        dt = datetime(2013, 1, 17, 21, 45, 0, tzinfo=utc)
+        dt = datetime(2013, 1, 17, 21, 45, 0, tzinfo=EST)
         self.e._start_dt = dt
         self.assertEqual(self.e.start_dt, dt)
 
     def test_event_end_dt_overrides_performance_dt(self):
-        dt = datetime(2013, 1, 17, 22, 40, 0, tzinfo=utc)
+        dt = datetime(2013, 1, 17, 22, 40, 0, tzinfo=EST)
         self.e._end_dt = dt
         self.assertEqual(self.e.end_dt, dt)
 
@@ -63,22 +64,22 @@ class EventPerformanceRelationTC(TestCase):
         self.p1 = Performance.objects.create(
             event=self.e,
             name='First Performace in Event',
-            start_dt=datetime(2013, 1, 17, 19, 30, 0, tzinfo=utc),
-            end_dt=datetime(2013, 1, 17, 20, 0, 0, tzinfo=utc)
+            start_dt=datetime(2013, 1, 17, 19, 30, 0, tzinfo=EST),
+            end_dt=datetime(2013, 1, 17, 20, 0, 0, tzinfo=EST)
         )
 
         self.p2 = Performance.objects.create(
             event=self.e,
             name='Second Performace in Event',
-            start_dt=datetime(2013, 1, 17, 19, 45, 0, tzinfo=utc),
-            end_dt=datetime(2013, 1, 17, 20, 15, 0, tzinfo=utc)
+            start_dt=datetime(2013, 1, 17, 19, 45, 0, tzinfo=EST),
+            end_dt=datetime(2013, 1, 17, 20, 15, 0, tzinfo=EST)
         )
 
         self.p3 = Performance.objects.create(
             event=None,
             name='Performace not in Event',
-            start_dt=datetime(2013, 1, 17, 19, 30, 0, tzinfo=utc),
-            end_dt=datetime(2013, 1, 17, 20, 0, 0, tzinfo=utc)
+            start_dt=datetime(2013, 1, 17, 19, 30, 0, tzinfo=EST),
+            end_dt=datetime(2013, 1, 17, 20, 0, 0, tzinfo=EST)
         )
 
     def test_event_contains_correct_performances(self):
@@ -92,9 +93,6 @@ class EventPerformanceRelationTC(TestCase):
         self.assertEqual(expected, result)
 
 
-# "2012-12-12 00:00:00" is a Wednesday
-# 15th is a Saturday
-@freeze_time("2012-12-12 00:00:00", tz_offset=0)
 class EventsPerformacesWeekPassedToTemplateTC(TestCase):
     """
     Assert that correct event and performances objects are handed to
@@ -110,8 +108,8 @@ class EventsPerformacesWeekPassedToTemplateTC(TestCase):
         self.e1 = Event.objects.create(
             name='QSIC Winter Ball',
             description='A night of fun!',
-            _start_dt=datetime(2012, 12, 15, 21, 0, 0, tzinfo=utc),
-            _end_dt=datetime(2012, 12, 16, 2, 0, 0, tzinfo=utc),
+            _start_dt=datetime(2012, 12, 15, 21, 0, 0, tzinfo=EST),
+            _end_dt=datetime(2012, 12, 16, 2, 0, 0, tzinfo=EST),
             _price=15.00
         )
 
@@ -120,15 +118,15 @@ class EventsPerformacesWeekPassedToTemplateTC(TestCase):
         self.p1 = Performance.objects.create(
             event=self.e2,
             name='Peace Love and Joy',
-            start_dt=datetime(2012, 12, 21, 19, 30, 0, tzinfo=utc),
-            end_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=utc),
+            start_dt=datetime(2012, 12, 21, 19, 30, 0, tzinfo=EST),
+            end_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=EST),
             price=5.00
         )
         self.p2 = Performance.objects.create(
             event=self.e2,
             name="Rockin' Rolla Music",
-            start_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=utc),
-            end_dt=datetime(2012, 12, 21, 20, 30, 0, tzinfo=utc),
+            start_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=EST),
+            end_dt=datetime(2012, 12, 21, 20, 30, 0, tzinfo=EST),
             price=5.00
         )
 
@@ -138,22 +136,22 @@ class EventsPerformacesWeekPassedToTemplateTC(TestCase):
         self.p3 = Performance.objects.create(
             event=self.e2,
             name='Suzie Q & The Team',
-            start_dt=datetime(2013, 1, 2, 20, 15, 0, tzinfo=utc),
-            end_dt=datetime(2013, 1, 2, 23, 0, 0, tzinfo=utc),
+            start_dt=datetime(2013, 1, 2, 20, 15, 0, tzinfo=EST),
+            end_dt=datetime(2013, 1, 2, 23, 0, 0, tzinfo=EST),
             price=5.00
         )
         self.p4 = Performance.objects.create(
             event=self.e2,
             name='Magic Man, The',
-            start_dt=datetime(2013, 1, 4, 19, 0, 0, tzinfo=utc),
-            end_dt=datetime(2012, 1, 4, 21, 15, 0, tzinfo=utc),
+            start_dt=datetime(2013, 1, 4, 19, 0, 0, tzinfo=EST),
+            end_dt=datetime(2012, 1, 4, 21, 15, 0, tzinfo=EST),
             price=5.00
         )
         self.p5 = Performance.objects.create(
             event=self.e2,
             name='Marty Loves Pizza',
-            start_dt=datetime(2013, 1, 5, 12, 30, 0, tzinfo=utc),
-            end_dt=datetime(2012, 1, 5, 16, 0, 0, tzinfo=utc),
+            start_dt=datetime(2013, 1, 5, 12, 30, 0, tzinfo=EST),
+            end_dt=datetime(2012, 1, 5, 16, 0, 0, tzinfo=EST),
             price=5.00
         )
 
@@ -162,31 +160,28 @@ class EventsPerformacesWeekPassedToTemplateTC(TestCase):
         self.p6 = Performance.objects.create(
             event=self.e3,
             name='Skiddss',
-            start_dt=datetime(2013, 1, 11, 15, 0, 0, tzinfo=utc),
-            end_dt=datetime(2012, 1, 11, 17, 0, 0, tzinfo=utc),
+            start_dt=datetime(2013, 1, 11, 15, 0, 0, tzinfo=EST),
+            end_dt=datetime(2012, 1, 11, 17, 0, 0, tzinfo=EST),
             price=23.00
         )
         self.p7 = Performance.objects.create(
             event=self.e3,
             name='Lolipops',
-            start_dt=datetime(2013, 1, 11, 17, 30, 0, tzinfo=utc),
-            end_dt=datetime(2012, 1, 11, 19, 0, 0, tzinfo=utc),
+            start_dt=datetime(2013, 1, 11, 17, 30, 0, tzinfo=EST),
+            end_dt=datetime(2012, 1, 11, 19, 0, 0, tzinfo=EST),
             price=34.00
         )
         self.p8 = Performance.objects.create(
             name='Madness!',
-            start_dt=datetime(2013, 1, 11, 20, 30, 0, tzinfo=utc),
-            end_dt=datetime(2012, 1, 11, 22, 0, 0, tzinfo=utc),
+            start_dt=datetime(2013, 1, 11, 20, 30, 0, tzinfo=EST),
+            end_dt=datetime(2012, 1, 11, 22, 0, 0, tzinfo=EST),
             price=15.00
         )
 
     def get_local_context(self, response):
         self.assertTrue(hasattr(response, 'context'))
-        self.assertTrue(hasattr(response.context, 'dicts'))
-        local_context = response.context.dicts
-        dict_list = [d for d in local_context if 'events' in d or 'performances' in d]
-        self.assertTrue(len(dict_list), 1)
-        return dict_list[0]
+        context = response.context
+        return {'events': context['events'], 'performances': context['performances']}
 
     def test_no_performaces_or_events_for_dark_week(self):
         response = self.client.get('/events/week/20121224', follow=True)
@@ -227,7 +222,7 @@ class EventsPerformacesWeekPassedToTemplateTC(TestCase):
 
 # "2012-12-12 00:00:00" is a Wednesday
 # 15th is a Saturday
-@freeze_time("2012-12-12 00:00:00", tz_offset=0)
+@freeze_time("2012-12-12 00:00:00", tz_offset=-4)
 class EventsPerformacesDetailViewContextPassedToTemplateTC(TestCase):
     """
     Assert that correct event and performance objects are handed to
@@ -244,15 +239,15 @@ class EventsPerformacesDetailViewContextPassedToTemplateTC(TestCase):
         self.p1 = Performance.objects.create(
             event=self.e1,
             name='Peace Love and Joy',
-            start_dt=datetime(2012, 12, 21, 19, 30, 0, tzinfo=utc),
-            end_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=utc),
+            start_dt=datetime(2012, 12, 21, 19, 30, 0, tzinfo=EST),
+            end_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=EST),
             price=5.00
         )
         self.p2 = Performance.objects.create(
             event=self.e1,
             name="Rockin' Rolla Music",
-            start_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=utc),
-            end_dt=datetime(2012, 12, 21, 20, 30, 0, tzinfo=utc),
+            start_dt=datetime(2012, 12, 21, 20, 0, 0, tzinfo=EST),
+            end_dt=datetime(2012, 12, 21, 20, 30, 0, tzinfo=EST),
             price=5.00
         )
 
@@ -276,8 +271,8 @@ class SlugTC(TestCase):
     """
     @classmethod
     def setUpClass(cls):
-        cls.start_dt = datetime.utcnow().replace(tzinfo=utc)
-        cls.end_dt = datetime.utcnow().replace(tzinfo=utc)
+        cls.start_dt = datetime.now().replace(tzinfo=EST)
+        cls.end_dt = datetime.now().replace(tzinfo=EST)
 
     def test_save_event_generates_correct_slug(self):
         e = Event.objects.create(name='QSIC House Night')

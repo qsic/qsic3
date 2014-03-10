@@ -17,8 +17,8 @@ from django.template.defaultfilters import slugify
 
 def current_week(request):
     # get current week and forward to that week
-    curr_week = CalendarWeek()
-    return HttpResponseRedirect(reverse('qsic_week', args=(curr_week.slug,)))
+    cur_week = CalendarWeek()
+    return HttpResponseRedirect(reverse('qsic_week', args=(cur_week.slug,)))
 
 
 def week(request, week_slug):
@@ -51,11 +51,15 @@ def week(request, week_slug):
     for day in cal_week.days():
         day_start = day['date']
         day_end = day['date'] + timedelta(days=1)
+
         day_events = []
         while (events_and_perofrmances and
                 day_start <= events_and_perofrmances[0].start_dt < day_end):
             day_events.append(events_and_perofrmances.pop(0))
-        days.append(day_events)
+        days.append({'name': day['name'], 'date': day['date'], 'events': day_events})
+
+    previous_week = cal_week - 1
+    following_week = cal_week + 1
 
     return render_to_response(
         'events/week.html',
