@@ -98,14 +98,15 @@
 /* line 83, _week.scss */
 .week .day .content .dark img {
   height: 10px;
+  width: 10px;
 }
 
-/* line 93, _week.scss */
+/* line 94, _week.scss */
 .week-nav .nav img, .week-nav .previous img, .week-nav .following img {
   height: 10px;
   width: 10px;
 }
-/* line 103, _week.scss */
+/* line 104, _week.scss */
 .week-nav .following {
   float: right;
 }

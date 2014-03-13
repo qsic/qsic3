@@ -26,16 +26,38 @@ class CalendarWeek(object):
     """
     slug_pattern = '%Y%m%d'
 
-    def __init__(self, slug=None):
+    def __init__(self, slug=None, start_dt=None):
         """
-        Initialize a CalendarWeek object with a slug of the form \d{8}
-        If a naive datetime or no datetimme is given, create one based on
-        current date.
+        Initialize a CalendarWeek object.
+
+        Initialize with a slug of the form ``\d{8}`` or
+        a datetime instance set to a Monday at 00:00:00 EST.
+        If no kwargs are given, create a ``CalendarWeek``
+        with a ``start_dt` set to the most recently past
+        Monday, 00:00:00 EST.
         """
         # referecnes Monday, 00:00:00 EST of the given week
-        self._start_dt = self._monday_dt_for_week_slug(slug)
+        if start_dt:
+            self.start_dt = start_dt
+        elif slug:
+            self.start_dt = self._monday_dt_for_week_slug(slug)
+        else:
+            self.start_dt = self._get_most_recent_past_monday_est(datetime.now())
 
-    def _monday_dt_for_week_slug(self, slug=None):
+    @staticmethod
+    def _get_most_recent_past_monday_est(dt):
+        """
+        Return a datetime instance with its date set to the most recent
+        Monday relative to the instance's original datetime
+        and a time set to 00:00:00 EST.
+        """
+        dt = dt.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=EST)
+        # calculate offset from today to most recent past Monday
+        # Monday (0), Sunday (7)
+        dt = dt - timedelta(days=dt.weekday())
+        return dt
+
+    def _monday_dt_for_week_slug(self, slug):
         """
         Return most recent past sunday's tz-aware datetime based on YYYYMMDD slug.
         """
@@ -43,17 +65,29 @@ class CalendarWeek(object):
         if slug and validate_slug(slug):
             dt = datetime.strptime(slug, self.slug_pattern)
         else:
-            dt = datetime.now().replace(hour=0, minute=0, second=0)
-        dt = dt.replace(tzinfo=EST)
+            raise ValueError('Invalid slug given. {}'.format(slug))
 
-        # calculate offset from today to most recent past Monday
-        # Monday (0), Sunday (7)
-        dt = dt - timedelta(days=dt.weekday())
-        return dt
+        return self._get_most_recent_past_monday_est(dt)
 
     @property
     def start_dt(self):
         return self._start_dt
+
+    @start_dt.setter
+    def start_dt(self, dt):
+        if not isinstance(dt, datetime):
+            raise ValueError('CalendarWeek.start_dt must be of type {}. '
+                             'Got object of type {} instead'.format(datetime, type(dt)))
+
+        if not (dt.hour, dt.minute, dt.second, dt.microsecond) == (0, 0, 0, 0):
+            raise ValueError('CalendarWeek.start_dt can only be set to '
+                             'a Monday with a time of 00:00:00.000000. '
+                             'Time given: {}'.format(dt.time()))
+
+        if not dt.tzinfo == EST:
+            raise ValueError('CalendarWeek.start_dt can only have a tzinfo value of `EST`')
+
+        self._start_dt = dt
 
     @property
     def end_dt(self):
@@ -62,12 +96,12 @@ class CalendarWeek(object):
     def __add__(self, other):
         if not isinstance(other, int):
             raise ValueError('Expected integer value. Got {}'.format(type(other)))
-        return self.start_dt + timedelta(weeks=other)
+        return CalendarWeek(start_dt=self.start_dt + timedelta(weeks=other))
 
     def __sub__(self, other):
         if not isinstance(other, int):
             raise ValueError('Expected integer value. Got {}'.format(type(other)))
-        return self.start_dt - timedelta(weeks=other)
+        return CalendarWeek(start_dt=self.start_dt - timedelta(weeks=other))
 
     @property
     def slug(self):
