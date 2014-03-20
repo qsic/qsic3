@@ -7,7 +7,7 @@ from qsic.events.views import PerformanceDetailView
 urlpatterns = patterns(
     'qsic.events.views',
 
-    url(r'^week/current?$',
+    url(r'^week/current/?$',
         'current_week',
         name='qsic_current_week'),
 

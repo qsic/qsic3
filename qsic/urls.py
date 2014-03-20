@@ -10,7 +10,7 @@ urlpatterns = patterns(
     url(r'^$', 'qsic.views.index_redirect', name='qsic_index'),
 
     # About Page
-    url(r'^about/?$', TemplateView.as_view(template_name='about.html')),
+    url(r'^about/?$', TemplateView.as_view(template_name='about.html'), name='qsic_about'),
 
     # sub apps
     url(r'^events/', include('qsic.events.urls')),
