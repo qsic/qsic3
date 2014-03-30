@@ -20,10 +20,16 @@ class Performer(models.Model):
     # 'it' is short for Imrpovteams / Improvteams.com
     it_url = models.URLField(null=True, blank=True)
     it_id = models.PositiveIntegerField(null=True, blank=True)
+
+    # suggested sizes:
+    # large 275
+    # medium 150
+    # small 75
     headshot = models.ImageField(upload_to='performers/headshots',
                                  null=True,
                                  blank=True)
     bio = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         app_label = 'qsic'
@@ -92,3 +98,9 @@ class Performer(models.Model):
                 self.headshot.save(file_name, s3file, save=False)
                 return {'success': True}
         return {'success': False, 'msg': 'Unable to save headshot.'}
+
+    def groups(self):
+        """
+        Return iterable of groups that the user is in.
+        """
+        return [gpr.group for gpr in self.groupperformerrelation_set.order_by('-start_dt')]

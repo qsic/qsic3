@@ -19,7 +19,11 @@ class Group(models.Model):
     slug = models.SlugField(blank=True, default='')
     # 'it' is short for Imrpovteams / Improvteams.com
     it_url = models.URLField(null=True, blank=True)
-    photo = models.ImageField(upload_to='performers/headshots',
+
+    # suggested sizes
+    # medium and large 800px x 150px
+    # small 400px x 150px
+    photo = models.ImageField(upload_to='groups/house_team_photos',
                               null=True,
                               blank=True)
     bio = models.TextField(null=True, blank=True)

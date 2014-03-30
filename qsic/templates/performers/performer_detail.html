@@ -1,1 +1,44 @@
 {% extends 'core/base.html' %}
+
+{% block title %}{{ performer }}{% endblock title %}
+
+{% block main_content %}
+  <section class="performer_detail">
+    <section class="row">
+      <article class="small-8 columns">
+        <h2>{{ performer }}</h2>
+        <p>
+          {{ performer.bio }}
+        </p>
+      </article>
+      <div class="small-4 columns">
+        <ul class="vcard">
+          <li>
+            <img src="http://growingventuresolutions.com/gvsfiles/assets/gvs-logo-square-400x400.gif" data-interchange="[{{ performer.headshot }}, (default)], [{{ performer.headshot }}, (large)]">
+            <noscript><img src="{{ performer.headshot }}"></noscript>
+          </li>
+          <li>{{ performer }}</li>
+        </ul>
+      </div>
+    </section>
+    <section class="row">
+      <article class="small-12 columns">
+        {% if performer.groups %}
+          <h5>{{ performer.first_name }} has been on these teams</h5>
+          {% for group in performer.groups %}
+            <ul class="inline-list">
+              <li><a href="{{ group.url }}">{{ group.name }}</a></li>
+            </ul>
+          {% endfor %}
+        {% endif %}
+      </article>
+    </section>
+    {% if performer.it_url %}
+    <section class="row">
+      <aside class="small-12 columns">
+        <a href="{{ performer.it_url }}">bio on improvteams.com</a>
+      </aside>
+    </section>
+    {% endif %}
+  </section>
+{% endblock main_content %}

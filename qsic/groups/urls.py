@@ -2,16 +2,18 @@ from django.conf.urls import patterns
 from django.conf.urls import url
 
 from qsic.groups.views import GroupDetailView
+from qsic.groups.views import CurrentHouseTeamListView
+from qsic.groups.views import PastHouseTeamListView
 
 urlpatterns = patterns(
     'qsic.groups.views',
 
-    url(r'^house_teams/current$',
-        'current_house_teams',
+    url(r'^house-teams/current$',
+        CurrentHouseTeamListView.as_view(),
         name='qsic_current_house_teams'),
 
-    url(r'^house_teams/past$',
-        'past_house_teams',
+    url(r'^house-teams/past$',
+        PastHouseTeamListView.as_view(),
         name='qsic_past_house_teams'),
 
     url(r'^group/(?P<pk>\d+)$',

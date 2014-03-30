@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.generic import DetailView
+from django.views.generic import ListView
 
 from qsic.groups.models import Group
 
@@ -17,23 +18,52 @@ class GroupDetailView(DetailView):
     model = Group
 
 
-def current_house_teams(request):
-    teams = Group.objects.filter(is_house_team=True)
-    teams = [t for t in teams if t.is_current]
+class HouseTeamListView(ListView):
+    template_name = 'groups/house_team_list.html'
+    model = Group
 
-    return render_to_response(
-        'groups/house_team_list.html',
-        locals(),
-        context_instance=RequestContext(request)
-    )
+    filter_criteria = {'is_house_team': True}
+    team_list_type = ''
+
+    def get_queryset(self):
+        """
+        Get the list of items for this view. This must be an iterable, and may
+        be a queryset (in which qs-specific behavior will be enabled).
+        """
+        queryset = self.model.objects.filter(**self.filter_criteria).order_by('-create_dt')
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        context['team_list_type'] = self.team_list_type
+        return context
 
 
-def past_house_teams(request):
-    teams = Group.objects.filter(is_house_team=True)
-    teams = [t for t in teams if not t.is_current]
+class CurrentHouseTeamListView(HouseTeamListView):
+    team_list_type = 'Current House Teams'
 
-    return render_to_response(
-        'groups/house_team_list.html',
-        locals(),
-        context_instance=RequestContext(request)
-    )
+    def get_queryset(self):
+        """
+        Get the list of items for this view. This must be an iterable, and may
+        be a queryset (in which qs-specific behavior will be enabled).
+        """
+        queryset = super().get_queryset()
+
+        return [team for team in queryset if team.is_current]
+
+
+class PastHouseTeamListView(HouseTeamListView):
+    team_list_type = 'Past House Teams'
+
+    def get_queryset(self):
+        """
+        Get the list of items for this view. This must be an iterable, and may
+        be a queryset (in which qs-specific behavior will be enabled).
+        """
+        queryset = super().get_queryset()
+
+        return [team for team in queryset if not team.is_current]
+

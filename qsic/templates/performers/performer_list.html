@@ -1,1 +1,21 @@
 {% extends 'core/base.html' %}
+
+{% block title %}{{ performer_list_type }}{% endblock title %}
+
+{% block main_content %}
+  <section>
+    <h2>{{ performer_list_type }}</h2>
+
+    <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-5 text-center">
+      {% for performer in object_list %}
+        <li>
+          <a class="th radius" href="{{ performer.url }}">
+            <img src="http://public-library.org/uploads/300003/1370810655747/150px-150-xxx.jpg">
+          </a>
+        <div>{{ performer }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+
+  </section>
+{% endblock main_content %}

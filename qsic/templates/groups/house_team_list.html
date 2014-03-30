@@ -1,1 +1,21 @@
 {% extends 'core/base.html' %}
+
+{% block title %}{{ team_list_type }}{% endblock title %}
+
+{% block main_content %}
+  <section class="house_team_list">
+    <h2>{{ team_list_type }}</h2>
+
+    <ul class="small-block-grid-1 medium-block-grid-1 large-block-grid-1 text-center">
+      {% for team in object_list %}
+        <li>
+          <a data-tooltip class="th radius has-tip tip-top" title="{{ team.name }}" href="{{ team.url }}">
+            <img class="show-for-small-only" src="http://assets.dogtime.com/asset/image/518aaa316dab62044b0008a4/column_11_cats-kittens-mothers-day.jpg">
+            <img class="show-for-medium-up" src="http://public-library.org/uploads/300003/1370810655747/150px-150-xxx.jpg">
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+  </section>
+{% endblock main_content %}

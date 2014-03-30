@@ -1,12 +1,12 @@
-/* line 4, _nav.scss */
+/* line 5, _nav.scss */
 .top-bar-section .title-area .name h1 a {
   padding: 0;
   padding-right: 15px;
+  display: inline-block;
 }
-/* line 9, _nav.scss */
-.top-bar-section .title-area .name a img {
+/* line 10, _nav.scss */
+.top-bar-section .title-area .name h1 a img {
   height: 45px;
-  margin: 0 auto;
   vertical-align: bottom;
 }
 
@@ -114,4 +114,27 @@
 /* line 2, _footer.scss */
 footer ul {
   font-size: 12px;
+}
+/* line 5, _footer.scss */
+footer ul li i {
+  font-size: 24px;
+  vertical-align: text-bottom;
+}
+
+/* line 2, _performer_detail.scss */
+section.performer_detail img {
+  background-color: #000000;
+  border: 1px solid red;
+  width: 275px;
+  height: 275px;
+}
+
+/* line 3, _group_list.scss */
+section.house_team_list ul li {
+  padding-bottom: 5px;
+}
+/* line 6, _group_list.scss */
+section.house_team_list ul li img {
+  width: 800px;
+  height: 150px;
 }
