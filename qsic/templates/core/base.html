@@ -42,15 +42,30 @@
         <ul class="right">
           <li class="divider"></li>
           <li>
-            <a href="{% url 'qsic_current_week' %}">Shows</a>
+            <a data-dropdown="nav_dropdown_shows" data-options="is_hover:true" href="#">Shows</a>
+            <ul id="nav_dropdown_shows" class="tiny f-dropdown" data-dropdown-content>
+              <li><a href="{% url 'qsic_tonight' %}">Tonight at QSIC!</a></li>
+              <li><a href="{% url 'qsic_current_week' %}">Shows By Week</a></li>
+              <li><a href="{% url 'qsic_current_month' %}">Shows By Month</a></li>
+            </ul>
           </li>
           <li class="divider"></li>
           <li>
-            <a href="{% url 'qsic_performers_current' %}">Performers</a>
+            <a data-dropdown="nav_dropdown_performers" data-options="is_hover:true" href="#">Performers</a>
+            <ul id="nav_dropdown_performers" class="f-dropdown" data-dropdown-content>
+              <li><a href="{% url 'qsic_performers_current' %}">Current Performers</a></li>
+              <li><a href="{% url 'qsic_performers_past' %}">Past Performers</a></li>
+              <li><a href="#">Visiting Performers</a></li>
+            </ul>
           </li>
           <li class="divider"></li>
           <li>
-            <a href="{% url 'qsic_current_house_teams' %}">Teams</a>
+            <a data-dropdown="nav_dropdown_teams" data-options="is_hover:true" href="#">Teams</a>
+            <ul id="nav_dropdown_teams" class="f-dropdown" data-dropdown-content>
+              <li><a href="{% url 'qsic_current_house_teams' %}">Current House Teams</a></li>
+              <li><a href="{% url 'qsic_past_house_teams' %}">Past House Teams</a></li>
+              <li><a href="#">Visiting Teams</a></li>
+            </ul>
           </li>
           <li class="divider"></li>
           <li>
@@ -77,7 +92,11 @@
         <div class="row">
           <div class="small-12 columns">
             <ul class="inline-list right">
-              <li><i class="fi-social-facebook"></i></li>
+              <li>
+                <a href="https://www.facebook.com/queenssecretimprovclub">
+                  <i class="fi-social-facebook"></i>
+                </a>
+              </li>
               <li>© Copyright 2014 QSIC</li>
               <li><a href="#">Directions</a></li>
               <li><a href="#">Donate</a></li>

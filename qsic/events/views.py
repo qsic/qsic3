@@ -15,6 +15,10 @@ from qsic.events.models import Performance
 from django.template.defaultfilters import slugify
 
 
+def tonight(request):
+    pass
+
+
 def current_week(request):
     # get current week and forward to that week
     cur_week = CalendarWeek()
@@ -66,6 +70,14 @@ def week(request, week_slug):
         locals(),
         context_instance=RequestContext(request)
     )
+
+
+def current_month(request):
+    pass
+
+
+def month(request, month_slug):
+    pass
 
 
 def event_detial_view_add_slug(request, pk=None):

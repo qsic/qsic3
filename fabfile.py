@@ -1,9 +1,7 @@
-# TODO port this to python3
 from fabric.api import local
 
 
-def copy_db_prod_to_staging(prod_app='qsic-production',
-                            staging_app='qsic-staging'):
+def copy_db_prod_to_staging(prod_app='qsic-production', staging_app='qsic-staging'):
     """
     Copy production database from prod_app to staging database
     in staging_app

@@ -2,9 +2,13 @@ footer {
     ul {
         font-size: 12px;
         li {
-            i {
-                font-size: 24px;
-                vertical-align: text-bottom;
+            vertical-align: baseline;
+            a {
+
+                i {
+                    display:inline-block;
+                    font-size: 24px;
+                }
             }
         }
     }

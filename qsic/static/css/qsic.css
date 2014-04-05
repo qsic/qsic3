@@ -115,18 +115,20 @@
 footer ul {
   font-size: 12px;
 }
-/* line 5, _footer.scss */
-footer ul li i {
+/* line 4, _footer.scss */
+footer ul li {
+  vertical-align: baseline;
+}
+/* line 8, _footer.scss */
+footer ul li a i {
+  display: inline-block;
   font-size: 24px;
-  vertical-align: text-bottom;
 }
 
 /* line 2, _performer_detail.scss */
 section.performer_detail img {
-  background-color: #000000;
-  border: 1px solid red;
-  width: 275px;
-  height: 275px;
+  width: 300px;
+  height: 300px;
 }
 
 /* line 3, _group_list.scss */

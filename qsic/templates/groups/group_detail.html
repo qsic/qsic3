@@ -1,1 +1,25 @@
 {% extends 'core/base.html' %}
+
+{% block title %}{{ group }}{% endblock title %}
+
+{% block main_content %}
+  <section class="group_detail">
+    <section class="row">
+      <article class="small-12 columns">
+        <img class="show-for-small-only th radius" src="http://assets.dogtime.com/asset/image/518aaa316dab62044b0008a4/column_11_cats-kittens-mothers-day.jpg">
+        <img class="show-for-medium-up th radius" src="http://public-library.org/uploads/300003/1370810655747/150px-150-xxx.jpg">
+        <noscript><img src="{{ group.photo }}"></noscript>
+      </article>
+
+      <article class="small-12 columns">
+        <h2>{{ group.name }}</h2>
+      </article>
+
+      <article class="small-12 columns">
+        <p>
+          {{ group.bio }}
+        </p>
+      </article>
+    </section>
+
+{% endblock main_content %}

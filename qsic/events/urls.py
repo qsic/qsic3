@@ -7,6 +7,10 @@ from qsic.events.views import PerformanceDetailView
 urlpatterns = patterns(
     'qsic.events.views',
 
+    url(r'^tonight/?$',
+        'tonight',
+        name='qsic_tonight'),
+
     url(r'^week/current/?$',
         'current_week',
         name='qsic_current_week'),
@@ -14,6 +18,14 @@ urlpatterns = patterns(
     url(r'^week/(\d{8})?$',
         'week',
         name='qsic_week'),
+
+    url(r'^month/current/?$',
+        'current_month',
+        name='qsic_current_month'),
+
+    url(r'^month/(\d{6})?$',
+        'month',
+        name='qsic_month'),
 
     url(r'^event/(?P<pk>\d+)$',
         'event_detial_view_add_slug',
