@@ -112,7 +112,7 @@ else:
     # DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
     MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
-    DEFAULT_FILE_STORAGE = 'py3s3.storage.S3Storage'
+    DEFAULT_FILE_STORAGE = 'project_settings.settings.django_py3s3.S3StaticStorage'
 
 if SERVE_STATIC or SERVE_MEDIA:
     # Only upload new or changed files to AWS
