@@ -72,6 +72,3 @@ def pushto(app):
     qsic app specified by ``app``.
     """
     push(app, 'master', heroku_app=app)
-
-
-#TODO add local env vars during deploy
