@@ -1,23 +1,9 @@
 # Django settings for qsic3 project.
 import os
 
-from django.core.exceptions import ImproperlyConfigured
-
 import dj_database_url
 
-
-def get_env_var(env_var, default=None, isbool=False):
-    """
-    Return value of envirnoment variable or throw exception
-    """
-    try:
-        env_value = os.environ.get(env_var, default)
-        if isbool:
-            env_value = 'true' in str(env_value).lower().strip()
-        return env_value
-    except KeyError:
-        error_msg = '{} environment variable not set'.format(env_var)
-        raise ImproperlyConfigured(error_msg)
+from .utils import get_env_var
 
 DEBUG = get_env_var('DJANGO_DEBUG', default=False, isbool=True)
 TEMPLATE_DEBUG = DEBUG
@@ -103,7 +89,7 @@ if SERVE_STATIC:
 else:
     # Serve static from AWS
     # tell django to use django-storages
-    STATICFILES_STORAGE = 'py3s3.storage.S3StaticStorage'
+    STATICFILES_STORAGE = 'project_settings.settings.django_py3s3.S3StaticStorage'
     STATIC_ROOT = AWS_S3_BUCKET_URL + '/' + STATIC_DIR + '/'
     STATIC_URL = STATIC_ROOT
 
@@ -126,7 +112,7 @@ else:
     # DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
     MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
-    DEFAULT_FILE_STORAGE = 'py3s3.storage.S3MediaStorage'
+    DEFAULT_FILE_STORAGE = 'py3s3.storage.S3Storage'
 
 if SERVE_STATIC or SERVE_MEDIA:
     # Only upload new or changed files to AWS
@@ -195,7 +181,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'south',
-    # 'storages', no longer using storages 2013.11.03
     #'easy_thumbnails',
     'qsic',
     'py3s3',

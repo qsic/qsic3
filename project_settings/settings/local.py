@@ -11,7 +11,4 @@ DATABASES = {
     }
 }
 
-
-
-
 SECRET_KEY = 'asdaaefaefaefaefefaefae'

@@ -52,6 +52,14 @@ def collectstatic(app):
     local(cmd)
 
 
+def migrate(app):
+    """
+    Migrate database schema to latest South schemamigration.
+    """
+    cmd = 'heroku run python manage.py migrate --app {app}'.format(app=app)
+    local(cmd)
+
+
 def push(remote, local_branch, heroku_app=None):
     """
     Push branch ``local_branch`` up to ``remote`` via git.
