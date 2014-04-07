@@ -108,8 +108,6 @@ if SERVE_MEDIA:
 
 else:
     # Serve media from AWS
-    # tell django to use django-storages
-    # DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location=MEDIA_DIR)
     MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
     DEFAULT_FILE_STORAGE = 'project_settings.settings.django_py3s3.S3StaticStorage'
