@@ -70,9 +70,6 @@ def push(remote, local_branch, heroku_app=None):
         cmd = ('git push {remote} {local_branch}'.format(**locals()))
         local(cmd)
 
-    if heroku_app:
-        collectstatic(heroku_app)
-
 
 def pushto(app):
     """
