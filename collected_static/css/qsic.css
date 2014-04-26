@@ -1,13 +1,12 @@
-/* line 5, _nav.scss */
-.top-bar-section .title-area .name h1 a {
-  padding: 0;
-  padding-right: 15px;
-  display: inline-block;
+/* line 2, _nav.scss */
+nav a#root_link {
+  background-image: url("/static/images/qsic-logo-queen-height-45px.png");
+  background-repeat: no-repeat;
+  background-position: left;
 }
-/* line 10, _nav.scss */
-.top-bar-section .title-area .name h1 a img {
-  height: 45px;
-  vertical-align: bottom;
+/* line 7, _nav.scss */
+nav a#root_link span {
+  padding-left: 50px;
 }
 
 /* line 22, _week.scss */

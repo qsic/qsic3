@@ -1,11 +1,14 @@
 {% extends 'core/base.html' %}
 
-{% block title %}A Week!{% endblock title %}
+{% block title %}
+  {% if cal_week.is_current_week %}
+    This week at QSIC...
+  {% else %}
+    Week of {{ cal_week.start_dt|date:"M. j, Y" }}
+  {% endif %}
+{% endblock title %}
 
 {% block main_content %}
-
-
-
   <div class="row">
     <div class="small-12 columns">
       <h3>

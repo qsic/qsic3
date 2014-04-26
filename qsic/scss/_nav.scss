@@ -1,18 +1,11 @@
-.top-bar-section {
-    .title-area {
-        .name {
-            h1 {
-                a {
-                    padding: 0;
-                    padding-right: 15px;
-                    display: inline-block;
+nav {
+    a#root_link {
+        background-image: url('/static/images/qsic-logo-queen-height-45px.png');
+        background-repeat: no-repeat;
+        background-position: left;
 
-                    img {
-                        height: 45px;
-                        vertical-align: bottom;
-                    }
-                }
-            }
+        span {
+            padding-left: 50px;
         }
     }
 }
