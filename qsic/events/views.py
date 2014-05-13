@@ -16,7 +16,12 @@ from django.template.defaultfilters import slugify
 
 
 def tonight(request):
-    pass
+
+    return render_to_response(
+        'events/tonight.html',
+        locals(),
+        context_instance=RequestContext(request)
+    )
 
 
 def current_week(request):
@@ -73,10 +78,12 @@ def week(request, week_slug):
 
 
 def current_month(request):
+    # TODO
     pass
 
 
 def month(request, month_slug):
+    # TODO
     pass
 
 

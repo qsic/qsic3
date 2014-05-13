@@ -19,13 +19,13 @@ urlpatterns = patterns(
         'week',
         name='qsic_week'),
 
-    url(r'^month/current/?$',
-        'current_month',
-        name='qsic_current_month'),
-
-    url(r'^month/(\d{6})?$',
-        'month',
-        name='qsic_month'),
+    # url(r'^month/current/?$',
+    #     'current_month',
+    #     name='qsic_current_month'),
+    #
+    # url(r'^month/(\d{6})?$',
+    #     'month',
+    #     name='qsic_month'),
 
     url(r'^event/(?P<pk>\d+)$',
         'event_detial_view_add_slug',

@@ -14,8 +14,8 @@
       <div class="small-5 columns text-right">
         <ul class="vcard">
           <li>
-            <img src="http://growingventuresolutions.com/gvsfiles/assets/gvs-logo-square-400x400.gif" data-interchange="[{{ performer.headshot }}, (default)], [{{ performer.headshot }}, (large)]">
-            <noscript><img src="{{ performer.headshot }}"></noscript>
+            <img src="{{ performer.headshot.url }}" data-interchange="[{{ performer.headshot.url }}, (default)], [{{ performer.headshot.url }}, (large)]">
+            <noscript><img src="{{ performer.headshot.url }}"></noscript>
           </li>
           <li>{{ performer }}</li>
         </ul>

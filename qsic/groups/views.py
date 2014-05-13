@@ -18,12 +18,12 @@ class GroupDetailView(DetailView):
     model = Group
 
 
-class HouseTeamListView(ListView):
-    template_name = 'groups/house_team_list.html'
+class GroupListView(ListView):
+    template_name = 'groups/group_list.html'
     model = Group
 
-    filter_criteria = {'is_house_team': True}
-    team_list_type = ''
+    filter_criteria = {}
+    group_list_type = ''
 
     def get_queryset(self):
         """
@@ -38,32 +38,44 @@ class HouseTeamListView(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
-        context['team_list_type'] = self.team_list_type
+        context['group_list_type'] = self.group_list_type
         return context
 
 
-class CurrentHouseTeamListView(HouseTeamListView):
-    team_list_type = 'Current House Teams'
+class CurrentHouseTeamListView(GroupListView):
+    group_list_type = 'Current House Teams'
 
     def get_queryset(self):
         """
         Get the list of items for this view. This must be an iterable, and may
         be a queryset (in which qs-specific behavior will be enabled).
         """
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(is_house_team=True)
 
         return [team for team in queryset if team.is_current]
 
 
-class PastHouseTeamListView(HouseTeamListView):
-    team_list_type = 'Past House Teams'
+class PastHouseTeamListView(GroupListView):
+    group_list_type = 'Past House Teams'
 
     def get_queryset(self):
         """
         Get the list of items for this view. This must be an iterable, and may
         be a queryset (in which qs-specific behavior will be enabled).
         """
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(is_house_team=True)
 
         return [team for team in queryset if not team.is_current]
 
+
+class VisitingGroupListView(GroupListView):
+    group_list_type = 'Past and Present Visiting Teams'
+
+    def get_queryset(self):
+        """
+        Get the list of items for this view. This must be an iterable, and may
+        be a queryset (in which qs-specific behavior will be enabled).
+        """
+        queryset = super().get_queryset().filter(is_house_team=False)
+
+        return [team for team in queryset if not team.is_current]
