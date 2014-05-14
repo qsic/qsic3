@@ -4,6 +4,12 @@ p {
   font-size: 12px;
 }
 
+/* line 1, _general.scss */
+.center {
+  margin: 0 auto;
+  text-align: center;
+}
+
 /* line 2, _nav.scss */
 nav a#root_link {
   background-image: url("/static/images/qsic-logo-queen-height-45px.png");

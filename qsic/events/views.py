@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.generic import DetailView
+from django.utils import timezone
 
 from qsic.core.utils import CalendarWeek
 from qsic.events.models import Event
@@ -19,6 +20,51 @@ def tonight(request):
 
     return render_to_response(
         'events/tonight.html',
+        locals(),
+        context_instance=RequestContext(request)
+    )
+
+
+def up_next(request):
+    # Get next event or next 6 performances to occur.
+
+    now = timezone.now()
+
+    # get all events for cal_week
+    events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt > now]
+
+    # get all performances not in events
+    performances = Performance.objects.filter(
+        start_dt__gte=now,
+    ).exclude(
+        event__in=events
+    ).order_by(
+        'start_dt'
+    )
+
+    events_and_perofrmances = list(itertools.chain(events, performances))
+
+    events_and_perofrmances.sort(key=lambda i: i.start_dt, reverse=True)
+
+    if events_and_perofrmances and isinstance(events_and_perofrmances[0], Event):
+        # just show the one event
+        up_next_type = 'event'
+        event = events_and_perofrmances[0]
+    elif events_and_perofrmances:
+        # get all the perfrmances up to the next Event
+        # or the next 6 perofrmances, which ever is achieved first.
+        up_next_type = 'perfomance'
+
+        performance_list = []
+        for n, o in enumerate(events_and_perofrmances):
+            performance_list.append(o)
+            if n >= 6 or o.event:
+                break
+    else:
+        up_next_type = None
+
+    return render_to_response(
+        'events/up_next.html',
         locals(),
         context_instance=RequestContext(request)
     )

@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Up Next at QSIC!{% endblock title %}
+
+{% block main_content %}
+  <div class="row">
+    <div class="small-12 columns">
+      <h3 class="subheader">
+        Up Next at QSIC!
+      </h3>
+    </div>
+  </div>
+
+  {% if up_next_type == 'event' %}
+    {% include 'events/_up_next_event.html' %}
+  {% elif up_next_type == 'perfomance' %}
+    {% include 'events/_up_next_performances.html' %}
+  {% else %}
+    {% include 'events/_up_next_nothing.html' %}
+  {% endif %}
+
+{% endblock main_content %}
