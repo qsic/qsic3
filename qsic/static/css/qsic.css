@@ -20,6 +20,10 @@ nav a#root_link {
 nav a#root_link span {
   padding-left: 50px;
 }
+/* line 12, _nav.scss */
+nav ul.f-dropdown li {
+  width: 100%;
+}
 
 /* line 22, _week.scss */
 .week {
