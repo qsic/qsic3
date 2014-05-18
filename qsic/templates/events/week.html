@@ -1,5 +1,7 @@
 {% extends 'core/base.html' %}
 
+{% load static %}
+
 {% block title %}
   {% if cal_week.is_current_week %}
     This week at QSIC...
@@ -21,10 +23,14 @@
     </div>
   </div>
 
-  {% include 'events/_week_nav.html' %}
-
   <div class="row week">
     <div class="small-12 columns">
+      <div class="nav">
+        <a class="nav-left" title="Previous Week" href="{% url 'qsic_week' previous_week.slug %}">
+         <i class="fa fa-angle-double-left"></i>
+        </a>
+      </div>
+
       {% for day in days %}
         <div class="day">
           <div class="header">
@@ -35,9 +41,13 @@
           </div>
         </div>
       {% endfor %}
+
+      <div class="nav">
+        <a class="nav-right" title="Following Week" href="{% url 'qsic_week' following_week.slug %}">
+          <i class="fa fa-angle-double-right"></i>
+        </a>
+      </div>
     </div>
   </div>
-
-  {% include 'events/_week_nav.html' %}
 
 {% endblock main_content %}
