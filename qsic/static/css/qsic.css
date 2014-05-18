@@ -25,6 +25,25 @@ nav ul.f-dropdown li {
   width: 100%;
 }
 
+/* line 2, _footer.scss */
+footer ul {
+  font-size: 12px;
+}
+/* line 4, _footer.scss */
+footer ul li {
+  vertical-align: baseline;
+}
+/* line 8, _footer.scss */
+footer ul li a i {
+  display: inline-block;
+  font-size: 24px;
+}
+/* line 13, _footer.scss */
+footer ul li a.facebook {
+  position: relative;
+  top: -10px;
+}
+
 /* line 22, _week.scss */
 .week {
   font-size: 0;
@@ -129,24 +148,9 @@ nav ul.f-dropdown li {
   width: 10px;
 }
 
-/* line 2, _footer.scss */
-footer ul {
-  font-size: 12px;
-}
-/* line 4, _footer.scss */
-footer ul li {
-  vertical-align: baseline;
-}
-/* line 8, _footer.scss */
-footer ul li a i {
-  display: inline-block;
-  font-size: 24px;
-}
-
-/* line 2, _performer_detail.scss */
-section.performer_detail img {
-  width: 300px;
-  height: 300px;
+/* line 4, events.scss */
+ul.example-orbit a {
+  color: #ffffff;
 }
 
 /* line 3, _group_list.scss */
@@ -157,4 +161,10 @@ section.house_team_list ul li {
 section.house_team_list ul li img {
   width: 800px;
   height: 150px;
+}
+
+/* line 2, _performer_detail.scss */
+section.performer_detail img {
+  width: 300px;
+  height: 300px;
 }

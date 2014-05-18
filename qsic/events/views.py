@@ -10,6 +10,7 @@ from django.views.generic import DetailView
 from django.utils import timezone
 
 from qsic.core.utils import CalendarWeek
+from qsic.core.utils import EST
 from qsic.events.models import Event
 from qsic.events.models import Performance
 
@@ -26,16 +27,16 @@ def tonight(request):
 
 
 def up_next(request):
-    # Get next event or next 6 performances to occur.
-
-    now = timezone.now()
+    # Starting with today, get the next event or 6 performances.
+    today_date = timezone.now().date()
+    today = timezone.datetime(today_date.year, today_date.month, today_date.day, tzinfo=EST)
 
     # get all events for cal_week
-    events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt > now]
+    events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt > today]
 
     # get all performances not in events
     performances = Performance.objects.filter(
-        start_dt__gte=now,
+        start_dt__gte=today,
     ).exclude(
         event__in=events
     ).order_by(

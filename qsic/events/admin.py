@@ -1,8 +1,5 @@
 from django.contrib import admin
 
-import this
-
-
 from .models import Event
 from .models import Performance
 from .models import PerformanceGroupPerformerRelation

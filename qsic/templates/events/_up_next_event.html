@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="small-12 columns">
+
+    <ul class="example-orbit" data-orbit data-options="resume_on_mouseout: true;slide_number: false;timer_speed: 5000">
+
+
+      <li>
+        <a href="#event_page">
+          <img src="/media/p.jpg" alt="{{ event.name }}" />
+        </a>
+        <div class="orbit-caption">
+          <a href="#event_page">{{ event.name }}</a>
+        </div>
+      </li>
+
+      {% for performance in event %}
+        <li class="active">
+          <img src="/media/Ship31_970x200.jpg" alt="{{ performance.name }}" />
+          <div class="orbit-caption">
+            {{ performance.name }}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-6 columns">
+    <div class="panel radius callout">
+
+      <h4>{{ event.name }}</h4>
+
+      <table>
+        {% for performace in event %}
+        <tr>
+          <td>{{ performace.start_dt }}</td>
+          <td>
+            <a href="{{ performace.url }}">
+              {{ performace.name }}
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+
+    </div>
+  </div>
+  <div class="small-6 columns">
+    <div class="panel radius callout">
+      Info
+    </div>
+  </div>
+</div>

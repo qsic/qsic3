@@ -1,7 +1,4 @@
-@import "settings";
-@import "general";
-@import "nav";
-@import "week";
-@import "footer";
-@import "performers/performer_detail";
-@import "group/group_list";
+@import "qsic/core/core";
+@import "qsic/events/events";
+@import "qsic/groups/groups";
+@import "qsic/performers/performers";
