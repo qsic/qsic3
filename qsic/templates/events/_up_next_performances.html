@@ -1,5 +1,44 @@
 <div class="row">
   <div class="small-12 columns">
-    {{ performance_list }}
+
+    <ul class="example-orbit" data-orbit data-options="resume_on_mouseout: true;slide_number: false;timer_speed: 5000">
+
+      {% for performance in performance_list %}
+        <li>
+          <img src="/media/Ship31_970x200.jpg" alt="{{ performance.name }}" />
+          <div class="orbit-caption">
+            {{ performance.name }}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-6 columns">
+    <div class="panel radius callout">
+
+      <h4>Performances</h4>
+
+      <table>
+        {% for performace in performance_list %}
+        <tr>
+          <td>{{ performace.start_dt }}</td>
+          <td>
+            <a href="{{ performace.url }}">
+              {{ performace.name }}
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+
+    </div>
+  </div>
+  <div class="small-6 columns">
+    <div class="panel radius callout">
+      Info
+    </div>
   </div>
 </div>

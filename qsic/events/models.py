@@ -75,6 +75,10 @@ class Event(models.Model):
     def type(self):
         return self.__class__.__name__
 
+    @property
+    def has_performances(self):
+        return bool(self.performance_set.count())
+
 
 class Performance(models.Model):
     """

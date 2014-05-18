@@ -32,7 +32,7 @@ def up_next(request):
     today = timezone.datetime(today_date.year, today_date.month, today_date.day, tzinfo=EST)
 
     # get all events for cal_week
-    events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt > today]
+    events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt >= today]
 
     # get all performances not in events
     performances = Performance.objects.filter(
