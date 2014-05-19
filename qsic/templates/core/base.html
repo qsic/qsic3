@@ -45,17 +45,14 @@
             <ul id="nav_dropdown_shows" class="tiny f-dropdown" data-dropdown-content>
               <li><a href="{% url 'qsic:up_next' %}">Up Next at QSIC!</a></li>
               <li><a href="{% url 'qsic:current_week' %}">Shows By Week</a></li>
-{#              <li><a href="{% url 'qsic_current_month' %}">Shows By Month</a></li>#}
             </ul>
           </li>
           <li class="divider"></li>
           <li>
-            <a data-dropdown="nav_dropdown_performers" data-options="is_hover:true"
-               href="{% url 'qsic:performers_all' %}">Performers</a>
+            <a data-dropdown="nav_dropdown_performers" data-options="is_hover:true" href="#">Performers</a>
             <ul id="nav_dropdown_performers" class="f-dropdown" data-dropdown-content>
               <li><a href="{% url 'qsic:performers_current' %}">Current Performers</a></li>
               <li><a href="{% url 'qsic:performers_past' %}">Past Performers</a></li>
-{#              <li><a href="{% url 'qsic_performers_visiting' %}">Visiting Performers</a></li>#}
             </ul>
           </li>
           <li class="divider"></li>

@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from image_cropping import ImageCroppingMixin
+
 from .models import Event
 from .models import Performance
 from .models import PerformanceGroupPerformerRelation
 
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(ImageCroppingMixin, admin.ModelAdmin):
     list_display = ('name', 'start_dt',)
     search_fields = ('name',)
 admin.site.register(Event, EventAdmin)

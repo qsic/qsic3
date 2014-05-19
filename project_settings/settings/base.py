@@ -2,6 +2,7 @@
 import os
 
 import dj_database_url
+from easy_thumbnails.conf import Settings as thumbnail_settings
 
 from .utils import get_env_var
 
@@ -179,7 +180,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'south',
-    #'easy_thumbnails',
+    'easy_thumbnails',
+    'image_cropping',
     'qsic',
     'py3s3',
 )
@@ -245,4 +247,16 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+
+# easy_thumbnails and django image cropping
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + thumbnail_settings.THUMBNAIL_PROCESSORS
+
+IMAGE_CROPPING_SIZE_WARNING = True
+
+SOUTH_MIGRATION_MODULES = {
+    'easy_thumbnails': 'easy_thumbnails.south_migrations',
 }

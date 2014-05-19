@@ -8,37 +8,18 @@
       <article class="small-7 columns">
         <h2>{{ object.name }}</h2>
         <p>
-          {{ performer.bio }}
+          {{ object.description }}
         </p>
       </article>
       <div class="small-5 columns text-right">
         <ul class="vcard">
           <li>
-            <img src="{{ performer.headshot.url }}" data-interchange="[{{ performer.headshot.url }}, (default)], [{{ performer.headshot.url }}, (large)]">
-            <noscript><img src="{{ performer.headshot.url }}"></noscript>
+            <img src="{{ object.photo.url }}" data-interchange="[{{ object.photo.url }}, (default)], [{{ object.photo.url }}, (large)]">
+            <noscript><img src="{{ object.photo.url }}"></noscript>
           </li>
-          <li>{{ performer }}</li>
+          <li>{{ object }}</li>
         </ul>
       </div>
     </section>
-    <section class="row">
-      <article class="small-12 columns">
-        {% if performer.groups %}
-          <h5>{{ performer.first_name }} has been on these teams</h5>
-          {% for group in performer.groups %}
-            <ul class="inline-list">
-              <li><a href="{{ group.url }}">{{ group.name }}</a></li>
-            </ul>
-          {% endfor %}
-        {% endif %}
-      </article>
-    </section>
-    {% if performer.it_url %}
-    <section class="row">
-      <aside class="small-12 columns">
-        <a href="{{ performer.it_url }}">bio on improvteams.com</a>
-      </aside>
-    </section>
-    {% endif %}
   </section>
 {% endblock main_content %}

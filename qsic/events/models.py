@@ -2,6 +2,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
+from image_cropping.fields import ImageRatioField
+
 from qsic.performers.models import Performer
 from qsic.groups.models import Group
 
@@ -23,6 +25,7 @@ class Event(models.Model):
                                  default=None)
     description = models.TextField(blank=True)
     photo = models.ImageField(upload_to='events/photos', null=True, blank=True)
+    cropping = ImageRatioField('photo', '970x200', size_warning=True)
 
     class Meta:
         app_label = 'qsic'
