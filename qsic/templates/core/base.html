@@ -23,7 +23,7 @@
         <ul class="title-area">
           <!-- Title Area -->
           <li>
-            <a href="{% url 'qsic_index' %}" id="root_link">
+            <a href="{% url 'qsic:index' %}" id="root_link">
               <span class="show-for-medium-up">
                 The Queen's Secret Improv Club
               </span>
@@ -43,18 +43,18 @@
           <li>
             <a data-dropdown="nav_dropdown_shows" data-options="is_hover:true" href="#">Shows</a>
             <ul id="nav_dropdown_shows" class="tiny f-dropdown" data-dropdown-content>
-              <li><a href="{% url 'qsic_up_next' %}">Up Next at QSIC!</a></li>
-              <li><a href="{% url 'qsic_current_week' %}">Shows By Week</a></li>
+              <li><a href="{% url 'qsic:up_next' %}">Up Next at QSIC!</a></li>
+              <li><a href="{% url 'qsic:current_week' %}">Shows By Week</a></li>
 {#              <li><a href="{% url 'qsic_current_month' %}">Shows By Month</a></li>#}
             </ul>
           </li>
           <li class="divider"></li>
           <li>
             <a data-dropdown="nav_dropdown_performers" data-options="is_hover:true"
-               href="{% url 'qsic_performers_all' %}">Performers</a>
+               href="{% url 'qsic:performers_all' %}">Performers</a>
             <ul id="nav_dropdown_performers" class="f-dropdown" data-dropdown-content>
-              <li><a href="{% url 'qsic_performers_current' %}">Current Performers</a></li>
-              <li><a href="{% url 'qsic_performers_past' %}">Past Performers</a></li>
+              <li><a href="{% url 'qsic:performers_current' %}">Current Performers</a></li>
+              <li><a href="{% url 'qsic:performers_past' %}">Past Performers</a></li>
 {#              <li><a href="{% url 'qsic_performers_visiting' %}">Visiting Performers</a></li>#}
             </ul>
           </li>
@@ -63,14 +63,14 @@
             <a data-dropdown="nav_dropdown_teams" data-options="is_hover:true"
                href="">Teams</a>
             <ul id="nav_dropdown_teams" class="f-dropdown" data-dropdown-content>
-              <li><a href="{% url 'qsic_current_house_teams' %}">Current House Teams</a></li>
-              <li><a href="{% url 'qsic_past_house_teams' %}">Past House Teams</a></li>
-              <li><a href="{% url 'qsic_visiting_groups' %}">Visiting Teams</a></li>
+              <li><a href="{% url 'qsic:current_house_teams' %}">Current House Teams</a></li>
+              <li><a href="{% url 'qsic:visiting_groups' %}">Visiting Teams</a></li>
+              <li><a href="{% url 'qsic:past_groups' %}">Past Teams</a></li>
             </ul>
           </li>
           <li class="divider"></li>
           <li>
-            <a href="{% url 'qsic_about' %}">About QSIC</a>
+            <a href="{% url 'qsic:about' %}">About QSIC</a>
           </li>
         </ul>
       </section>
@@ -99,7 +99,7 @@
                 </a>
               </li>
               <li>© Copyright 2014 QSIC</li>
-              <li><a href="{% url 'qsic_about' %}#directions">Directions</a></li>
+              <li><a href="{% url 'qsic:about' %}#directions">Directions</a></li>
               <li><a href="#">Donate</a></li>
             </ul>
           </div>

@@ -5,21 +5,26 @@ from qsic.groups.views import GroupDetailView
 from qsic.groups.views import CurrentHouseTeamListView
 from qsic.groups.views import PastHouseTeamListView
 from qsic.groups.views import VisitingGroupListView
+from qsic.groups.views import AllPastGroupListView
 
 urlpatterns = patterns(
     'qsic.groups.views',
 
     url(r'^house-teams/current$',
         CurrentHouseTeamListView.as_view(),
-        name='qsic_current_house_teams'),
+        name='current_house_teams'),
 
     url(r'^house-teams/past$',
         PastHouseTeamListView.as_view(),
-        name='qsic_past_house_teams'),
+        name='past_house_teams'),
 
     url(r'^visiting$',
         VisitingGroupListView.as_view(),
-        name='qsic_visiting_groups'),
+        name='visiting_groups'),
+
+    url(r'all/past$',
+        AllPastGroupListView.as_view(),
+        name='past_groups'),
 
     url(r'^group/(?P<pk>\d+)$',
         'group_detail_view_add_slug',

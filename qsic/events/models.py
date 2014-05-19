@@ -22,6 +22,7 @@ class Event(models.Model):
                                  decimal_places=2,
                                  default=None)
     description = models.TextField(blank=True)
+    photo = models.ImageField(upload_to='events/photos', null=True, blank=True)
 
     class Meta:
         app_label = 'qsic'
@@ -98,6 +99,8 @@ class Performance(models.Model):
                                 max_digits=6,
                                 decimal_places=2,
                                 default=None)
+    description = models.TextField(blank=True)
+    photo = models.ImageField(upload_to='performances/photos', null=True, blank=True)
 
     class Meta:
         app_label = 'qsic'
@@ -112,7 +115,7 @@ class Performance(models.Model):
 
     @property
     def url(self):
-        url = reverse('performance_detail_view_add_slug', kwargs={'pk': self.id})
+        url = reverse('qsic:performance_detail_view_add_slug', kwargs={'pk': self.id})
         url = ''.join((url, '/', self.slug))
         return url
 

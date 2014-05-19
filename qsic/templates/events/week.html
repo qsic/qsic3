@@ -26,7 +26,7 @@
   <div class="row week">
     <div class="small-12 columns">
       <div class="nav">
-        <a class="nav-left" title="Previous Week" href="{% url 'qsic_week' previous_week.slug %}">
+        <a class="nav-left" title="Previous Week" href="{% url 'qsic:week' previous_week.slug %}">
          <i class="fa fa-angle-double-left"></i>
         </a>
       </div>
@@ -43,7 +43,7 @@
       {% endfor %}
 
       <div class="nav">
-        <a class="nav-right" title="Following Week" href="{% url 'qsic_week' following_week.slug %}">
+        <a class="nav-right" title="Following Week" href="{% url 'qsic:week' following_week.slug %}">
           <i class="fa fa-angle-double-right"></i>
         </a>
       </div>

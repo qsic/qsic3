@@ -13,19 +13,19 @@ urlpatterns = patterns(
 
     url(r'^$',
         PerformersRedirectView.as_view(),
-        name='qsic_performers_index'),
+        name='performers_index'),
 
     url(r'^all/?$',
         PerformerAllListView.as_view(),
-        name='qsic_performers_all'),
+        name='performers_all'),
 
     url(r'^current/?$',
         PerformerCurrentListView.as_view(),
-        name='qsic_performers_current'),
+        name='performers_current'),
 
     url(r'^past/?$',
         PerformerPastListView.as_view(),
-        name='qsic_performers_past'),
+        name='performers_past'),
 
     url(r'^performer/(?P<pk>\d+)/?$',
         'performer_detail_view_add_slug',

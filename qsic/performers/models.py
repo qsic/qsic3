@@ -45,7 +45,7 @@ class Performer(models.Model):
 
     @property
     def url(self):
-        url = reverse('performer_detail_view_add_slug', kwargs={'pk': self.id})
+        url = reverse('qsic:performer_detail_view_add_slug', kwargs={'pk': self.id})
         url = ''.join((url, '/', self.slug))
         return url
 

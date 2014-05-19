@@ -1,2 +1,25 @@
 {% extends 'core/base.html' %}
 
+{% block title %}{{ object.name }}{% endblock title %}
+
+{% block main_content %}
+  <section class="event_detail">
+    <section class="row">
+      <article class="small-7 columns">
+        <h2>{{ object }}</h2>
+        <p>
+          {{ object.description }}
+        </p>
+      </article>
+      <div class="small-5 columns text-right">
+        <ul class="vcard">
+          <li>
+            <img src="{{ object.photo.url }}" data-interchange="[{{ object.photo.url }}, (default)], [{{ object.photo.url }}, (large)]">
+            <noscript><img src="{{ object.photo.url }}"></noscript>
+          </li>
+          <li>{{ object }}</li>
+        </ul>
+      </div>
+    </section>
+  </section>
+{% endblock main_content %}

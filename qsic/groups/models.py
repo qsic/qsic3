@@ -69,7 +69,7 @@ class Group(models.Model):
 
     @property
     def url(self):
-        url = reverse('group_detail_view_add_slug', kwargs={'pk': self.id})
+        url = reverse('qsic:group_detail_view_add_slug', kwargs={'pk': self.id})
         url = ''.join((url, '/', self.slug))
         return url
 

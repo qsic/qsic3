@@ -9,19 +9,19 @@ urlpatterns = patterns(
 
     url(r'^up-next/?$',
         'up_next',
-        name='qsic_up_next'),
+        name='up_next'),
 
     url(r'^tonight/?$',
         'tonight',
-        name='qsic_tonight'),
+        name='tonight'),
 
     url(r'^week/current/?$',
         'current_week',
-        name='qsic_current_week'),
+        name='current_week'),
 
     url(r'^week/(\d{8})?$',
         'week',
-        name='qsic_week'),
+        name='week'),
 
     # url(r'^month/current/?$',
     #     'current_month',

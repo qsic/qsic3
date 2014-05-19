@@ -74,7 +74,7 @@ def up_next(request):
 def current_week(request):
     # get current week and forward to that week
     cur_week = CalendarWeek()
-    return HttpResponseRedirect(reverse('qsic_week', args=(cur_week.slug,)))
+    return HttpResponseRedirect(reverse('qsic:week', args=(cur_week.slug,)))
 
 
 def week(request, week_slug):

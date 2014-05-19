@@ -15,7 +15,7 @@ def performer_detail_view_add_slug(request, pk=None):
 
 class PerformersRedirectView(RedirectView):
     def get_redirect_url(self):
-        return reverse('qsic_performers_current')
+        return reverse('qsic:performers_current')
 
 
 class PerformerDetailView(DetailView):

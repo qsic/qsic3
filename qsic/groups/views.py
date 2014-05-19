@@ -69,7 +69,7 @@ class PastHouseTeamListView(GroupListView):
 
 
 class VisitingGroupListView(GroupListView):
-    group_list_type = 'Past and Present Visiting Teams'
+    group_list_type = 'Visiting Teams'
 
     def get_queryset(self):
         """
@@ -78,4 +78,15 @@ class VisitingGroupListView(GroupListView):
         """
         queryset = super().get_queryset().filter(is_house_team=False)
 
-        return [team for team in queryset if not team.is_current]
+        return [team for team in queryset if team.is_current]
+
+
+class AllPastGroupListView(GroupListView):
+    group_list_type = 'All Past Teams'
+
+    def get_queryset(self):
+        """
+        Get the list of items for this view. This must be an iterable, and may
+        be a queryset (in which qs-specific behavior will be enabled).
+        """
+        return [team for team in super().get_queryset() if not team.is_current]
