@@ -21,12 +21,9 @@ class Group(models.Model):
     slug = models.SlugField(blank=True, default='')
     # 'it' is short for Imrpovteams / Improvteams.com
     it_url = models.URLField(null=True, blank=True)
-
-    # suggested sizes
-    # medium and large 800px x 150px
-    # small 400px x 150px
     photo = models.ImageField(upload_to='groups/photos', null=True, blank=True)
-    cropping = ImageRatioField('photo', '1000x800', size_warning=True)
+    detail_crop = ImageRatioField('photo', '1000x800', size_warning=True)
+    list_crop = ImageRatioField('photo', '970x200', size_warning=True)
     bio = models.TextField(null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True, null=True)
     is_house_team = models.BooleanField(default=True)

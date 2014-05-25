@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load cropping %}
 
 {% block title %}{{ performer_list_type }}{% endblock title %}
 
@@ -10,7 +11,11 @@
       {% for performer in object_list %}
         <li>
           <a class="th radius" href="{{ performer.url }}">
-            <img src="http://public-library.org/uploads/300003/1370810655747/150px-150-xxx.jpg">
+            {% if performer.detail_crop %}
+              <img src="{% cropped_thumbnail performer "detail_crop" scale=0.42 %}">
+            {% else %}
+              <img src="">
+            {% endif %}
           </a>
         <div>{{ performer }}</div>
         </li>

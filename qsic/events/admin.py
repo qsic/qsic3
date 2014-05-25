@@ -8,13 +8,13 @@ from .models import PerformanceGroupPerformerRelation
 from qsic.core.admin import QsicModelAdmin
 
 
-class EventAdmin(ImageCroppingMixin, QsicModelAdmin):
+class EventAdmin(ImageCroppingMixin, admin.ModelAdmin):
     list_display = ('name', 'start_dt',)
     search_fields = ('name',)
 admin.site.register(Event, EventAdmin)
 
 
-class PerformanceAdmin(ImageCroppingMixin, QsicModelAdmin):
+class PerformanceAdmin(ImageCroppingMixin, admin.ModelAdmin):
     list_display = ('name', 'event', 'start_dt', 'end_dt', 'price',)
     search_fields = ('name', 'event',)
 admin.site.register(Performance, PerformanceAdmin)
