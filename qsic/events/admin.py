@@ -13,7 +13,7 @@ class EventAdmin(ImageCroppingMixin, admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 
-class PerformanceAdmin(admin.ModelAdmin):
+class PerformanceAdmin(ImageCroppingMixin, admin.ModelAdmin):
     list_display = ('name', 'event', 'start_dt', 'end_dt', 'price',)
     search_fields = ('name', 'event',)
 admin.site.register(Performance, PerformanceAdmin)

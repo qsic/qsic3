@@ -8,6 +8,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 
+from image_cropping.fields import ImageRatioField
+
 from py3s3.files import S3ContentFile
 from qsic.parsers.improvteams.parser import ItPerformerParser
 
@@ -27,9 +29,9 @@ class Performer(models.Model):
     # large 275
     # medium 150
     # small 75
-    headshot = models.ImageField(upload_to='performers/headshots',
-                                 null=True,
-                                 blank=True)
+    photo = models.ImageField(upload_to='performers/photos', null=True, blank=True)
+    cropping = ImageRatioField('photo', '300x300', size_warning=True)
+
     bio = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
 

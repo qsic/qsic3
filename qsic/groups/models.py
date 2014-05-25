@@ -7,6 +7,8 @@ from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 
+from image_cropping.fields import ImageRatioField
+
 from py3s3.files import S3ContentFile
 from qsic.parsers.improvteams.parser import ItTeamParser
 
@@ -23,9 +25,8 @@ class Group(models.Model):
     # suggested sizes
     # medium and large 800px x 150px
     # small 400px x 150px
-    photo = models.ImageField(upload_to='groups/house_team_photos',
-                              null=True,
-                              blank=True)
+    photo = models.ImageField(upload_to='groups/photos', null=True, blank=True)
+    cropping = ImageRatioField('photo', '1000x800', size_warning=True)
     bio = models.TextField(null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True, null=True)
     is_house_team = models.BooleanField(default=True)

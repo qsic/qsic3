@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from image_cropping import ImageCroppingMixin
+
 from .models import Group
 from .models import GroupPerformerRelation
 
 
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(ImageCroppingMixin, admin.ModelAdmin):
     list_display = ('name', 'it_url',)
     search_fields = ('name',)
 admin.site.register(Group, GroupAdmin)
