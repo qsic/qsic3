@@ -7,10 +7,12 @@
 {% endblock %}
 
 {% block object-tools-items %}
+  {% if has_it_parser %}
   <li>
     <a onclick="loadFromImprovteams();" href="#" class="historylink">
       Load From Improvteams.com
     </a>
   </li>
+  {% endif %}
   {{ block.super }}
 {% endblock %}
