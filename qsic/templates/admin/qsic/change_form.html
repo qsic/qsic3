@@ -9,7 +9,7 @@
 {% block object-tools-items %}
   {% if has_it_parser %}
   <li>
-    <a onclick="loadFromImprovteams();" href="#" class="historylink">
+    <a href="{% url 'qsic:load_performer_from_it' original.id %}" class="historylink">
       Load From Improvteams.com
     </a>
   </li>

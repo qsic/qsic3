@@ -83,8 +83,7 @@ class Performer(models.Model):
         """Fetch and save headshot photo from Improvteams.com"""
         if not self.it_id:
             return {'success': False, 'msg': 'Improvteams id is not set.'}
-        uri = ''.join(['http://newyork.improvteams.com/',
-                       'uploads/performer_images/performer_',
+        uri = ''.join(['http://newyork.improvteams.com/uploads/performer_images/performer_',
                        str(self.it_id),
                        '.jpg'])
         with urllib.request.urlopen(uri) as imgp:
@@ -92,8 +91,9 @@ class Performer(models.Model):
             mimetype = 'image/jpeg'
             if imgp.info().get_content_type() == mimetype:
                 file_name = str(self.it_id) + '.jpg'
-                s3file = S3ContentFile(imgp.read(), mimetype=mimetype)
-                self.headshot.save(file_name, s3file, save=False)
+                print(file_name)
+                s3file = S3ContentFile(imgp.read(), name=file_name, mimetype=mimetype)
+                self.photo.save(file_name, s3file, save=False)
                 return {'success': True}
         return {'success': False, 'msg': 'Unable to save headshot.'}
 

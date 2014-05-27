@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseServerError
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView
@@ -62,3 +63,16 @@ class PerformerCurrentListView(PerformerAllListView):
 class PerformerPastListView(PerformerAllListView):
     filter_criteria = {'is_active': False}
     performer_list_title = 'Past Performers'
+
+
+def load_from_it(request, qsic_id):
+    performer = get_object_or_404(Performer, id=qsic_id)
+
+    save_content = performer.save_it_content_from_parsed_it_url()
+
+    if save_content['success']:
+        fetch_headshot = performer.fetch_headshot()
+        if fetch_headshot['success']:
+            return HttpResponseRedirect(reverse('admin:qsic_performer_change'))
+
+    return HttpResponseServerError()

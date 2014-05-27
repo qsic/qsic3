@@ -34,4 +34,8 @@ urlpatterns = patterns(
     url(r'^performer/(?P<pk>\d+)/[A-Za-z0-9_\-]+/?$',
         PerformerDetailView.as_view(),
         name='performer_detail_view'),
+
+    url(r'^load_from_it/(\d+)/?$',
+        'load_from_it',
+        name='load_performer_from_it')
 )
