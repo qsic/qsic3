@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load cropping %}
 
 {% block title %}{{ performer }}{% endblock title %}
 
@@ -14,8 +15,13 @@
       <div class="small-5 columns text-right">
         <ul class="vcard">
           <li>
-            <img src="{{ performer.headshot.url }}" data-interchange="[{{ performer.headshot.url }}, (default)], [{{ performer.headshot.url }}, (large)]">
-            <noscript><img src="{{ performer.headshot.url }}"></noscript>
+            {% if performer.detail_crop %}
+              <img class="show-for-medium-up" src="{% cropped_thumbnail performer "detail_crop" %}">
+              <img class="show-for-small" src="{% cropped_thumbnail performer "detail_crop" scale=0.42 %}">
+            {% else %}
+              <img class="show-for-medium-up" src="">
+              <img class="show-for-small" src="">
+            {% endif %}
           </li>
           <li>{{ performer }}</li>
         </ul>

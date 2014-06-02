@@ -23,7 +23,7 @@ class Group(models.Model):
     it_url = models.URLField(null=True, blank=True)
     photo = models.ImageField(upload_to='groups/photos', null=True, blank=True)
     detail_crop = ImageRatioField('photo', '1000x800', size_warning=True)
-    list_crop = ImageRatioField('photo', '970x200', size_warning=True)
+    banner_crop = ImageRatioField('photo', '970x200', size_warning=True)
     bio = models.TextField(null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True, null=True)
     is_house_team = models.BooleanField(default=True)

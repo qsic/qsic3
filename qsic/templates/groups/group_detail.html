@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load cropping %}
 
 {% block title %}{{ group }}{% endblock title %}
 
@@ -6,9 +7,13 @@
   <section class="group_detail">
     <section class="row">
       <article class="small-12 columns">
-        <img class="show-for-small-only th radius" src="http://assets.dogtime.com/asset/image/518aaa316dab62044b0008a4/column_11_cats-kittens-mothers-day.jpg">
-        <img class="show-for-medium-up th radius" src="http://public-library.org/uploads/300003/1370810655747/150px-150-xxx.jpg">
-        <noscript><img src="{{ group.photo }}"></noscript>
+        {% if group.detail_crop %}
+          <img class="show-for-medium-up" src="{% cropped_thumbnail group "detail_crop" %}">
+          <img class="show-for-small" src="{% cropped_thumbnail group "detail_crop" scale=0.42 %}">
+        {% else %}
+          <img class="show-for-medium-up" src="">
+          <img class="show-for-small" src="">
+        {% endif %}
       </article>
 
       <article class="small-12 columns">

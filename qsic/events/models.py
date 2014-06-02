@@ -25,7 +25,8 @@ class Event(models.Model):
                                  default=None)
     description = models.TextField(blank=True)
     photo = models.ImageField(upload_to='events/photos', null=True, blank=True)
-    cropping = ImageRatioField('photo', '970x200', size_warning=True)
+    detail_crop = ImageRatioField('photo', '970x200', size_warning=True)
+    banner_crop = ImageRatioField('photo', '970x200', size_warning=True)
 
     class Meta:
         app_label = 'qsic'
@@ -71,7 +72,7 @@ class Event(models.Model):
 
     @property
     def url(self):
-        url = reverse('event_detial_view_add_slug', kwargs={'pk': self.id})
+        url = reverse('qsic:event_detial_view_add_slug', kwargs={'pk': self.id})
         url = ''.join((url, '/', self.slug))
         return url
 
@@ -104,7 +105,8 @@ class Performance(models.Model):
                                 default=None)
     description = models.TextField(blank=True)
     photo = models.ImageField(upload_to='performances/photos', null=True, blank=True)
-    cropping = ImageRatioField('photo', '970x200', size_warning=True)
+    detail_crop = ImageRatioField('photo', '970x200', size_warning=True)
+    banner_crop = ImageRatioField('photo', '970x200', size_warning=True)
 
     class Meta:
         app_label = 'qsic'

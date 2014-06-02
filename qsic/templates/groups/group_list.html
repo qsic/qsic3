@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load cropping %}
 
 {% block title %}{{ group_list_type }}{% endblock title %}
 
@@ -10,8 +11,13 @@
       {% for group in object_list %}
         <li>
           <a data-tooltip class="th radius has-tip tip-top" title="{{ group.name }}" href="{{ group.url }}">
-            <img class="show-for-small-only" src="http://assets.dogtime.com/asset/image/518aaa316dab62044b0008a4/column_11_cats-kittens-mothers-day.jpg">
-            <img class="show-for-medium-up" src="http://public-library.org/uploads/300003/1370810655747/150px-150-xxx.jpg">
+            {% if group.banner_crop %}
+              <img class="show-for-medium-up" src="{% cropped_thumbnail group "banner_crop" %}">
+              <img class="show-for-small" src="{% cropped_thumbnail group "banner_crop" scale=0.42 %}">
+            {% else %}
+              <img class="show-for-medium-up" src="">
+              <img class="show-for-small" src="">
+            {% endif %}
           </a>
         </li>
       {% endfor %}

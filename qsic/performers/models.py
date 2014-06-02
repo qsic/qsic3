@@ -69,12 +69,7 @@ class Performer(models.Model):
         self.first_name = performer_info.first_name
         self.last_name = performer_info.last_name
 
-        self.bio = ''.join([
-            '{}'.format(performer_info.bio),
-            '<br>'
-            'Bio courtesy of '
-            '<a href="{}">Improvteams.com</a>'.format(performer_info.url)
-        ])
+        self.bio = performer_info.bio
 
         self.save()
         return {'success': True}

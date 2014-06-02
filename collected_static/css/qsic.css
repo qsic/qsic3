@@ -157,14 +157,3 @@ ul.example-orbit a {
 section.house_team_list ul li {
   padding-bottom: 5px;
 }
-/* line 6, _group_list.scss */
-section.house_team_list ul li img {
-  width: 800px;
-  height: 150px;
-}
-
-/* line 2, _performer_detail.scss */
-section.performer_detail img {
-  width: 300px;
-  height: 300px;
-}

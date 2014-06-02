@@ -1,4 +1,8 @@
+import sys
+
 from .base import *
+
+sys.path.append('/Users/paul/Code/python/py3s3')
 
 DATABASES = {
     'default': {
