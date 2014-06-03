@@ -8,11 +8,11 @@
     <section class="row">
       <article class="small-12 columns">
         {% if group.detail_crop %}
-          <img class="show-for-medium-up" src="{% cropped_thumbnail group "detail_crop" %}">
-          <img class="show-for-small" src="{% cropped_thumbnail group "detail_crop" scale=0.42 %}">
+          <img class="show-for-medium-up radius th" src="{% cropped_thumbnail group "detail_crop" %}">
+          <img class="show-for-small radius th" src="{% cropped_thumbnail group "detail_crop" scale=0.42 %}">
         {% else %}
-          <img class="show-for-medium-up" src="">
-          <img class="show-for-small" src="">
+          <img class="show-for-medium-up radius th" src="">
+          <img class="show-for-small radius th" src="">
         {% endif %}
       </article>
 
