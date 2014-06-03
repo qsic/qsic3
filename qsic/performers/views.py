@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseServerError
 from django.http.response import HttpResponseRedirect
@@ -70,9 +71,17 @@ def load_from_it(request, qsic_id):
 
     save_content = performer.save_it_content_from_parsed_it_url()
 
+    fetch_headshot = {}
     if save_content['success']:
         fetch_headshot = performer.fetch_headshot()
-        if fetch_headshot['success']:
-            return HttpResponseRedirect(reverse('admin:qsic_performer_change'))
+        fetch_headshot = ''
+    else:
+        messages.error(request, 'There was an error loading info from Improvteams.com')
 
-    return HttpResponseServerError()
+    if 'success' in fetch_headshot and fetch_headshot['success']:
+        pass
+    else:
+        messages.error(request, 'There was an error fetching the headshot from Improvteams.com')
+
+
+    return HttpResponseRedirect(reverse('admin:qsic_performer_change', args=(qsic_id,)))

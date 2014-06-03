@@ -84,7 +84,7 @@ class ItPerformerParser(BaseItParser):
     def parse_soup_for_bio(self):
         """Return self with bio populated"""
         bio = self.soup.select('#main .profile .profile_right .bio')[0].text
-        if self.bio:
+        if bio:
             self.bio = bio.strip()
 
 

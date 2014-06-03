@@ -69,6 +69,7 @@ class Performer(models.Model):
         self.first_name = performer_info.first_name
         self.last_name = performer_info.last_name
 
+        # print(performer_info.bio)
         self.bio = performer_info.bio
 
         self.save()
@@ -82,12 +83,16 @@ class Performer(models.Model):
                        str(self.it_id),
                        '.jpg'])
         with urllib.request.urlopen(uri) as imgp:
+            # make sure resource has a content-length
+            if not 'Content-Length' in imgp.headers:
+                return None
+            content_length = int(imgp.headers['Content-Length'])
+            content = imgp.read(content_length)
             # make sure imgp is a jpeg
             mimetype = 'image/jpeg'
             if imgp.info().get_content_type() == mimetype:
                 file_name = str(self.it_id) + '.jpg'
-                print(file_name)
-                s3file = S3ContentFile(imgp.read(), name=file_name, mimetype=mimetype)
+                s3file = S3ContentFile(content, name=file_name, mimetype=mimetype)
                 self.photo.save(file_name, s3file, save=False)
                 return {'success': True}
         return {'success': False, 'msg': 'Unable to save headshot.'}
