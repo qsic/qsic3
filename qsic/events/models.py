@@ -119,18 +119,24 @@ class Performance(models.Model):
         self.slug = slugify(self.name)
         super(Performance, self).save()
 
-    @property
-    def url(self):
+    def pgpr(self):
         pgpr_set = self.performancegroupperformerrelation_set.all()
         if pgpr_set.count() != 1:
-            return '#'
+            return None
         if pgpr_set[0].group:
-            url = reverse('qsic:group_detail_view_add_slug', kwargs={'pk': pgpr_set[0].group.id})
-            return ''.join((url, '/', self.slug))
+            return pgpr_set[0].group
         elif pgpr_set[0].performer:
-            url = reverse('qsic:performer_detail_view_add_slug',
-                          kwargs={'pk': pgpr_set[0].performer.id})
-            return ''.join((url, '/', self.slug))
+            return pgpr_set[0].performer
+        else:
+            return None
+
+    @property
+    def url(self):
+        pgpr = self.pgpr()
+        if pgpr and isinstance(pgpr, Group):
+            return reverse('qsic:group_detail_view_add_slug', kwargs={'pk': pgpr.id})
+        elif pgpr and isinstance(pgpr, Performer):
+            return reverse('qsic:performer_detail_view_add_slug', kwargs={'pk': pgpr.id})
         else:
             return '#'
 

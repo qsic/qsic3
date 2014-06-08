@@ -3,9 +3,8 @@
 
 <div class="row">
   <div class="small-12 columns">
-    <div class="center">
+    <div class="center panel radius">
       <ul class="example-orbit" data-orbit data-options="resume_on_mouseout: true;slide_number: false;timer_speed: 5000">
-
         {% for qsic_pic in qsic_pics %}
           <li>
             <img src="{% cropped_thumbnail qsic_pic "banner_crop" %}" alt="{{ qsic_pic.caption }}" />

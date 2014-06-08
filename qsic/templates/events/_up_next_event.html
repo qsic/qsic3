@@ -2,29 +2,34 @@
 
 <div class="row">
   <div class="small-12 columns">
+    <div class="center panel radius">
+      <ul class="example-orbit" data-orbit data-options="resume_on_mouseout: true;slide_number: false;timer_speed: 5000">
 
-    <ul class="example-orbit" data-orbit data-options="resume_on_mouseout: true;slide_number: false;timer_speed: 5000">
-
-      <li>
-        <a href="#event_page">
-          <img src="/media/p.jpg" alt="{{ event.name }}" />
-        </a>
-        <div class="orbit-caption">
-          <a href="#event_page">{{ event.name }}</a>
-        </div>
-      </li>
-
-      {% for performance in event %}
-        <li class="active">
-          <img src="/media/Ship31_970x200.jpg" alt="{{ performance.name }}" />
+        <li>
+          <a href="#">
+            <img src="{% cropped_thumbnail event_photo "banner_crop" %}" alt="{{ event_photo.caption }}" />
+          </a>
           <div class="orbit-caption">
-            {{ performance.name }}
+            <a href="#">{{ event_photo.caption }}</a>
           </div>
         </li>
-      {% endfor %}
-    </ul>
+
+        {% for performance in event %}
+          {% if performance.pgpr %}
+            <li class="active">
+              <img src="{% cropped_thumbnail performance.pgpr "banner_crop" %}" alt="{{ performance.name }}" />
+              <div class="orbit-caption">
+                <a href="{{ performance.pgpr.url }}">{{ performance.name }}</a>
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 </div>
+
+<hr>
 
 <div class="row">
   <div class="small-6 columns">

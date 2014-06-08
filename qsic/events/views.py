@@ -51,12 +51,12 @@ def up_next(request):
     if events_and_perofrmances and isinstance(events_and_perofrmances[0], Event):
         # just show the one event
         up_next_type = 'event'
+        event_photo = QSICPic.objects.all()[0]
         event = events_and_perofrmances[0]
     elif events_and_perofrmances:
         # get all the perfrmances up to the next Event
         # or the next 6 perofrmances, which ever is achieved first.
         up_next_type = 'perfomance'
-
         performance_list = []
         for n, o in enumerate(events_and_perofrmances):
             performance_list.append(o)
@@ -64,8 +64,7 @@ def up_next(request):
                 break
     else:
         up_next_type = None
-
-    qsic_pics = QSICPic.objects.all()
+        qsic_pics = QSICPic.objects.all()
 
     return render_to_response(
         'events/up_next.html',
