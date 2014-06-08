@@ -35,6 +35,9 @@ class Performer(models.Model):
     def __str__(self):
         return self.full_name
 
+    def type(self):
+        return self.__class__.__name__
+
     def save(self, **kwargs):
         self.slug = slugify(' '.join((self.first_name, self.last_name)))
         super().save()
@@ -93,9 +96,18 @@ class Performer(models.Model):
             if imgp.info().get_content_type() == mimetype:
                 file_name = str(self.it_id) + '.jpg'
                 s3file = S3ContentFile(content, name=file_name, mimetype=mimetype)
-                self.photo.save(file_name, s3file, save=False)
+                self.photo.save(file_name, s3file, save=True)
                 return {'success': True}
         return {'success': False, 'msg': 'Unable to save headshot.'}
+
+    def load_from_it(self):
+        self.save_it_content_from_parsed_it_url()
+        self.fetch_headshot()
+        # save default dims of photo
+        if self.photo:
+            self.detail_crop = ','.join(('0', '0', str(self.photo.width), str(self.photo.height)))
+            self.save()
+        return True
 
     def groups(self):
         """

@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render_to_response
@@ -90,3 +92,16 @@ class AllPastGroupListView(GroupListView):
         be a queryset (in which qs-specific behavior will be enabled).
         """
         return [team for team in super().get_queryset() if not team.is_current]
+
+
+def load_from_it(request, qsic_id):
+    group = get_object_or_404(Group, id=qsic_id)
+
+    try:
+        group.load_from_it()
+        messages.success(request, 'Success!')
+    except:
+        raise
+        messages.error(request, 'There was an error loading info from Improvteams.com')
+
+    return HttpResponseRedirect(reverse('admin:qsic_group_change', args=(qsic_id,)))

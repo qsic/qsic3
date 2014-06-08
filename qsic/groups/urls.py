@@ -33,4 +33,8 @@ urlpatterns = patterns(
     url(r'^group/(?P<pk>\d+)/[A-Za-z0-9_\-]+$',
         GroupDetailView.as_view(),
         name='group_detail_view'),
+
+    url(r'^load_from_it/(\d+)/?$',
+        'load_from_it',
+        name='load_group_from_it')
 )

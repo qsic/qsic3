@@ -1,5 +1,5 @@
-
 # import models from subapps here
+from qsic.core.models import QSICPic
 from qsic.performers.models import Performer
 from qsic.groups.models import Group
 from qsic.groups.models import GroupPerformerRelation

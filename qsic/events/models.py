@@ -121,9 +121,18 @@ class Performance(models.Model):
 
     @property
     def url(self):
-        url = reverse('qsic:performance_detail_view_add_slug', kwargs={'pk': self.id})
-        url = ''.join((url, '/', self.slug))
-        return url
+        pgpr_set = self.performancegroupperformerrelation_set.all()
+        if pgpr_set.count() != 1:
+            return '#'
+        if pgpr_set[0].group:
+            url = reverse('qsic:group_detail_view_add_slug', kwargs={'pk': pgpr_set[0].group.id})
+            return ''.join((url, '/', self.slug))
+        elif pgpr_set[0].performer:
+            url = reverse('qsic:performer_detail_view_add_slug',
+                          kwargs={'pk': pgpr_set[0].performer.id})
+            return ''.join((url, '/', self.slug))
+        else:
+            return '#'
 
     @property
     def performers(self):

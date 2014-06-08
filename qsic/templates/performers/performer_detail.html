@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% load cropping %}
 
 {% block title %}{{ performer }}{% endblock title %}
@@ -19,8 +20,7 @@
               <img class="show-for-medium-up" src="{% cropped_thumbnail performer "detail_crop" %}">
               <img class="show-for-small" src="{% cropped_thumbnail performer "detail_crop" scale=0.42 %}">
             {% else %}
-              <img class="show-for-medium-up" src="">
-              <img class="show-for-small" src="">
+              <img src="{% static 'images/no_pic_performer.jpg' %}">
             {% endif %}
           </li>
           <li>{{ performer }}</li>
@@ -30,7 +30,7 @@
     <section class="row">
       <article class="small-12 columns">
         {% if performer.groups %}
-          <h5>{{ performer.first_name }} has been on these teams</h5>
+          <h5 style="text-decoration: underline;">{{ performer.first_name }}'s past and present teams</h5>
           {% for group in performer.groups %}
             <ul class="inline-list">
               <li><a href="{{ group.url }}">{{ group.name }}</a></li>
@@ -41,8 +41,8 @@
     </section>
     {% if performer.it_url %}
     <section class="row">
-      <aside class="small-12 columns">
-        <a href="{{ performer.it_url }}">bio on improvteams.com</a>
+      <aside style="font-size: 12px;" class="small-12 columns text-right">
+        Profile courtesy of <a href="{{ performer.it_url }}">improvteams.com</a>
       </aside>
     </section>
     {% endif %}

@@ -69,19 +69,10 @@ class PerformerPastListView(PerformerAllListView):
 def load_from_it(request, qsic_id):
     performer = get_object_or_404(Performer, id=qsic_id)
 
-    save_content = performer.save_it_content_from_parsed_it_url()
-
-    fetch_headshot = {}
-    if save_content['success']:
-        fetch_headshot = performer.fetch_headshot()
-        fetch_headshot = ''
-    else:
+    try:
+        performer.load_from_it()
+        messages.success(request, 'Success!')
+    except:
         messages.error(request, 'There was an error loading info from Improvteams.com')
-
-    if 'success' in fetch_headshot and fetch_headshot['success']:
-        pass
-    else:
-        messages.error(request, 'There was an error fetching the headshot from Improvteams.com')
-
 
     return HttpResponseRedirect(reverse('admin:qsic_performer_change', args=(qsic_id,)))

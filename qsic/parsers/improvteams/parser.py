@@ -153,8 +153,10 @@ class ItTeamParser(BaseItParser):
     def parse_soup_for_performer_uri_list(self):
         """Return self with performer uri list populated"""
         selector = '#main .profile .profile_right .people.thumbnails'
-        performer_div_list = self.soup.select(selector)[0]
         performer_uri_list = []
-        for a in performer_div_list.find_all('a'):
-            performer_uri_list.append(a['href'])
-        self.performer_uri_list = performer_uri_list
+        if self.soup.select(selector) and len(self.soup.select(selector)):
+            performer_div_list = self.soup.select(selector)[0]
+
+            for a in performer_div_list.find_all('a'):
+                performer_uri_list.append(a['href'])
+            self.performer_uri_list = performer_uri_list

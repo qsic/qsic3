@@ -9,7 +9,11 @@
 {% block object-tools-items %}
   {% if has_it_parser %}
   <li>
-    <a href="{% url 'qsic:load_performer_from_it' original.id %}" class="historylink">
+    {% if original.type == 'Group' %}
+      <a href="{% url 'qsic:load_group_from_it' original.id %}" class="historylink">
+    {% elif original.type == 'Performer' %}
+      <a href="{% url 'qsic:load_performer_from_it' original.id %}" class="historylink">
+    {% endif %}
       Load From Improvteams.com
     </a>
   </li>

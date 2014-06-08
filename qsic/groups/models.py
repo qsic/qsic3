@@ -1,4 +1,6 @@
+import os
 import string
+import urllib.parse
 import urllib.request
 
 from django.core.urlresolvers import reverse
@@ -41,6 +43,9 @@ class Group(models.Model):
     def __iter__(self):
         return self
 
+    def type(self):
+        return self.__class__.__name__
+
     def __next__(self):
         qs = self.groupperformerrelation_set.all()
         qs = qs.filter(
@@ -70,6 +75,52 @@ class Group(models.Model):
         url = reverse('qsic:group_detail_view_add_slug', kwargs={'pk': self.id})
         url = ''.join((url, '/', self.slug))
         return url
+
+    def save_it_content_from_parsed_it_url(self):
+        """Save Group info parsed from Improvteams.com
+            Return True on successful completion
+        """
+
+        # Return False if URL passed does not save to model
+        # eg. invalid URL
+        if not self.it_url:
+            return {'success': False, 'msg': 'It url is not set.'}
+
+        # Parse performer info from URL
+        try:
+            group_info = ItTeamParser(self.it_url)
+        except:
+            return {'success': False, 'msg': 'Unable to parse team info.'}
+
+        self.name = group_info.team_name
+        self.bio = group_info.team_bio
+
+        uri = urllib.parse.urljoin(self.it_url, group_info.team_photo_uri)
+        file_name = os.path.basename(uri)
+
+        with urllib.request.urlopen(uri) as imgp:
+            # make sure resource has a content-length
+            if not 'Content-Length' in imgp.headers:
+                return None
+            content_length = int(imgp.headers['Content-Length'])
+            content = imgp.read(content_length)
+            # make sure imgp is a jpeg
+            mimetype = 'image/jpeg'
+            if imgp.info().get_content_type() == mimetype:
+                s3file = S3ContentFile(content, name=file_name, mimetype=mimetype)
+                self.photo.save(file_name, s3file, save=True)
+
+        self.save()
+        return {'success': True}
+
+    def load_from_it(self):
+        self.save_it_content_from_parsed_it_url()
+        # save default dims of photo
+        if self.photo:
+            self.banner_crop = ','.join(('0', '0', str(self.photo.width), str(200)))
+            self.detail_crop = ','.join(('0', '0', str(self.photo.width), str(500)))
+            self.save()
+        return True
 
 
 class GroupPerformerRelation(models.Model):
