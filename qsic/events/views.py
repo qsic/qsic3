@@ -9,6 +9,7 @@ from django.template.context import RequestContext
 from django.views.generic import DetailView
 from django.utils import timezone
 
+from qsic.core.models import QSICPic
 from qsic.core.utils import CalendarWeek
 from qsic.core.utils import EST
 from qsic.events.models import Event
@@ -63,6 +64,8 @@ def up_next(request):
                 break
     else:
         up_next_type = None
+
+    qsic_pics = QSICPic.objects.all()
 
     return render_to_response(
         'events/up_next.html',
