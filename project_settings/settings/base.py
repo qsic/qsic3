@@ -68,7 +68,6 @@ AWS_ACCESS_KEY_ID = get_env_var('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = get_env_var('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = get_env_var('AWS_STORAGE_BUCKET_NAME')
 
-#
 # Of the format: '//bucket_name.s3.amazonaws.com/[media|static]/'
 AWS_S3_BUCKET_URL = '//%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
@@ -112,7 +111,7 @@ else:
     # Serve media from AWS
     MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
     MEDIA_URL = MEDIA_ROOT
-    DEFAULT_FILE_STORAGE = 'project_settings.settings.django_py3s3.S3StaticStorage'
+    DEFAULT_FILE_STORAGE = 'project_settings.settings.django_py3s3.S3MediaStorage'
 
 if SERVE_STATIC or SERVE_MEDIA:
     # Only upload new or changed files to AWS
