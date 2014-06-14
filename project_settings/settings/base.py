@@ -256,6 +256,9 @@ THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
+#THUMBNAIL_DEFAULT_STORAGE = 'easy_thumbnails.storage.ThumbnailFileSystemStorage'
+THUMBNAIL_DEFAULT_STORAGE = DEFAULT_FILE_STORAGE
+
 IMAGE_CROPPING_SIZE_WARNING = True
 
 SOUTH_MIGRATION_MODULES = {
