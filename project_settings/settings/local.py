@@ -21,3 +21,5 @@ DATABASES = {
 
 SECRET_KEY = 'asdaaefaefaefaefefaefae'
 
+COMMITCHANGER = True
+
