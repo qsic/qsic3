@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic import RedirectView
+from django.conf import settings
 
 from qsic.performers.models import Performer
 
@@ -73,6 +74,8 @@ def load_from_it(request, qsic_id):
         performer.load_from_it()
         messages.success(request, 'Success!')
     except:
+        if settings.DEBUG:
+            raise
         messages.error(request, 'There was an error loading info from Improvteams.com')
 
     return HttpResponseRedirect(reverse('admin:qsic_performer_change', args=(qsic_id,)))

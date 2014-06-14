@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
@@ -101,7 +102,8 @@ def load_from_it(request, qsic_id):
         group.load_from_it()
         messages.success(request, 'Success!')
     except:
-        raise
+        if settings.DEBUG:
+            raise
         messages.error(request, 'There was an error loading info from Improvteams.com')
 
     return HttpResponseRedirect(reverse('admin:qsic_group_change', args=(qsic_id,)))
