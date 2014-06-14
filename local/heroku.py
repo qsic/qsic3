@@ -57,9 +57,9 @@ def update_local_db_with_qsic27_production():
         # add performers
         for p in data['performers'].values():
             cur.execute("INSERT INTO qsic_performer "
-                        "(id, first_name, last_name, slug, it_url, it_id, bio) "
+                        "(id, first_name, last_name, slug, it_url, it_id, bio, detail_crop, is_active) "
                         "VALUES "
-                        "(%s, %s, %s, %s, %s, %s, %s)",
+                        "(%s, %s, %s, %s, %s, %s, %s, '', True)",
                         (p['id'],
                          p['first_name'],
                          p['last_name'],
@@ -73,9 +73,9 @@ def update_local_db_with_qsic27_production():
         # add groups
         for g in data['groups'].values():
             cur.execute("INSERT INTO qsic_group "
-                        "(id, name, slug, it_url, bio, create_dt, is_house_team) "
+                        "(id, name, slug, it_url, bio, create_dt, is_house_team, detail_crop, banner_crop) "
                         "VALUES "
-                        "(%s, %s, %s, %s, %s, %s, %s)",
+                        "(%s, %s, %s, %s, %s, %s, %s, '', '')",
                         (g['id'],
                          g['name'],
                          g['slug'],
@@ -109,9 +109,9 @@ def update_local_db_with_qsic27_production():
                             if p['show_id'] == e['id']]
             start_dt, end_dt = get_event_time_boundaries(e, performances)
             cur.execute("INSERT INTO qsic_event "
-                        "(id, name, description, slug, _start_dt, _end_dt) "
+                        "(id, name, description, slug, _start_dt, _end_dt, detail_crop, banner_crop) "
                         "VALUES "
-                        "(%s, %s, %s, %s, %s, %s)",
+                        "(%s, %s, %s, %s, %s, %s, '', '')",
                         (e['id'],
                          e['title'],
                          e['blurb'],
@@ -130,9 +130,9 @@ def update_local_db_with_qsic27_production():
             end_dt = datetime.datetime.combine(event_start_dt, p['end_dt'])
 
             cur.execute("INSERT INTO qsic_performance "
-                        "(id, event_id, name, start_dt, end_dt, slug) "
+                        "(id, event_id, name, start_dt, end_dt, slug, detail_crop, banner_crop, description) "
                         "VALUES "
-                        "(%s, %s, %s, %s, %s, %s)",
+                        "(%s, %s, %s, %s, %s, %s, '', '', '')",
                         (p['id'],
                          p['event_id'],
                          name_,
