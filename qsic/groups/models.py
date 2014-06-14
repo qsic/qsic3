@@ -29,6 +29,7 @@ class Group(models.Model):
     bio = models.TextField(null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True, null=True)
     is_house_team = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         app_label = 'qsic'
@@ -62,9 +63,12 @@ class Group(models.Model):
 
     @property
     def is_current(self):
-        gpr = GroupPerformerRelation.objects.filter(group=self)
-        gpr = gpr.filter(Q(end_dt__gte=timezone.now()) | Q(end_dt=None))
-        return gpr.filter(Q(start_dt__lte=timezone.now())).exists()
+        if self.is_house_team:
+            gpr = GroupPerformerRelation.objects.filter(group=self)
+            gpr = gpr.filter(Q(end_dt__gte=timezone.now()) | Q(end_dt=None))
+            return gpr.filter(Q(start_dt__lte=timezone.now())).exists()
+        else:
+            return self.is_active
 
     def save(self, **kwargs):
         self.slug = slugify(self.name)

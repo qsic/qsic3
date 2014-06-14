@@ -8,7 +8,7 @@ from qsic.core.admin import QsicModelAdmin
 
 
 class GroupAdmin(ImageCroppingMixin, QsicModelAdmin):
-    list_display = ('name', 'it_url',)
+    list_display = ('name', 'it_url', 'is_house_team', 'is_active',)
     search_fields = ('name',)
     extra_context = {'has_it_parser': True}
 
@@ -17,7 +17,19 @@ class GroupAdmin(ImageCroppingMixin, QsicModelAdmin):
                 obj.load_from_it()
     load_from_it.short_description = 'Load from Improvteams.com'
 
-    actions = [load_from_it]
+    def mark_as_is_active(self, request, queryset):
+        for obj in queryset:
+            obj.is_active = True
+            obj.save()
+    mark_as_is_active.short_description = 'Mark group(s) as active.'
+
+    def mark_as_is_inactive(self, request, queryset):
+        for obj in queryset:
+            obj.is_active = False
+            obj.save()
+    mark_as_is_inactive.short_description = 'Mark group(s) as inactive.'
+
+    actions = [load_from_it, mark_as_is_active, mark_as_is_inactive]
 
 admin.site.register(Group, GroupAdmin)
 

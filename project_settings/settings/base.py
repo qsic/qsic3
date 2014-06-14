@@ -76,6 +76,7 @@ ENCODING = 'utf-8'
 
 SERVE_STATIC = get_env_var('DJANGO_SERVE_STATIC', default=False, isbool=True)
 if SERVE_STATIC:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
     # Serve static locally
     # Absolute path to the directory static files should be collected to.
     # Don't put anything in this directory yourself; store your static files
@@ -96,6 +97,7 @@ else:
 
 SERVE_MEDIA = get_env_var('DJANGO_SERVE_MEDIA', default=False, isbool=True)
 if SERVE_MEDIA:
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
     # Serve media locally
     # Absolute filesystem path to the directory that
     # will hold user-uploaded files.
