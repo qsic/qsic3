@@ -51,7 +51,10 @@ def up_next(request):
     if events_and_perofrmances and isinstance(events_and_perofrmances[0], Event):
         # just show the one event
         up_next_type = 'event'
-        event_photo = QSICPic.objects.all()[0]
+        qsic_pics_qs = QSICPic.objects.all()
+        if not qsic_pics_qs.count():
+            raise ValueError('No QSIC Pics found. Please submit one QSIC Pic in the Django Admin.')
+        event_photo = qsic_pics_qs[0]
         event = events_and_perofrmances[0]
     elif events_and_perofrmances:
         # get all the perfrmances up to the next Event

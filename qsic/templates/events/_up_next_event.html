@@ -7,7 +7,9 @@
 
         <li>
           <a href="#">
-            <img src="{% cropped_thumbnail event_photo "banner_crop" %}" alt="{{ event_photo.caption }}" />
+            {% if event_photo %}
+              <img src="{% cropped_thumbnail event_photo "banner_crop" %}" alt="{{ event_photo.caption }}" />
+            {% endif %}
           </a>
           <div class="orbit-caption">
             <a href="#">{{ event_photo.caption }}</a>
