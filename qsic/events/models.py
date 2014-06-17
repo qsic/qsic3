@@ -26,7 +26,7 @@ class Event(models.Model):
     description = models.TextField(blank=True)
     photo = models.ImageField(upload_to='events/photos', null=True, blank=True)
     detail_crop = ImageRatioField('photo', '500x500', size_warning=True)
-    banner_crop = ImageRatioField('photo', '970x200', size_warning=True)
+    banner_crop = ImageRatioField('photo', '960x300', size_warning=True)
 
     class Meta:
         app_label = 'qsic'
@@ -106,7 +106,7 @@ class Performance(models.Model):
     description = models.TextField(blank=True)
     photo = models.ImageField(upload_to='performances/photos', null=True, blank=True)
     detail_crop = ImageRatioField('photo', '500x500', size_warning=True)
-    banner_crop = ImageRatioField('photo', '970x200', size_warning=True)
+    banner_crop = ImageRatioField('photo', '960x300', size_warning=True)
 
     class Meta:
         app_label = 'qsic'

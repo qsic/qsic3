@@ -1,19 +1,9 @@
 {% load static %}
-{% load cropping %}
 
 <div class="row">
   <div class="small-12 columns">
     <div class="center panel radius">
-      <ul class="example-orbit" data-orbit data-options="resume_on_mouseout: true;slide_number: false;timer_speed: 5000">
-        {% for qsic_pic in qsic_pics %}
-          <li>
-            <img src="{% cropped_thumbnail qsic_pic "banner_crop" %}" alt="{{ qsic_pic.caption }}" />
-            <div class="orbit-caption">
-              {{ qsic_pic.caption }}
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
+      <img class="radius th" src="{% static 'images/qsic_shadow.jpg' %}">
     </div>
   </div>
 </div>
@@ -21,23 +11,10 @@
 <hr>
 
 <div class="row">
-  <div class="small-6 columns">
+  <div class="small-12 columns">
     <div class="panel radius callout">
-      <h5>Fun In The Sun</h5>
+      <h5>Shows are posted weekly. Check back soon!</h5>
       <p>
-        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer aliquet laoreet sollicitudin. Nam tristique ut tellus non consectetur. Aenean venenatis, dui id tincidunt imperdiet, eros sapien cursus metus, vel dictum nulla justo posuere felis. Aliquam viverra sagittis eros, id convallis leo placerat sed. Etiam mi nibh, faucibus vel mollis sit amet, scelerisque vel arcu. Aliquam faucibus, dolor sed ornare mattis, lorem purus consectetur nulla, nec faucibus diam metus ac enim. Aenean et molestie neque, vel auctor lectus. In eu viverra sem. Sed faucibus libero a enim ullamcorper, eu commodo turpis rhoncus
-      </p>
-    </div>
-  </div>
-  <div class="small-6 columns">
-    <div class="panel radius callout">
-      <h5>Info</h5>
-      <p>
-        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer aliquet laoreet sollicitudin. Nam tristique ut tellus non consectetur. Aenean venenatis, dui id tincidunt imperdiet, eros sapien cursus metus, vel dictum nulla justo posuere felis. Aliquam viverra sagittis eros, id convallis leo placerat sed. Etiam mi nibh, faucibus vel mollis sit amet, scelerisque vel arcu. Aliquam faucibus, dolor sed ornare mattis, lorem purus consectetur nulla, nec faucibus diam metus ac enim. Aenean et molestie neque, vel auctor lectus. In eu viverra sem. Sed faucibus libero a enim ullamcorper, eu commodo turpis rhoncus
-      </p>
-
-      <p>
-
       </p>
     </div>
   </div>

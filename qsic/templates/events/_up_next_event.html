@@ -1,28 +1,26 @@
 {% load cropping %}
+{% load static %}
 
 <div class="row">
   <div class="small-12 columns">
     <div class="center panel radius">
-      <ul class="example-orbit" data-orbit data-options="resume_on_mouseout: true;slide_number: false;timer_speed: 5000">
+      <ul class="example-orbit" data-orbit
+          data-options="animation:slide;resume_on_mouseout: true;slide_number: false;timer_speed: 5000; bullets: false;">
 
         <li>
-          <a href="#">
-            {% if event_photo %}
+          {% if event_photo %}
+            <a href="#">
               <img src="{% cropped_thumbnail event_photo "banner_crop" %}" alt="{{ event_photo.caption }}" />
-            {% endif %}
-          </a>
-          <div class="orbit-caption">
-            <a href="#">{{ event_photo.caption }}</a>
-          </div>
+            </a>
+          {% else %}
+            <img src="{% static 'images/qsic_shadow_banner.jpg' %}" alt="The Queen's Secret Improv Club" />
+          {% endif %}
         </li>
 
         {% for performance in event %}
           {% if performance.pgpr %}
             <li class="active">
               <img src="{% cropped_thumbnail performance.pgpr "banner_crop" %}" alt="{{ performance.name }}" />
-              <div class="orbit-caption">
-                <a href="{{ performance.pgpr.url }}">{{ performance.name }}</a>
-              </div>
             </li>
           {% endif %}
         {% endfor %}
@@ -42,14 +40,14 @@
       {% if event.has_performances %}
         <table>
           {% for performace in event %}
-          <tr>
-            <td>{{ performace.start_dt }}</td>
-            <td>
-              <a href="{{ performace.url }}">
-                {{ performace.name }}
-              </a>
-            </td>
-          </tr>
+            <tr>
+              <td>{{ performace.start_dt }}</td>
+              <td>
+                <a href="{{ performace.url }}">
+                  {{ performace.name }}
+                </a>
+              </td>
+            </tr>
           {% endfor %}
         </table>
       {% else %}

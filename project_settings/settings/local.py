@@ -1,4 +1,12 @@
+import os
 import sys
+
+from local.parse_env_file import parse
+
+envvars = parse('local/enter_env.sh')
+
+for k, v in envvars.items():
+    os.environ.update(envvars)
 
 from .base import *
 

@@ -1,20 +1,23 @@
 {% load cropping %}
+{% load static %}
 
 <div class="row">
   <div class="small-12 columns">
     <div class="center panel radius">
-      <ul class="example-orbit" data-orbit data-options="resume_on_mouseout: true;slide_number: false;timer_speed: 3000">
+      <ul class="example-orbit" data-orbit
+          data-options="animation:slide;resume_on_mouseout: true;slide_number: false;timer_speed: 5000; bullets: false;">
 
         {% for performance in performance_list %}
           {% if performance.pgpr %}
             <li class="active">
               <img src="{% cropped_thumbnail performance.pgpr "banner_crop" %}" alt="{{ performance.name }}" />
-              <div class="orbit-caption">
-                <a href="{{ performance.pgpr.url }}">{{ performance.name }}</a>
-              </div>
             </li>
           {% endif %}
         {% endfor %}
+
+        <li>
+          <img src="{% static 'images/qsic_shadow_banner.jpg' %}" alt="The Queen's Secret Improv Club" />
+        </li>
       </ul>
     </div>
   </div>
