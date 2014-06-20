@@ -23,9 +23,10 @@ class Group(models.Model):
     slug = models.SlugField(blank=True, default='')
     # 'it' is short for Imrpovteams / Improvteams.com
     it_url = models.URLField(null=True, blank=True)
-    photo = models.ImageField(upload_to='groups/photos', null=True, blank=True)
-    detail_crop = ImageRatioField('photo', '970x500', size_warning=True)
-    banner_crop = ImageRatioField('photo', '960x300', size_warning=True)
+    photo_detail_crop = models.ImageField(upload_to='groups/photos', null=True, blank=True)
+    detail_crop = ImageRatioField('photo_detail_crop', '970x500', size_warning=True)
+    photo_banner_crop = models.ImageField(upload_to='groups/photos', null=True, blank=True)
+    banner_crop = ImageRatioField('photo_banner_crop', '960x300', size_warning=True)
     bio = models.TextField(null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True, null=True)
     is_house_team = models.BooleanField(default=True)
@@ -112,7 +113,8 @@ class Group(models.Model):
             mimetype = 'image/jpeg'
             if imgp.info().get_content_type() == mimetype:
                 s3file = S3ContentFile(content, name=file_name, mimetype=mimetype)
-                self.photo.save(file_name, s3file, save=True)
+                self.photo_detail_crop.save(file_name, s3file, save=True)
+                self.photo_banner_crop.save(file_name, s3file, save=True)
 
         self.save()
         return {'success': True}
@@ -120,10 +122,13 @@ class Group(models.Model):
     def load_from_it(self):
         self.save_it_content_from_parsed_it_url()
         # save default dims of photo
-        if self.photo:
-            self.banner_crop = ','.join(('0', '0', str(self.photo.width), str(200)))
-            self.detail_crop = ','.join(('0', '0', str(self.photo.width), str(500)))
+        if self.photo_detail_crop:
+            self.detail_crop = ','.join(('0', '0', str(self.photo_detail_crop.width), str(500)))
             self.save()
+        if self.photo_banner_crop:
+            self.detail_crop = ','.join(('0', '0', str(self.photo_banner_crop.width), str(300)))
+            self.save()
+
         return True
 
 
