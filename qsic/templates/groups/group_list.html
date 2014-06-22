@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% load cropping %}
 
 {% block title %}{{ group_list_type }}{% endblock title %}
@@ -10,13 +11,11 @@
     <ul class="small-block-grid-1 medium-block-grid-1 large-block-grid-1 text-center">
       {% for group in object_list %}
         <li>
-          <a data-tooltip class="th radius has-tip tip-top" title="{{ group.name }}" href="{{ group.url }}">
-            {% if group.banner_crop %}
-              <img class="show-for-medium-up" src="{% cropped_thumbnail group "banner_crop" %}">
-              <img class="show-for-small" src="{% cropped_thumbnail group "banner_crop" scale=0.42 %}">
+          <a title="{{ group.name }}" href="{{ group.url }}">
+            {% if group.photo %}
+              <img class="radius th" src="{% cropped_thumbnail group 'banner_crop' %}">
             {% else %}
-              <img class="show-for-medium-up" src="">
-              <img class="show-for-small" src="">
+              <img class="radius th" src="{% static 'images/no_pic_group_banner_crop.jpg' %}">
             {% endif %}
           </a>
         </li>

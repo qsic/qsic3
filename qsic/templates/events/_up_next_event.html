@@ -20,7 +20,11 @@
         {% for performance in event %}
           {% if performance.pgpr %}
             <li class="active">
-              <img src="{% cropped_thumbnail performance.pgpr "banner_crop" %}" alt="{{ performance.name }}" />
+              {% if performance.pgpr.photo %}
+                <img src="{% cropped_thumbnail performance.pgpr "banner_crop" %}" alt="{{ performance.name }}" />
+              {% else %}
+                <img src="{% static 'images/no_pic_group_banner_crop.jpg' %}" alt="{{ performance.name }}" />
+              {% endif %}
             </li>
           {% endif %}
         {% endfor %}

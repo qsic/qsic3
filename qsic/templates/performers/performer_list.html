@@ -12,8 +12,8 @@
       {% for performer in object_list %}
         <li>
           <a class="th radius" href="{{ performer.url }}">
-            {% if performer.detail_crop %}
-              <img src="{% cropped_thumbnail performer "detail_crop" scale=0.42 %}">
+            {% if performer.photo %}
+              <img src="{% cropped_thumbnail performer 'detail_crop' scale=0.42 %}">
             {% else %}
               <img src="{% static 'images/no_pic_performer.jpg' %}" width="126">
             {% endif %}

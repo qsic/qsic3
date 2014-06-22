@@ -16,9 +16,8 @@
       <div class="small-5 columns text-right">
         <ul class="vcard">
           <li>
-            {% if performer.detail_crop %}
-              <img class="show-for-medium-up" src="{% cropped_thumbnail performer "detail_crop" %}">
-              <img class="show-for-small" src="{% cropped_thumbnail performer "detail_crop" scale=0.42 %}">
+            {% if performer.photo %}
+              <img src="{% cropped_thumbnail performer "detail_crop" %}">
             {% else %}
               <img src="{% static 'images/no_pic_performer.jpg' %}">
             {% endif %}

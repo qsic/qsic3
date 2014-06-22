@@ -23,10 +23,9 @@ class Group(models.Model):
     slug = models.SlugField(blank=True, default='')
     # 'it' is short for Imrpovteams / Improvteams.com
     it_url = models.URLField(null=True, blank=True)
-    photo_detail_crop = models.ImageField(upload_to='groups/photos', null=True, blank=True)
-    detail_crop = ImageRatioField('photo_detail_crop', '970x500', size_warning=True)
-    photo_banner_crop = models.ImageField(upload_to='groups/photos', null=True, blank=True)
-    banner_crop = ImageRatioField('photo_banner_crop', '960x300', size_warning=True)
+    photo = models.ImageField(upload_to='groups/photos', null=True, blank=True)
+    detail_crop = ImageRatioField('photo', '970x500', size_warning=True)
+    banner_crop = ImageRatioField('photo', '960x300', size_warning=True)
     bio = models.TextField(null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True, null=True)
     is_house_team = models.BooleanField(default=True)
@@ -56,9 +55,9 @@ class Group(models.Model):
         )
 
         if self.performer_offset < qs.count():
-            performer = qs[self.performer_offset]
+            gpr = qs[self.performer_offset]
             self.performer_offset += 1
-            return performer
+            return gpr.performer
         else:
             raise StopIteration
 
