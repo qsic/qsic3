@@ -3,6 +3,8 @@ from datetime import datetime
 
 from django.template.defaultfilters import slugify
 from django.test import TestCase
+from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 from freezegun import freeze_time
 
@@ -10,6 +12,7 @@ from qsic.core.utils import EST
 
 from .models import Event
 from .models import Performance
+from .models import ReoccurringEventType
 
 from qsic.core.utils import CalendarWeek
 
@@ -297,3 +300,32 @@ class SlugTC(TestCase):
         response = self.client.get('/events/performance/' + str(p.id), follow=True)
         self.assertTrue(hasattr(response, 'request'))
         self.assertEqual(response.request['PATH_INFO'], p.url)
+
+
+class ReoccuringEventsTC(TestCase):
+    def test_build_reoccuring_events(self):
+        event_start_time = datetime(2014, 6, 20, 19, 30, 0, tzinfo=EST)
+        event_end_time = datetime(2014, 6, 20, 22, 30, 0, tzinfo=EST)
+        ret = ReoccurringEventType.objects.create(name='Test events', period=7)
+        e = Event.objects.create(name='TestEvent',
+                                 description='Lots of fun here',
+                                 reoccurring_event_type=ret,
+                                 _start_dt=event_start_time,
+                                 _end_dt=event_end_time)
+        self.assertEqual(Event.objects.count(), 1)
+        # go to up-next page 8 days prior to event's start date
+        with freeze_time('2014-06-12 00:00:00', tz_offset=-4):
+            self.client.get(reverse('qsic:up_next'), follow=True)
+        self.assertEqual(Event.objects.count(), 1)
+        # go to page 4 days prior to event's start date
+        with freeze_time('2014-06-16 00:00:00', tz_offset=-4):
+            self.client.get(reverse('qsic:up_next'), follow=True)
+        e_qs = Event.objects.order_by('-_start_dt')
+        self.assertEqual(e_qs.count(), 2)
+        self.assertEqual(e_qs.first().start_dt, e.start_dt + timezone.timedelta(days=7))
+        # go to page 2 days after event's start date
+        with freeze_time('2014-06-22 00:00:00', tz_offset=-4):
+            self.client.get(reverse('qsic:up_next'), follow=True)
+        self.assertEqual(Event.objects.count(), 3)
+        e_qs = Event.objects.order_by('-_start_dt')
+        self.assertEqual(e_qs.first().start_dt, e.start_dt + timezone.timedelta(days=14))

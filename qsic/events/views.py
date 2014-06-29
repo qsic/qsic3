@@ -14,6 +14,7 @@ from qsic.core.utils import CalendarWeek
 from qsic.core.utils import EST
 from qsic.events.models import Event
 from qsic.events.models import Performance
+from qsic.events.utils import build_reoccuring_events
 
 from django.template.defaultfilters import slugify
 
@@ -29,8 +30,11 @@ def tonight(request):
 
 def up_next(request):
     # Starting with today, get the next event or 6 performances.
-    today_date = timezone.now().date()
+    now = timezone.now()
+    today_date = now.date()
     today = timezone.datetime(today_date.year, today_date.month, today_date.day, tzinfo=EST)
+
+    build_reoccuring_events(now)
 
     # get all events for cal_week
     events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt >= today]

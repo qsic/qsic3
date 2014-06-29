@@ -8,6 +8,14 @@ from qsic.performers.models import Performer
 from qsic.groups.models import Group
 
 
+class ReoccurringEventType(models.Model):
+    name = models.CharField(max_length=1024)
+    period = models.IntegerField(verbose_name='Period between events in days')
+
+    class Meta:
+        app_label = 'qsic'
+
+
 class Event(models.Model):
     """
     Example. QSIC House Night, QSIC Winter Ball
@@ -27,6 +35,10 @@ class Event(models.Model):
     photo = models.ImageField(upload_to='events/photos', null=True, blank=True)
     detail_crop = ImageRatioField('photo', '500x500', size_warning=True)
     banner_crop = ImageRatioField('photo', '960x300', size_warning=True)
+    reoccurring_event_type = models.ForeignKey(ReoccurringEventType,
+                                               null=True,
+                                               blank=True)
+    is_placeholder = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'qsic'
@@ -54,7 +66,7 @@ class Event(models.Model):
         super(Event, self).save()
 
     def __str__(self):
-        return '{} {}'.format(self.start_dt, self.name)
+        return '{} UTC {}'.format(self.start_dt.strftime('%Y-%m-%d %H:%m'), self.name)
 
     @property
     def start_dt(self):

@@ -6,3 +6,4 @@ from qsic.groups.models import GroupPerformerRelation
 from qsic.events.models import Event
 from qsic.events.models import Performance
 from qsic.events.models import PerformanceGroupPerformerRelation
+from qsic.events.models import ReoccurringEventType

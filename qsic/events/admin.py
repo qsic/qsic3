@@ -5,6 +5,7 @@ from image_cropping import ImageCroppingMixin
 from .models import Event
 from .models import Performance
 from .models import PerformanceGroupPerformerRelation
+from .models import ReoccurringEventType
 from qsic.core.admin import QsicModelAdmin
 
 
@@ -48,7 +49,12 @@ admin.site.register(Performance, PerformanceAdmin)
 
 
 class EventAdmin(ImageCroppingMixin, admin.ModelAdmin):
-    list_display = ('name', 'start_dt',)
+    list_display = ('name', 'start_dt', 'reoccurring_event_type', 'is_placeholder')
     search_fields = ('name',)
 admin.site.register(Event, EventAdmin)
 
+
+class ReoccurringEventTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'period',)
+    search_fields = ('name',)
+admin.site.register(ReoccurringEventType, ReoccurringEventTypeAdmin)
