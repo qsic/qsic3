@@ -11,7 +11,9 @@
         {% if item.type == 'Event' %}
           <div class="event">
             <span class="title">
+              <a href="{{ item.url }}">
                 {{ item.name }}
+              </a>
             </span>
             <ul>
               {% for p in item %}
