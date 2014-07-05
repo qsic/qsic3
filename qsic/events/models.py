@@ -24,7 +24,7 @@ class Event(models.Model):
     Example. QSIC House Night, QSIC Winter Ball
     """
     name = models.CharField(max_length=1024, blank=True, default='')
-    slug = models.SlugField(blank=True, default='')
+    slug = models.SlugField(max_length=1024, blank=True, default='')
     # Making times and price private so that a performance(s) can
     # override them.
     _start_dt = models.DateTimeField(blank=True, null=True)
@@ -110,7 +110,7 @@ class Performance(models.Model):
     """
     event = models.ForeignKey('qsic.Event', blank=True, null=True)
     name = models.CharField(max_length=1024, blank=True, default='')
-    slug = models.SlugField(blank=True, default='')
+    slug = models.SlugField(max_length=1024, blank=True, default='')
     start_dt = models.DateTimeField()
     end_dt = models.DateTimeField()
     price = models.DecimalField(blank=True,
