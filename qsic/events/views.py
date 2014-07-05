@@ -50,7 +50,7 @@ def up_next(request):
 
     events_and_perofrmances = list(itertools.chain(events, performances))
 
-    events_and_perofrmances.sort(key=lambda i: i.start_dt, reverse=True)
+    events_and_perofrmances.sort(key=lambda i: i.start_dt)
 
     if events_and_perofrmances and isinstance(events_and_perofrmances[0], Event):
         # just show the one event
