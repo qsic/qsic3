@@ -97,7 +97,8 @@ def week(request, week_slug):
     build_reoccuring_events(cal_week.start_dt)
 
     # get all events for cal_week
-    events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt in cal_week]
+    events = [e for e in Event.objects.all().order_by('_start_dt')
+              if e.start_dt in cal_week and not e.is_placeholder]
 
     # get all performances not in events
     performances = Performance.objects.filter(
