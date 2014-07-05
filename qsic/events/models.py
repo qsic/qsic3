@@ -15,6 +15,9 @@ class ReoccurringEventType(models.Model):
     class Meta:
         app_label = 'qsic'
 
+    def __str__(self):
+        return '{}'.format(self.name)
+
 
 class Event(models.Model):
     """
