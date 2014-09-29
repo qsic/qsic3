@@ -40,7 +40,11 @@ class Event(models.Model):
     banner_crop = ImageRatioField('photo', '960x300', size_warning=True)
     reoccurring_event_type = models.ForeignKey(ReoccurringEventType,
                                                null=True,
-                                               blank=True)
+                                               blank=True,
+                                               on_delete=models.SET_NULL)
+    # If an event is a placeholder, it does not appear in the calendar of events.
+    # Instead, it acts as a signal to NOT create a new event at the same time
+    # for an event that is normally reoccuring.
     is_placeholder = models.BooleanField(default=False)
 
     class Meta:
