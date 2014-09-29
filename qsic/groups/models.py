@@ -112,8 +112,7 @@ class Group(models.Model):
             mimetype = 'image/jpeg'
             if imgp.info().get_content_type() == mimetype:
                 s3file = S3ContentFile(content, name=file_name, mimetype=mimetype)
-                self.photo_detail_crop.save(file_name, s3file, save=True)
-                self.photo_banner_crop.save(file_name, s3file, save=True)
+                self.photo.save(file_name, s3file, save=True)
 
         self.save()
         return {'success': True}
@@ -121,11 +120,9 @@ class Group(models.Model):
     def load_from_it(self):
         self.save_it_content_from_parsed_it_url()
         # save default dims of photo
-        if self.photo_detail_crop:
-            self.detail_crop = ','.join(('0', '0', str(self.photo_detail_crop.width), str(500)))
-            self.save()
-        if self.photo_banner_crop:
-            self.detail_crop = ','.join(('0', '0', str(self.photo_banner_crop.width), str(300)))
+        if self.photo:
+            self.detail_crop = ','.join(('0', '0', str(self.photo.width), str(500)))
+            self.banner_crop = ','.join(('0', '0', str(self.photo.width), str(300)))
             self.save()
 
         return True
