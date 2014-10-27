@@ -85,7 +85,7 @@ class VisitingGroupListView(GroupListView):
 
 
 class AllPastGroupListView(GroupListView):
-    group_list_type = 'All Past Teams'
+    group_list_type = 'All Past House Teams'
 
     def get_queryset(self):
         """
