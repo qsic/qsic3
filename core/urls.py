@@ -12,6 +12,7 @@ urlpatterns = patterns(
 
     # About Page
     url(r'^about/?$', TemplateView.as_view(template_name='core/about.html'), name='about'),
+    url(r'^500/?$', TemplateView.as_view(template_name='500.html'), name='server_error'),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
