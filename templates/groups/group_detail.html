@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cropping %}
+
+{% block title %}{{ group }}{% endblock title %}
+
+{% block main_content %}
+  <section class="group_detail">
+    <section class="row">
+      <article class="small-12 columns">
+        {% if group.photo %}
+          <img class="radius th" src="{% cropped_thumbnail group "detail_crop" %}">
+        {% else %}
+          <img class="radius th" src="{% static 'images/no_pic_group_detail_crop.jpg' %}">
+        {% endif %}
+      </article>
+
+      <article class="small-12 columns">
+        <h2>{{ group.name }}</h2>
+      </article>
+
+      <article class="small-12 columns">
+        <p>
+          {{ group.bio }}
+        </p>
+      </article>
+    </section>
+  </section>
+
+  <section class="group_performers">
+    <section class="row">
+      <article class="small-12 columns">
+        <ul class="small-block-grid-8">
+          {% for performer in group %}
+            <li>
+              <a href="{{ performer.url }}">
+                {% if performer.photo %}
+                  <img class="radius th" src="{% cropped_thumbnail performer 'detail_crop' scale=0.42 %}">
+                {% else %}
+                  <img class="radius th" src="{% static 'images/no_pic_performer.jpg' %}" width="75">
+                {% endif %}
+              </a>
+            <div><span class="">{{ performer }}</span></div>
+            </li>
+          {% endfor %}
+        </ul>
+      </article>
+    </section>
+  </section>
+
+{% endblock main_content %}

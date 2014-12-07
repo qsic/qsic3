@@ -15,6 +15,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'', include('qsic.urls', namespace='qsic')),
-
+    # sub apps
+    url(r'', include('core.urls', namespace='core')),
+    url(r'^events/', include('events.urls', namespace='events')),
+    url(r'^groups/', include('groups.urls', namespace='groups')),
+    url(r'^performers/', include('performers.urls', namespace='performers')),
 )

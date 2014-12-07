@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cropping %}
+
+{% block title %}{{ object }}{% endblock title %}
+
+{% block main_content %}
+  <section class="event_detail">
+    <section class="row">
+      <article class="small-12 columns">
+        {% if object.photo %}
+          <img class="radius th" src="{% cropped_thumbnail group "detail_crop" %}">
+        {% else %}
+          <img class="radius th" src="{% static 'images/no_pic_event_detail_crop.jpg' %}">
+        {% endif %}
+      </article>
+
+      <article class="small-12 columns">
+        <h2>{{ object.name }}</h2>
+      </article>
+
+      <article class="small-12 columns">
+        <p>
+          {{ object.description }}
+        </p>
+      </article>
+    </section>
+  </section>
+
+  <section class="event_performances">
+    <section class="row">
+      <article class="small-12 columns">
+        <ul class="panel callout no-bullet">
+          {% for performance in object %}
+            <li> {{ performance.start_dt }} - {{ performance.name }} </li>
+          {% empty %}
+            <li> {{ object.start_dt }} </li>
+          {% endfor %}
+        </ul>
+      </article>
+    </section>
+  </section>
+{% endblock main_content %}

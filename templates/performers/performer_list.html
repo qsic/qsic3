@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cropping %}
+
+{% block title %}{{ performer_list_type }}{% endblock title %}
+
+{% block main_content %}
+  <section>
+    <h2>{{ performer_list_type }}</h2>
+
+    <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-5 text-center">
+      {% for performer in object_list %}
+        <li>
+          <a class="th radius" href="{{ performer.url }}">
+            {% if performer.photo %}
+              <img src="{% cropped_thumbnail performer 'detail_crop' scale=0.42 %}">
+            {% else %}
+              <img src="{% static 'images/no_pic_performer.jpg' %}" width="126">
+            {% endif %}
+          </a>
+        <div>{{ performer }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+
+  </section>
+{% endblock main_content %}

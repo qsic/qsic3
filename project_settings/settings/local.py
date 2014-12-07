@@ -1,11 +1,19 @@
 import os
 import sys
 
-from local.parse_env_file import parse
 
-envvars = parse('env.sh')
-for k, v in envvars.items():
+def update_env(envfile):
+    """
+    Update environemnt with env vars in ``envfile``.
+    """
+    envvars = {}
+    with open(os.path.abspath(envfile)) as fp:
+        for line in fp.readlines():
+            if line[0:6] == 'export':
+                line_list = line[6:].strip().split('=')
+                envvars[line_list[0].strip()] = line_list[1].strip()
     os.environ.update(envvars)
+update_env('env.sh')
 
 from .base import *
 
@@ -46,6 +54,8 @@ MEDIA_ROOT = rootjoin(PROJECT_ROOT, '%s' % MEDIA_DIR)
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/%s/' % MEDIA_DIR
+
+RAVEN_CONFIG = {}
 
 print('Project Root set to:', PROJECT_ROOT)
 print('Static Root set to:', STATIC_ROOT)

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cropping %}
+
+{% block title %}{{ performer }}{% endblock title %}
+
+{% block main_content %}
+  <section class="performer_detail">
+    <section class="row">
+      <article class="small-7 columns">
+        <h2>{{ performer }}</h2>
+        <p>
+          {{ performer.bio }}
+        </p>
+      </article>
+      <div class="small-5 columns text-right">
+        <ul class="vcard">
+          <li>
+            {% if performer.photo %}
+              <img src="{% cropped_thumbnail performer "detail_crop" %}">
+            {% else %}
+              <img src="{% static 'images/no_pic_performer.jpg' %}">
+            {% endif %}
+          </li>
+          <li>{{ performer }}</li>
+        </ul>
+      </div>
+    </section>
+    <section class="row">
+      <article class="small-12 columns">
+        {% if performer.groups %}
+          <h5 style="text-decoration: underline;">{{ performer.first_name }}'s past and present teams</h5>
+          {% for group in performer.groups %}
+            <ul class="inline-list">
+              <li><a href="{{ group.url }}">{{ group.name }}</a></li>
+            </ul>
+          {% endfor %}
+        {% endif %}
+      </article>
+    </section>
+    {% if performer.it_url %}
+    <section class="row">
+      <aside style="font-size: 12px;" class="small-12 columns text-right">
+        Profile courtesy of <a href="{{ performer.it_url }}">improvteams.com</a>
+      </aside>
+    </section>
+    {% endif %}
+  </section>
+{% endblock main_content %}

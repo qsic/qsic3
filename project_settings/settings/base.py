@@ -28,12 +28,6 @@ DEBUG = get_env_var('DJANGO_DEBUG', default=False, isbool=True)
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
 
-ADMINS = (
-    ('Paul Logston', 'code@logston.me'),
-)
-
-MANAGERS = ADMINS
-
 DATABASE_URL = get_env_var('DATABASE_URL')
 DATABASES = {
     'default': dj_database_url.config()
@@ -50,10 +44,9 @@ ALLOWED_HOSTS = ['*']
 TIME_ZONE = 'America/New_York'
 
 # Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
+# http://www.i18nguy.com/unicode/language-i
+# dentifiers.html
 LANGUAGE_CODE = 'en-us'
-
-SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -108,13 +101,6 @@ STATICFILES_FINDERS = (
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -134,6 +120,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    rootjoin('templates'),
 )
 
 INSTALLED_APPS = (
@@ -150,8 +137,12 @@ INSTALLED_APPS = (
     'django_extensions',
     'easy_thumbnails',
     'image_cropping',
-    'qsic',
+    'core',
+    'events',
+    'groups',
+    'performers',
     'py3s3',
+    'raven.contrib.django.raven_compat',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -209,7 +200,7 @@ LOGGING = {
             'propagate': True,
         },
 
-        'qsic': {
+        '': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
@@ -230,4 +221,9 @@ IMAGE_CROPPING_SIZE_WARNING = True
 
 SOUTH_MIGRATION_MODULES = {
     'easy_thumbnails': 'easy_thumbnails.south_migrations',
+}
+
+# Set your DSN value
+RAVEN_CONFIG = {
+    'dsn': 'https://e92ff3ac19cd4d89945f1b5e428f061d:accc3dfff4044ffa9193e79a564c9175@app.getsentry.com/34299',
 }
