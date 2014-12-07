@@ -5,8 +5,7 @@ from subprocess import call
 
 from local.parse_env_file import parse
 
-envvars = parse('local/enter_env.sh')
-
+envvars = parse('env.sh')
 for k, v in envvars.items():
     os.environ.update(envvars)
 

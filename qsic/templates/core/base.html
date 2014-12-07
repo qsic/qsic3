@@ -1,3 +1,4 @@
+{% load raven %}
 {% load static %}
 <!doctype html>
 <html class="no-js" lang="en">
@@ -10,8 +11,7 @@
   <link rel="stylesheet" href="{% static 'css/foundation-icons/foundation-icons.css' %}" />
   <link rel="stylesheet" href="{% static 'css/qsic.css' %}" />
   <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/foundation/5.1.1/js/vendor/modernizr.min.js"></script>
-
+  <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.1.1/js/vendor/modernizr.min.js"></script>
   {% block extra_head %}{% endblock extra_head %}
 </head>
 <body>
@@ -107,9 +107,12 @@
 {% endblock body_content %}
 <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.1.1/js/vendor/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.1.1/js/foundation.min.js"></script>
+<script src="//cdn.ravenjs.com/1.1.16/jquery,native/raven.min.js"></script>
+<script>Raven.config('{% sentry_public_dsn %}').install();</script>
 <script>
   $(document).foundation();
 </script>
+<script>booyah / 4;</script>
 {% block extra_foot %}{% endblock extra_foot %}
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

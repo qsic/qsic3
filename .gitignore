@@ -10,7 +10,7 @@
 .sass-cache
 
 ### Private
-local/enter_env.sh
+env.sh
 
 ### Old Reference Site
 local/qsic-online

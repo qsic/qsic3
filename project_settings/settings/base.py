@@ -4,24 +4,31 @@ import os
 import dj_database_url
 from easy_thumbnails.conf import Settings as thumbnail_settings
 
-from .utils import get_env_var
+
+def get_env_var(env_var, default=None, isbool=False):
+    """
+    Return value of envirnoment variable or throw exception
+    """
+    from django.core.exceptions import ImproperlyConfigured
+    try:
+        env_value = os.environ.get(env_var, default)
+        if isbool:
+            env_value = 'true' in str(env_value).lower().strip()
+        return env_value
+    except KeyError:
+        error_msg = '{} environment variable not set'.format(env_var)
+        raise ImproperlyConfigured(error_msg)
+
+# Return directory name containing file depth levels deep
+dirname = lambda file, depth: os.path.dirname(dirname(file, depth-1)) if depth else file
+PROJECT_ROOT = os.path.abspath(dirname(__file__, 3))
+rootjoin = lambda *args: os.path.join(PROJECT_ROOT, *args)
 
 DEBUG = get_env_var('DJANGO_DEBUG', default=False, isbool=True)
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
 
-# Return directory name containing file depth levels deep
-dirname = lambda file, depth: os.path.dirname(dirname(file, depth-1)) if depth else file
-
-PROJECT_ROOT = os.path.abspath(dirname(__file__, 3))
-
-rootjoin = lambda *args: os.path.join(PROJECT_ROOT, *args)
-
-if DEBUG:
-    print('Project Root set to:', PROJECT_ROOT)
-
 ADMINS = (
-    ('Leo Mendoza', 'leomendoza@gmail.com'),
     ('Paul Logston', 'code@logston.me'),
 )
 
@@ -74,64 +81,23 @@ AWS_S3_BUCKET_URL = '//%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # Encoding for AWS transactions
 ENCODING = 'utf-8'
 
-SERVE_STATIC = get_env_var('DJANGO_SERVE_STATIC', default=False, isbool=True)
-if SERVE_STATIC:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-    # Serve static locally
-    # Absolute path to the directory static files should be collected to.
-    # Don't put anything in this directory yourself; store your static files
-    # in apps' "static/" subdirectories and in STATICFILES_DIRS.
-    # Example: "/home/media/media.lawrence.com/static/"
-    STATIC_ROOT = rootjoin(PROJECT_ROOT, 'collected_static')
+# Serve static from AWS
+# tell django to use django-storages
+STATICFILES_STORAGE = 'django_py3s3.storages.S3StaticStorage'
+STATIC_ROOT = AWS_S3_BUCKET_URL + '/' + STATIC_DIR + '/'
+STATIC_URL = STATIC_ROOT
 
-    # URL prefix for static files.
-    # Example: "http://media.lawrence.com/static/"
-    STATIC_URL = '/%s/' % STATIC_DIR
-
-else:
-    # Serve static from AWS
-    # tell django to use django-storages
-    STATICFILES_STORAGE = 'project_settings.settings.django_py3s3.S3StaticStorage'
-    STATIC_ROOT = AWS_S3_BUCKET_URL + '/' + STATIC_DIR + '/'
-    STATIC_URL = STATIC_ROOT
-
-SERVE_MEDIA = get_env_var('DJANGO_SERVE_MEDIA', default=False, isbool=True)
-if SERVE_MEDIA:
-    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-    # Serve media locally
-    # Absolute filesystem path to the directory that
-    # will hold user-uploaded files.
-    # Example: "/home/media/media.lawrence.com/media/"
-    MEDIA_ROOT = rootjoin(PROJECT_ROOT, '%s' % MEDIA_DIR)
-
-    # URL that handles the media served from MEDIA_ROOT. Make sure to use a
-    # trailing slash.
-    # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-    MEDIA_URL = '/%s/' % MEDIA_DIR
-
-else:
-    # Serve media from AWS
-    MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
-    MEDIA_URL = MEDIA_ROOT
-    DEFAULT_FILE_STORAGE = 'project_settings.settings.django_py3s3.S3MediaStorage'
-
-if SERVE_STATIC or SERVE_MEDIA:
-    # Only upload new or changed files to AWS
-    AWS_PRELOAD_METADATA = True
-
-
-if DEBUG:
-    print('Static Root set to:', STATIC_ROOT)
-    print('Static URL set to:', STATIC_URL)
-    print('Media Root set to:', MEDIA_ROOT)
-    print('Media URL set to:', MEDIA_URL)
-
+# Serve media from AWS
+MEDIA_ROOT = AWS_S3_BUCKET_URL + '/' + MEDIA_DIR + '/'
+MEDIA_URL = MEDIA_ROOT
+DEFAULT_FILE_STORAGE = 'django_py3s3.storages.S3MediaStorage'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    rootjoin('static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -181,7 +147,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'south',
     'django_extensions',
     'easy_thumbnails',
     'image_cropping',
