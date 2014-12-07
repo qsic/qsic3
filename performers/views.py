@@ -22,7 +22,7 @@ class PerformersRedirectView(RedirectView):
 
 
 class PerformerDetailView(DetailView):
-    template_name = 'performers/../templates/performers/performer_detail.html'
+    template_name = 'performers/performer_detail.html'
     model = Performer
 
     def get_context_data(self, **kwargs):
@@ -34,7 +34,7 @@ class PerformerDetailView(DetailView):
 
 
 class PerformerAllListView(ListView):
-    template_name = 'performers/../templates/performers/performer_list.html'
+    template_name = 'performers/performer_list.html'
     model = Performer
 
     filter_criteria = {}
