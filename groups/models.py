@@ -76,6 +76,7 @@ class Group(models.Model):
         """Save Group info parsed from Improvteams.com
             Return True on successful completion
         """
+        from performers.models import Performer
 
         # Return False if URL passed does not save to model
         # eg. invalid URL
@@ -107,6 +108,12 @@ class Group(models.Model):
                 self.photo.save(file_name, s3file, save=True)
 
         self.save()
+
+        if group_info.performer_uri_list:
+            for performer_uri in group_info.performer_uri_list:
+                p = Performer.objects.create(first_name='', last_name='', it_url=performer_uri)
+                p.load_from_it()
+
         return {'success': True}
 
     def load_from_it(self):
