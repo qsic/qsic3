@@ -50,6 +50,7 @@ admin.site.register(Performance, PerformanceAdmin)
 
 class EventAdmin(ImageCroppingMixin, admin.ModelAdmin):
     list_display = ('name', 'start_dt', 'reoccurring_event_type', 'is_placeholder')
+    ordering = ('-_start_dt',)
     search_fields = ('name',)
     actions = ['mark_as_placeholder']
 
