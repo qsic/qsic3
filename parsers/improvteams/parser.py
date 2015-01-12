@@ -116,8 +116,8 @@ class ItTeamParser(BaseItParser):
         title_leaf = BeautifulSoup(self.html).select(selector)
         if title_leaf:
             title = title_leaf[0].string
-            if title:
-                self.team_name = title.strip('| New York Improv Teams')
+            if title and title.endswith('| New York Improv Teams'):
+                self.team_name = title[:-24]
 
     def parse_soup_for_team_photo_uri(self):
         """Return self with team photo uri populated"""
