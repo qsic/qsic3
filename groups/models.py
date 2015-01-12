@@ -60,12 +60,7 @@ class Group(models.Model):
 
     @property
     def is_current(self):
-        if self.is_house_team:
-            gpr = GroupPerformerRelation.objects.filter(group=self)
-            gpr = gpr.filter(Q(end_dt__gte=timezone.now()) | Q(end_dt=None))
-            return gpr.filter(Q(start_dt__lte=timezone.now())).exists()
-        else:
-            return self.is_active
+        return self.is_active
 
     def save(self, **kwargs):
         self.slug = slugify(self.name)

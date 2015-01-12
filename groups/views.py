@@ -106,4 +106,4 @@ def load_from_it(request, qsic_id):
             raise
         messages.error(request, 'There was an error loading info from Improvteams.com')
 
-    return HttpResponseRedirect(reverse('admin:group_change', args=(qsic_id,)))
+    return HttpResponseRedirect(reverse('admin:groups_group_change', args=(qsic_id,)))
