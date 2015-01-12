@@ -114,6 +114,10 @@ class Group(models.Model):
                 p = Performer.objects.create(first_name='', last_name='', it_url=performer_uri)
                 p.load_from_it()
 
+                GroupPerformerRelation.objects.create(group=self,
+                                                      performer=p,
+                                                      start_dt=timezone.now())
+
         return {'success': True}
 
     def load_from_it(self):
