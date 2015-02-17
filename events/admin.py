@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from image_cropping import ImageCroppingMixin
+import pytz
 
 from .models import Event
 from .models import Performance
@@ -60,7 +61,8 @@ class EventAdmin(ImageCroppingMixin, admin.ModelAdmin):
     mark_as_placeholder.short_description = "Mark selected events as placeholders"
 
     def start_dt_with_day(self, obj):
-        return obj.start_dt.strftime('%a, %b %d, %Y %I:%M%p')
+        start_dt = obj.start_dt.astimezone(pytz.timezone('US/Eastern'))
+        return start_dt.strftime('%a, %b %d, %Y %I:%M%p')
     start_dt_with_day.short_description = 'Start Dt'
 admin.site.register(Event, EventAdmin)
 

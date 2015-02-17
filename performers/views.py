@@ -64,8 +64,12 @@ class PerformerCurrentListView(PerformerAllListView):
 
     def get_queryset(self):
         queryset = super(PerformerCurrentListView, self).get_queryset()
+        # This will filter in any performers who are members of any active group.
         queryset = queryset.filter(groupperformerrelation__group__is_active=True)
-        return queryset
+        # This will filter in any performers who have a group performer
+        # relation with a end_dt of NULL.
+        queryset = queryset.filter(groupperformerrelation__end_dt=None)
+        return queryset.distinct()
 
 
 class PerformerPastListView(PerformerAllListView):
@@ -75,10 +79,12 @@ class PerformerPastListView(PerformerAllListView):
         queryset = super(PerformerPastListView, self).get_queryset()
 
         queryset = queryset.filter(
-            Q(is_active=False) | ~Q(groupperformerrelation__group__is_active=True)
+            Q(is_active=False) |
+            ~Q(groupperformerrelation__group__is_active=True) |
+            ~Q(groupperformerrelation__end_dt=None)
         )
 
-        return queryset
+        return queryset.distinct()
 
 
 def load_from_it(request, qsic_id):
