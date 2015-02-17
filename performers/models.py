@@ -23,7 +23,7 @@ class Performer(models.Model):
     slug = models.SlugField(blank=True, default='')
     # 'it' is short for Imrpovteams / Improvteams.com
     it_url = models.URLField(null=True, blank=True)
-    it_id = models.PositiveIntegerField(null=True, blank=True)
+    it_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
     photo = models.ImageField(upload_to='performers/photos', null=True, blank=True)
     detail_crop = ImageRatioField('photo', '300x300', size_warning=True)
     bio = models.TextField(null=True, blank=True)
