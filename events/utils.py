@@ -8,9 +8,13 @@ def build_reoccuring_events(start_ts, memoize=False):
     # Given a week start time, are there any reoccuring event types that
     # do not have an associated event. If so, create an event for each
     # ``ReoccurringEventType``.
+    if start_ts > timezone.now() + timezone.timedelta(days=180):
+        return
+
     ret_qs = ReoccurringEventType.objects.all()
     for ret in ret_qs:
         last_event_of_type = ret.event_set.order_by('-_start_dt').first()
+
         if not last_event_of_type:
             continue
 

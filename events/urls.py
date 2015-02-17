@@ -46,4 +46,8 @@ urlpatterns = patterns(
     url(r'^performance/(?P<pk>\d+)/[A-Za-z0-9_\-]+$',
         PerformanceDetailView.as_view(),
         name='peroformance_detail_view'),
+
+    url(r'^remove_future_events/?$',
+        'remove_future_events',
+        name='remove_future_events')
 )

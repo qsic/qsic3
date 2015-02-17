@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponseServerError
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -61,10 +62,23 @@ class PerformerCurrentListView(PerformerAllListView):
     filter_criteria = {'is_active': True}
     performer_list_title = 'Current Performers'
 
+    def get_queryset(self):
+        queryset = super(PerformerCurrentListView, self).get_queryset()
+        queryset = queryset.filter(groupperformerrelation__group__is_active=True)
+        return queryset
+
 
 class PerformerPastListView(PerformerAllListView):
-    filter_criteria = {'is_active': False}
     performer_list_title = 'Past Performers'
+
+    def get_queryset(self):
+        queryset = super(PerformerPastListView, self).get_queryset()
+
+        queryset = queryset.filter(
+            Q(is_active=False) | ~Q(groupperformerrelation__group__is_active=True)
+        )
+
+        return queryset
 
 
 def load_from_it(request, qsic_id):

@@ -49,15 +49,19 @@ admin.site.register(Performance, PerformanceAdmin)
 
 
 class EventAdmin(ImageCroppingMixin, admin.ModelAdmin):
-    list_display = ('name', 'start_dt', 'reoccurring_event_type', 'is_placeholder')
+    list_display = ('name', 'start_dt_with_day', 'reoccurring_event_type', 'is_placeholder')
     ordering = ('-_start_dt',)
     search_fields = ('name',)
-    actions = ['mark_as_placeholder']
+    actions = ['mark_as_placeholder', 'remove_future_events']
 
     def mark_as_placeholder(self, request, queryset):
         rows_updated = queryset.update(is_placeholder=True)
         self.message_user(request, "%s event(s) marked as placeholder(s)." % rows_updated)
     mark_as_placeholder.short_description = "Mark selected events as placeholders"
+
+    def start_dt_with_day(self, obj):
+        return obj.start_dt.strftime('%a, %b %d, %Y %I:%M%p')
+    start_dt_with_day.short_description = 'Start Dt'
 admin.site.register(Event, EventAdmin)
 
 

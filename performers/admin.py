@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils import timezone
 
 from image_cropping import ImageCroppingMixin
 
@@ -28,5 +29,13 @@ class PerformerAdmin(ImageCroppingMixin, QsicModelAdmin):
             obj.save()
     mark_as_is_inactive.short_description = 'Mark performer(s) as inactive.'
 
-    actions = [load_from_it, mark_as_is_active, mark_as_is_inactive]
+    def mark_as_left_group(self, request, queryset):
+        for obj in queryset:
+            # Get all group perofrmer relations for perfomer
+            gpr_qs = obj.groupperformerrelation_set.filter(end_dt=None)
+            # add end dates to group performer relations without end dates
+            gpr_qs.update(end_dt=timezone.now())
+    mark_as_left_group.short_description = 'Mark performer(s) as "Left Group".'
+
+    actions = [load_from_it, mark_as_is_active, mark_as_is_inactive, mark_as_left_group]
 admin.site.register(Performer, PerformerAdmin)

@@ -2,6 +2,7 @@ import itertools
 from datetime import timedelta
 
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render_to_response
@@ -165,3 +166,11 @@ class EventDetailView(DetailView):
 class PerformanceDetailView(DetailView):
     template_name = 'events/performance_detail.html'
     model = Performance
+
+
+def remove_future_events(request):
+    events = Event.objects.filter(_start_dt__gt=timezone.now(), is_placeholder=False)
+    count = events.count()
+    events.delete()
+    messages.success(request, '{} events deleted.'.format(count))
+    return HttpResponseRedirect(reverse('admin:events_event_changelist'))
