@@ -111,3 +111,4 @@ class Performer(models.Model):
         Return iterable of groups that the user is in.
         """
         return [gpr.group for gpr in self.groupperformerrelation_set.order_by('-start_dt')]
+
