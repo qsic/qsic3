@@ -38,7 +38,8 @@ def up_next(request):
     build_reoccuring_events(now)
 
     # get all events for cal_week
-    events = [e for e in Event.objects.all().order_by('_start_dt') if e.start_dt >= today]
+    events = [e for e in Event.objects.exclude(is_placeholder=True).order_by('_start_dt')
+              if e.start_dt >= today]
 
     # get all performances not in events
     performances = Performance.objects.filter(
