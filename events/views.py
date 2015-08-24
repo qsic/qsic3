@@ -35,7 +35,9 @@ def up_next(request):
     today_date = now.date()
     today = timezone.datetime(today_date.year, today_date.month, today_date.day, tzinfo=EST)
 
-    build_reoccuring_events(now)
+    # Temporarily suspend building of reoccurring events
+    if False:
+        build_reoccuring_events(now)
 
     # get all events for cal_week
     events = [e for e in Event.objects.exclude(is_placeholder=True).order_by('_start_dt')
@@ -96,7 +98,9 @@ def week(request, week_slug):
     """
     cal_week = CalendarWeek(week_slug)
 
-    build_reoccuring_events(cal_week.start_dt)
+    # Temporarily suspend building of reoccurring events
+    if False:
+        build_reoccuring_events(cal_week.start_dt)
 
     # get all events for cal_week
     events = [e for e in Event.objects.all().order_by('_start_dt')
